@@ -23,10 +23,15 @@ def jira_auth():
             "Content-Type": "application/json"}
 
 def jira_search(jql, fields, max_results=200):
-    url = JIRA_BASE + "/rest/api/3/search/jql"
-    payload = json.dumps({"jql": jql, "fields": fields,
-                          "maxResults": max_results, "startAt": 0}).encode("utf-8")
-    req = urllib.request.Request(url, data=payload, headers=jira_auth(), method="POST")
+    # Nuevo endpoint Jira: GET con query params
+    import urllib.parse
+    params = urllib.parse.urlencode({
+        "jql": jql,
+        "maxResults": max_results,
+        "fields": ",".join(fields) if isinstance(fields, list) else fields,
+    })
+    url = JIRA_BASE + "/rest/api/3/search/jql?" + params
+    req = urllib.request.Request(url, headers=jira_auth(), method="GET")
     try:
         with urllib.request.urlopen(req) as r:
             data = json.loads(r.read())
