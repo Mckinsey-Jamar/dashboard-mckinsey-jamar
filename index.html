@@ -362,15 +362,20 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
   .week-due.soon{color:#E65100;font-weight:700;}
 
   /* ── No-date panel ── */
-  .nodate-badge{display:inline-block;background:#9E9E9E;color:#fff;border-radius:10px;padding:2px 8px;font-size:10px;cursor:pointer;margin-top:2px;}
-  .nodate-badge.open{background:#616161;}
+  .nodate-badge{display:inline-flex;align-items:center;gap:3px;background:#F5F5F5;color:#546E7A;border:1px solid #CFD8DC;border-radius:4px;padding:2px 8px;font-size:9.5px;font-weight:700;cursor:pointer;margin-top:4px;transition:background .15s;}
+  .nodate-badge:hover{background:#ECEFF1;border-color:#B0BEC5;}
+  .nodate-badge.open{background:#ECEFF1;}
   .nodate-detail-row{display:none;}
-  .nodate-detail-row td{padding:0!important;background:#F5F5F5;}
-  .nodate-panel{padding:10px 14px;border-left:3px solid #9E9E9E;}
-  .nodate-panel-title{font-weight:700;font-size:11px;color:#616161;margin-bottom:6px;}
+  .nodate-detail-row td{padding:0!important;background:#FAFAFA;}
+  .nodate-panel{padding:10px 18px;border-top:2px solid #CFD8DC;border-bottom:1px solid #CFD8DC;}
+  .nodate-panel-title{font-size:10px;font-weight:800;color:#546E7A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
   .nodate-tbl{width:100%;border-collapse:collapse;font-size:11px;}
-  .nodate-tbl th{background:#EEEEEE;padding:4px 8px;text-align:left;font-size:10px;font-weight:600;}
-  .nodate-tbl td{padding:4px 8px;border-top:1px solid #E0E0E0;vertical-align:top;}
+  .nodate-tbl th{background:#ECEFF1;color:#455A64;font-size:9.5px;font-weight:700;padding:5px 10px;text-align:left;border-bottom:1px solid #CFD8DC;white-space:nowrap;}
+  .nodate-tbl td{padding:6px 10px;border-bottom:1px solid #F5F5F5;vertical-align:middle;}
+  .nodate-tbl tr:last-child td{border-bottom:none;}
+  .nodate-tbl tr:hover td{background:#F5F5F5;}
+  .nodate-tbl a{color:#546E7A;font-weight:700;text-decoration:none;font-size:10px;}
+  .nodate-tbl a:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
