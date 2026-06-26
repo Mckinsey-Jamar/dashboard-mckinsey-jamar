@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafolio McKinsey – Jamar</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<style>
+:root {
+  --slate:     #404B5A;
+  --slate-dk:  #2C3540;
+  --red:       #ED1820;
+  --burgundy:  #832325;
+  --teal:      #3F95A0;
+  --mint:      #4EB9A7;
+  --brown:     #C4956A;
+  --op:        #1565C0;
+  --op-lt:     #E3F0FF;
+  --cr:        #6A1B9A;
+  --cr-lt:     #F3E5F5;
+  --l1c:#C4956A; --l2c:#3F95A0; --l3c:#4EB9A7; --l4c:#2C3540; --l5c:#832325;
+  --done:#43A047; --prog:#FFA726; --todo:#B0BEC5; --late:#EF5350;
+  --bg:#F5F5F5; --card:#FFF; --border:#E1E4E8;
+  --shadow:0 1px 3px rgba(64,75,90,.09),0 4px 12px rgba(64,75,90,.04);
+  --r:8px; --gap:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial,"Helvetica Neue",sans-serif;background:var(--bg);color:var(--slate-dk);font-size:13px;-webkit-font-smoothing:antialiased;}
+
+/* ── HEADER ── */
+.hdr{background:var(--slate-dk);color:#fff;padding:12px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.hdr-left h1{font-size:17px;font-weight:700;letter-spacing:.2px;}
+.hdr-left p{font-size:11px;color:#aac4e0;margin-top:2px;}
+.hdr-right{display:flex;align-items:center;gap:14px;}
+.logo-txt{font-size:26px;font-weight:900;letter-spacing:4px;color:var(--red);border-bottom:2px solid rgba(255,255,255,.4);padding-bottom:2px;}
+.print-btn{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;padding:5px 12px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.6px;}
+.print-btn:hover{background:rgba(255,255,255,.1);}
+
+/* ── FILTERS ── */
+.filters-wrap{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;}
+.filters-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--slate);margin-bottom:10px;}
+.filters-row{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;}
+.fg{display:flex;flex-direction:column;gap:6px;}
+.fg-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;}
+.chip-row{display:flex;gap:5px;flex-wrap:wrap;}
+
+/* País toggle */
+.pais-toggle{display:inline-flex;background:#ECEEF0;border-radius:6px;padding:3px;gap:2px;}
+.pais-btn{border:0;background:transparent;padding:5px 14px;font-size:12px;font-weight:600;color:#666;cursor:pointer;border-radius:4px;font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all 120ms;}
+.pais-btn.active{background:var(--slate-dk);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+
+/* Chips */
+.chip{border:1px solid var(--border);background:#fff;border-radius:999px;padding:5px 12px;font-size:11.5px;cursor:pointer;user-select:none;color:#999;font-weight:500;transition:all 120ms;font-family:inherit;}
+.chip:hover:not(.active){border-color:#999;color:var(--slate-dk);background:#F7F7F7;}
+.chip.active{font-weight:700;}
+.chip.active.l1{background:var(--l1c);border-color:var(--l1c);color:#fff;}
+.chip.active.l2{background:var(--l2c);border-color:var(--l2c);color:#fff;}
+.chip.active.l3{background:var(--l3c);border-color:var(--l3c);color:var(--slate-dk);}
+.chip.active.l4{background:var(--l4c);border-color:var(--l4c);color:#fff;}
+.chip.active.l5{background:var(--l5c);border-color:var(--l5c);color:#fff;}
+.chip.active.cat-bc{background:var(--red);border-color:var(--red);color:#fff;}
+.chip.active.cat-hab{background:var(--slate);border-color:var(--slate);color:#fff;}
+.chip.active.cat-mvp{background:var(--burgundy);border-color:var(--burgundy);color:#fff;}
+.chip.active.f-op{background:var(--op);border-color:var(--op);color:#fff;}
+.chip.active.f-cr{background:var(--cr);border-color:var(--cr);color:#fff;}
+.reset-btn{background:transparent;border:1px solid #ccc;color:#888;padding:5px 12px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;align-self:flex-end;text-transform:uppercase;letter-spacing:.6px;}
+.reset-btn:hover{border-color:var(--slate);color:var(--slate);}
+
+/* SF chip label */
+.sf-chip{position:relative;padding-right:10px;}
+.sf-chip.active{background:#EEF4FF;border-color:var(--op);color:var(--op);}
+.sf-chip.active.cr-sf{background:var(--cr-lt);border-color:var(--cr);color:var(--cr);}
+/* Selected sf banner */
+#sf-selection-banner{font-size:10px;color:var(--slate);margin-top:6px;min-height:14px;}
+#sf-selection-banner span{font-weight:700;color:var(--op);}
+/* ── KPI ROW ── */
+.kpi-row{display:grid;grid-template-columns:1.3fr 2.4fr 1.3fr;gap:var(--gap);padding:var(--gap) 24px 0;}
+
+/* Primary KPI */
+.kpi-primary{background:var(--slate-dk);color:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:16px 20px;}
+.kpi-p-num{font-size:52px;font-weight:900;line-height:1;letter-spacing:-2px;}
+.kpi-p-lbl{font-size:11px;color:rgba(255,255,255,.7);margin-top:3px;}
+.kpi-p-row{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.15);}
+.kpi-p-row .r-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.6);}
+.kpi-p-row .r-val{font-size:15px;font-weight:800;margin-top:1px;}
+
+/* L stages KPI */
+.kpi-stages{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:12px 16px;}
+.kpi-stages-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:#888;margin-bottom:10px;}
+.stages-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;}
+.stage-col{background:#FAFAFA;border-radius:6px;overflow:hidden;border-top:3px solid #ccc;}
+.stage-col.l1{border-top-color:var(--l1c);}
+.stage-col.l2{border-top-color:var(--l2c);}
+.stage-col.l3{border-top-color:var(--l3c);}
+.stage-col.l4{border-top-color:var(--l4c);}
+.stage-col.l5{border-top-color:var(--l5c);}
+.sc-row{padding:6px 8px;text-align:center;border-bottom:1px solid rgba(0,0,0,.05);}
+.sc-row:last-child{border-bottom:none;}
+.sc-lbl{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#888;display:block;margin-bottom:1px;}
+.sc-val{font-size:18px;font-weight:800;color:var(--slate-dk);line-height:1;display:block;}
+.sc-pct{font-size:9px;color:#999;display:block;margin-top:1px;}
+.sc-imp{font-size:9.5px;font-weight:700;color:var(--slate-dk);display:block;}
+.sc-imp-lbl{font-size:8px;color:#aaa;display:block;margin-bottom:1px;}
+
+/* Categoría KPI */
+.kpi-cats{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:12px 16px;}
+.kpi-cats-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:#888;margin-bottom:10px;}
+.cats-grid{display:grid;grid-template-columns:1fr;gap:8px;}
+.cat-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:#FAFAFA;border-radius:6px;border-left:3px solid #ccc;}
+.cat-row.bc{border-left-color:var(--red);}
+.cat-row.hab{border-left-color:var(--slate);}
+.cat-row.mvp{border-left-color:var(--burgundy);}
+.cat-row .cr-lbl{flex:1;font-size:11px;font-weight:600;color:var(--slate-dk);}
+.cat-row .cr-num{font-size:18px;font-weight:800;color:var(--slate-dk);min-width:28px;text-align:right;}
+.cat-row .cr-pct{font-size:9.5px;color:#999;min-width:35px;text-align:right;}
+.cat-row .cr-imp{font-size:10px;font-weight:700;color:var(--slate-dk);min-width:70px;text-align:right;}
+
+/* ── FRENTES SECTION ── */
+.section{padding:var(--gap) 24px 0;}
+.section-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--slate);margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--slate);}
+
+.frentes-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);}
+
+.frente-block{border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+.frente-hdr{padding:8px 14px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.frente-hdr.op{background:var(--op);}
+.frente-hdr.cr{background:var(--cr);}
+.frente-hdr h2{font-size:13px;font-weight:800;letter-spacing:.2px;white-space:nowrap;}
+.fh-meta{display:flex;gap:16px;align-items:center;}
+.fh-stat{text-align:center;}
+.fh-stat .fs-val{font-size:16px;font-weight:800;line-height:1;}
+.fh-stat .fs-lbl{font-size:9px;opacity:.75;text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+
+.sf-list{background:var(--card);}
+
+/* Sub-frente clickable row */
+.sf-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid #F0F0F0;cursor:pointer;transition:background 120ms;}
+.sf-row:hover{background:#F5F8FF;}
+.sf-row.active{background:#EEF4FF;}
+.sf-row:last-of-type{border-bottom:none;}
+.sf-left{}
+.sf-name{font-size:12px;font-weight:700;color:var(--slate-dk);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.sf-chevron{font-size:9px;color:#aaa;transition:transform 200ms;display:inline-block;}
+.sf-row.active .sf-chevron{transform:rotate(90deg);color:var(--op);}
+.sf-pills{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px;}
+.sf-pill{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:10px;color:#fff;white-space:nowrap;}
+.sf-pill.l1{background:var(--l1c);}
+.sf-pill.l2{background:var(--l2c);}
+.sf-pill.l3{background:var(--l3c);color:var(--slate-dk);}
+.sf-pill.l4{background:var(--l4c);}
+.sf-pill.l5{background:var(--l5c);}
+.sf-bar{display:flex;height:5px;border-radius:3px;overflow:hidden;gap:1px;}
+.sf-bar-seg{height:100%;}
+.sf-right{text-align:right;}
+.sf-count{font-size:22px;font-weight:900;}
+.sf-count.op{color:var(--op);}
+.sf-count.cr{color:var(--cr);}
+.sf-imp{font-size:10px;color:#888;margin-top:1px;}
+
+/* Expandable panel */
+.sf-panel{display:none;background:#F7F9FF;border-bottom:2px solid var(--border);padding:14px 16px;}
+.sf-panel.open{display:block;}
+.sf-panel-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#888;margin-bottom:10px;}
+.sf-panel-ini-grid{display:flex;flex-direction:column;gap:8px;}
+.sf-ini-row{background:#fff;border:1px solid var(--border);border-radius:6px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;}
+.sf-ini-name{font-size:11px;font-weight:600;color:var(--slate-dk);margin-bottom:5px;}
+.sf-ini-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.sf-ini-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+/* Hitos mini bar inside panel */
+.hitos-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1px;min-width:90px;}
+.hb-d{background:var(--done);}
+.hb-p{background:var(--prog);}
+.hb-t{background:#D0D0D0;}
+.hb-l{background:var(--late);}
+.hitos-counts{display:flex;gap:8px;margin-top:4px;}
+.hc{display:flex;align-items:center;gap:3px;font-size:9.5px;color:#666;}
+.hc .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.hc.d .dot{background:var(--done);}
+.hc.p .dot{background:var(--prog);}
+.hc.t .dot{background:#B0BEC5;}
+.hc.l .dot{background:var(--late);}
+.no-hitos{font-size:10px;color:#aaa;font-style:italic;padding:4px 0;}
+.sf-panel-noplan{font-size:11px;color:#888;padding:6px 0;}
+
+/* ── TABLE ── */
+.tbl-wrap-card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;padding-bottom:0px;}
+.tbl-toolbar{display:flex;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.tbl-toolbar input{flex:1;min-width:200px;padding:6px 12px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;}
+.tbl-toolbar input:focus{outline:none;border-color:var(--teal);}
+.tbl-count{font-size:10.5px;color:#999;margin-left:auto;white-space:nowrap;}
+.tbl-scroll{overflow-x:auto;max-height:420px;overflow-y:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{position:sticky;top:0;background:#F7F9FC;padding:8px 10px;text-align:left;border-bottom:2px solid var(--slate);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#666;white-space:nowrap;cursor:pointer;user-select:none;}
+thead th:hover{color:var(--slate-dk);}
+thead th.num{text-align:right;}
+tbody td{padding:8px 10px;border-bottom:1px solid #F4F4F4;vertical-align:middle;}
+tbody tr:hover td{background:#FAFCFF;}
+td.num{text-align:right;font-variant-numeric:tabular-nums;}
+
+/* Group headers */
+.grp-frente td{background:var(--slate-dk);color:#fff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;padding:8px 14px;border:none;}
+.grp-frente.cr td{background:#4a1a7a;}
+.grp-sf td{background:#F0F2F5;color:var(--slate-dk);font-size:11px;font-weight:700;padding:7px 14px 7px 24px;border-bottom:1px solid #ddd;}
+tr.subtotal td{background:#F7F9FC;font-weight:700;font-size:11px;border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:6px 10px;}
+tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-size:12px;padding:10px 10px;}
+.lbl-right{text-align:right;text-transform:uppercase;font-size:10px;letter-spacing:.4px;opacity:.8;}
+
+/* Badges */
+.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap;}
+.b-l1{background:#FDF0E4;color:#8B5E2F;border:1px solid var(--l1c);}
+.b-l2{background:#E0F4F5;color:#1B6A74;border:1px solid var(--l2c);}
+.b-l3{background:#E6F7F5;color:#1B6A5E;border:1px solid var(--l3c);}
+.b-l4{background:#E8EAED;color:var(--slate-dk);border:1px solid #999;}
+.b-l5{background:#F9E4E5;color:var(--burgundy);border:1px solid var(--burgundy);}
+.b-op{background:var(--op-lt);color:var(--op);}
+.b-cr{background:var(--cr-lt);color:var(--cr);}
+.b-bc{background:#FEEAEB;color:var(--red);font-size:9.5px;}
+.b-hab{background:#EEF0F2;color:var(--slate);font-size:9.5px;}
+.b-mvp{background:#F9E4E5;color:var(--burgundy);font-size:9.5px;}
+.b-col{background:#FFF8E1;color:#7B5800;font-size:9.5px;padding:1px 6px;}
+.b-pan{background:#E3F0FF;color:#0D47A1;font-size:9.5px;padding:1px 6px;}
+
+/* Tasks mini (table) */
+.task-mini{display:flex;flex-direction:column;gap:3px;}
+.task-bar{display:flex;height:5px;border-radius:3px;overflow:hidden;gap:1px;min-width:70px;}
+.tb-d{background:var(--done);}
+.tb-p{background:var(--prog);}
+.tb-t{background:var(--todo);}
+.no-plan{font-size:10px;color:#bbb;font-style:italic;}
+
+/* ── PLAN DETAIL SECTION ── */
+.plan-section{padding:var(--gap) 24px 0;display:grid;grid-template-columns:1fr;gap:var(--gap);}
+.plan-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 20px;}
+.plan-card-hdr{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:10px;}
+.plan-card-hdr h3{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--slate-dk);}
+.plan-card-hdr .plan-sub{font-size:10px;color:#aaa;font-weight:400;text-transform:none;letter-spacing:0;}
+.plan-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.pstat{border-radius:6px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.pstat.done{background:#EEF8EE;}
+.pstat.prog{background:#FFF8EC;}
+.pstat.todo{background:#F5F5F5;}
+.pstat.late{background:#FFF0F0;}
+.pstat .ps-num{font-size:32px;font-weight:900;line-height:1;}
+.pstat.done .ps-num{color:var(--done);}
+.pstat.prog .ps-num{color:var(--prog);}
+.pstat.todo .ps-num{color:#9E9E9E;}
+.pstat.late .ps-num{color:var(--late);}
+.pstat .ps-lbl{font-size:11px;color:#666;display:flex;align-items:center;gap:4px;}
+.plan-progress-row{margin-bottom:10px;}
+.plan-prog-bar{height:10px;border-radius:5px;overflow:hidden;display:flex;gap:1px;}
+.ppb-d{background:var(--done);}
+.ppb-p{background:var(--prog);}
+.ppb-t{background:#D0D0D0;}
+.plan-prog-meta{font-size:11px;color:#666;margin-top:5px;}
+.plan-note{background:#F9F9F9;border:1px solid #EFEFEF;border-radius:5px;padding:9px 12px;font-size:11px;color:#777;line-height:1.5;}
+.plan-note strong{color:var(--slate-dk);}
+/* SF Activities summary card */
+.sf-act-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px;}
+.sf-act-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.sf-act-name{font-size:12px;font-weight:700;color:var(--slate-dk);}
+.sf-act-frente{font-size:9.5px;color:#888;margin-top:2px;}
+.sf-act-total{font-size:26px;font-weight:900;text-align:right;line-height:1;}
+.sf-act-total-lbl{font-size:9px;color:#aaa;text-align:right;}
+.sf-act-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;gap:1px;margin-bottom:8px;}
+.sf-act-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center;}
+.sf-act-stat{padding:4px 2px;border-radius:4px;}
+.sf-act-stat.d{background:#EEF8EE;}
+.sf-act-stat.p{background:#FFF8EC;}
+.sf-act-stat.t{background:#F5F5F5;}
+.sf-act-stat.l{background:#FFF0F0;}
+.sf-act-stat .asn{font-size:14px;font-weight:800;}
+.sf-act-stat.d .asn{color:var(--done);}
+.sf-act-stat.p .asn{color:var(--prog);}
+.sf-act-stat.t .asn{color:#9E9E9E;}
+.sf-act-stat.l .asn{color:var(--late);}
+.sf-act-stat .asl{font-size:8.5px;color:#888;}
+.sf-act-pct{font-size:10px;color:var(--slate-dk);margin-top:6px;text-align:center;}
+.sf-no-act{font-size:10.5px;color:#aaa;font-style:italic;text-align:center;padding:12px 0;}
+/* Grid for multiple plan cards */
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--gap);}
+
+/* Accordion */
+.acc-frente{background:var(--slate-dk);color:#fff;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;padding:9px 16px;display:flex;justify-content:space-between;align-items:center;}
+.acc-frente.cr{background:#4a1a7a;}
+.acc-sf-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 16px 9px 24px;background:#F0F2F5;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;transition:background 120ms;}
+.acc-sf-hdr:hover{background:#E4E8EE;}
+.acc-sf-hdr.open{background:#E8EDF5;}
+.acc-sf-title{font-size:12px;font-weight:700;color:var(--slate-dk);display:flex;align-items:center;gap:8px;}
+.acc-chevron{font-size:9px;color:#aaa;transition:transform 200ms;}
+.acc-sf-hdr.open .acc-chevron{transform:rotate(90deg);}
+.acc-sf-meta{display:flex;gap:14px;align-items:center;}
+.acc-body{display:none;overflow-x:auto;}
+.acc-body.open{display:block;}
+.acc-table{width:100%;border-collapse:collapse;font-size:12px;}
+.acc-table thead th{background:#FAFBFC;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#888;white-space:nowrap;}
+.acc-table thead th.num{text-align:right;}
+.acc-table tbody td{padding:8px 10px;border-bottom:1px solid #F4F4F4;vertical-align:middle;font-size:12px;}
+.acc-table tbody tr:last-child td{border-bottom:none;}
+.acc-table tbody tr:hover td{background:#FAFCFF;}
+.acc-table td.num{text-align:right;}
+/* Sync bar pulse animation */
+@keyframes pulse-blue { 0%,100%{opacity:1} 50%{opacity:.4} }
+.syncing { animation: pulse-blue .8s ease-in-out infinite; }
+/* impact value */
+.imp-val{font-weight:700;color:var(--slate-dk);}
+.dash{color:#ccc;}
+
+/* Footnote */
+.footnote{font-size:10px;color:#aaa;padding:8px 24px 16px;text-align:center;}
+
+/* FLAG SVG */
+.flag{display:inline-block;width:16px;height:11px;border:1px solid rgba(0,0,0,.12);border-radius:2px;vertical-align:middle;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0;}
+.flag.col{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 4'><rect width='6' height='4' fill='%23FCD116'/><rect y='2' width='6' height='1' fill='%23003893'/><rect y='3' width='6' height='1' fill='%23CE1126'/></svg>");}
+.flag.pan{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 4'><rect width='6' height='4' fill='%23fff'/><rect x='3' width='3' height='2' fill='%23DA121A'/><rect y='2' width='3' height='2' fill='%23005AA7'/></svg>");}
+
+
+/* ── Late tasks panel ── */
+.late-badge{display:inline-flex;align-items:center;gap:3px;background:#FFF0F0;color:#C62828;border:1px solid #FFCDD2;border-radius:4px;padding:2px 8px;font-size:9.5px;font-weight:700;cursor:pointer;margin-top:4px;transition:background .15s;}
+.late-badge:hover{background:#FFEBEE;border-color:#EF9A9A;}
+.late-badge.open{background:#FFEBEE;}
+.late-detail-row{display:none;}
+  .week-detail-row{display:none;}
+  .week-detail-row td{padding:0!important;background:#FFFDE7;}
+.late-detail-row td{padding:0!important;background:#FFF8F8;}
+.late-panel{padding:10px 18px;border-top:2px solid #FFCDD2;border-bottom:1px solid #FFCDD2;}
+.late-panel-title{font-size:10px;font-weight:800;color:#C62828;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.late-tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.late-tbl th{background:#FFEBEE;color:#B71C1C;font-size:9.5px;font-weight:700;padding:5px 10px;text-align:left;border-bottom:1px solid #FFCDD2;white-space:nowrap;}
+.late-tbl td{padding:6px 10px;border-bottom:1px solid #FFF0F0;vertical-align:middle;}
+.late-tbl tr:last-child td{border-bottom:none;}
+.late-tbl tr:hover td{background:#FFF3F3;}
+.late-tbl a{color:#C62828;font-weight:700;text-decoration:none;font-size:10px;}
+.late-tbl a:hover{text-decoration:underline;}
+.late-due{color:#C62828;font-weight:700;white-space:nowrap;}
+.late-due.critical{color:#B71C1C;}
+.late-assignee{color:#555;font-size:10.5px;}
+.late-summary{color:#333;max-width:360px;}
+.late-detail-card{border-radius:0 0 6px 6px;overflow:hidden;}
+@media(max-width:900px){.frentes-grid{grid-template-columns:1fr;}.kpi-row{grid-template-columns:1fr;}.stages-grid{grid-template-columns:repeat(3,1fr);}}
+@media print{body{background:#fff;}.filters-wrap,.print-btn{display:none!important;}.tbl-scroll{max-height:none;overflow:visible;}@page{size:A4 landscape;margin:8mm;}}
+
+  .badge.b-global{background:linear-gradient(90deg,#2563eb 50%,#c0392b 50%);color:#fff;font-size:9px;}
+
+  .week-badge{display:inline-flex;align-items:center;gap:5px;background:#FFF3E0;color:#E65100;
+    border:1px solid #FFB74D;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;
+    cursor:pointer;transition:background .2s;}
+  .week-badge:hover{background:#FFE0B2;}
+  .week-tbl{width:100%;border-collapse:collapse;font-size:11px;}
+  .week-tbl th{background:#FFF8E1;color:#E65100;font-size:9.5px;font-weight:700;
+    padding:5px 10px;text-align:left;border-bottom:1px solid #FFE082;white-space:nowrap;}
+  .week-tbl td{padding:6px 10px;border-bottom:1px solid #FFFDE7;vertical-align:middle;}
+  .week-tbl tr:last-child td{border-bottom:none;}
+  .week-tbl tr:hover td{background:#FFFDE7;}
+  .week-tbl a{color:#E65100;font-weight:700;text-decoration:none;font-size:10px;}
+  .week-tbl a:hover{text-decoration:underline;}
+  .week-detail-card{margin-top:6px;border-radius:6px;overflow:hidden;
+    border:1px solid #FFE082;background:#FFFDF7;}
+  .week-panel{padding:10px 14px;}
+  .week-panel-title{font-size:10px;font-weight:800;color:#E65100;
+    text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+  .week-due{font-size:10px;color:#555;white-space:nowrap;}
+  .week-due.soon{color:#E65100;font-weight:700;}
+
+  /* ── No-date panel ── */
+  .nodate-badge{display:inline-block;background:#9E9E9E;color:#fff;border-radius:10px;padding:2px 8px;font-size:10px;cursor:pointer;margin-top:2px;}
+  .nodate-badge.open{background:#616161;}
+  .nodate-detail-row{display:none;}
+  .nodate-detail-row td{padding:0!important;background:#F5F5F5;}
+  .nodate-panel{padding:10px 14px;border-left:3px solid #9E9E9E;}
+  .nodate-panel-title{font-weight:700;font-size:11px;color:#616161;margin-bottom:6px;}
+  .nodate-tbl{width:100%;border-collapse:collapse;font-size:11px;}
+  .nodate-tbl th{background:#EEEEEE;padding:4px 8px;text-align:left;font-size:10px;font-weight:600;}
+  .nodate-tbl td{padding:4px 8px;border-top:1px solid #E0E0E0;vertical-align:top;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-left">
+    <h1>Portafolio McKinsey — Jamar</h1>
+    <p>Seguimiento de iniciativas · Operaciones &amp; Crédito · Actualizado: <span id="upd-date"></span></p>
+  </div>
+  <div class="hdr-right">
+    <button class="print-btn" onclick="window.print()">Imprimir / PDF</button>
+    <div class="logo-txt">JAMAR</div>
+  </div>
+</div>
+
+<!-- SYNC BAR -->
+<div id="sync-bar" style="background:#1a2f47;color:#aac4e0;padding:6px 24px;display:flex;align-items:center;gap:16px;font-size:11px;border-bottom:1px solid #0d1b2a;flex-wrap:wrap;">
+  <span>🔄 Última actualización: <strong id="last-sync-lbl" style="color:#6dd5fa;">Sin datos aún</strong></span>
+  <span id="countdown-txt" style="color:#4EB9A7;font-weight:600;"></span>
+  <div id="sync-progress-bar" style="flex:1;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;min-width:80px;">
+    <div id="sync-progress-fill" style="height:100%;background:#1565C0;width:0%;transition:width 1s linear;border-radius:2px;"></div>
+  </div>
+  <span id="sync-status-lbl" style="color:#4EB9A7;font-weight:700;"></span>
+  <button onclick="manualRefresh()" id="btn-refresh-bar" style="background:#1565C0;border:none;color:#fff;padding:4px 14px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.4px;white-space:nowrap;">⟳ Actualizar ahora</button>
+  <button onclick="openJiraConfig()" id="btn-jira-config" style="background:transparent;border:1px solid #4EB9A7;color:#4EB9A7;padding:4px 12px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.4px;white-space:nowrap;">⚙ Credenciales Jira</button>
+</div>
+
+<!-- JIRA CREDENTIALS MODAL -->
+<div id="jira-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:10px;padding:28px 32px;max-width:440px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.25);">
+    <h3 style="font-size:15px;color:#1a2f47;margin-bottom:6px;">⚙ Credenciales Jira</h3>
+    <p style="font-size:11.5px;color:#607D8B;margin-bottom:20px;line-height:1.5;">
+      Necesarias para sincronizar datos en tiempo real.<br>
+      Genera tu token en <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank" style="color:#1565C0;">id.atlassian.com → API tokens</a>
+    </p>
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;font-weight:700;color:#404B5A;display:block;margin-bottom:4px;">Email de Jira</label>
+      <input id="jira-email-input" type="email" placeholder="tuemail@jamar.com"
+        style="width:100%;padding:8px 10px;border:1px solid #cdd;border-radius:6px;font-size:12px;outline:none;">
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="font-size:11px;font-weight:700;color:#404B5A;display:block;margin-bottom:4px;">API Token</label>
+      <input id="jira-token-input" type="password" placeholder="ATATxxx..."
+        style="width:100%;padding:8px 10px;border:1px solid #cdd;border-radius:6px;font-size:12px;outline:none;">
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="closeJiraConfig()" style="background:transparent;border:1px solid #ccc;color:#607D8B;padding:7px 18px;border-radius:6px;font-size:12px;cursor:pointer;">Cancelar</button>
+      <button onclick="saveJiraConfig()" style="background:#1565C0;border:none;color:#fff;padding:7px 18px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;">Guardar y sincronizar</button>
+    </div>
+    <p id="jira-modal-status" style="font-size:11px;color:#EF5350;margin-top:10px;display:none;"></p>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-wrap">
+  <div class="filters-title">Filtros</div>
+  <div class="filters-row">
+
+    <div class="fg">
+      <div class="fg-lbl">País</div>
+      <div class="pais-toggle" id="pais-toggle">
+        <button class="pais-btn active" data-pais="Global">Global</button>
+        <button class="pais-btn" data-pais="COL"><span class="flag col"></span> Colombia</button>
+        <button class="pais-btn" data-pais="PAN"><span class="flag pan"></span> Panamá</button>
+      </div>
+    </div>
+
+    <div class="fg">
+      <div class="fg-lbl">Frente</div>
+      <div class="chip-row">
+        <button class="chip f-op active" data-grp="frente" data-val="Operaciones">⚙️ Operaciones</button>
+        <button class="chip f-cr active" data-grp="frente" data-val="Crédito">💳 Crédito</button>
+      </div>
+    </div>
+
+    <div class="fg">
+      <div class="fg-lbl">Sub-frente</div>
+      <div class="chip-row" id="sf-filter-row">
+        <button class="chip active sf-chip" data-grp="sf" data-val="S&OP">S&OP</button>
+        <button class="chip active sf-chip" data-grp="sf" data-val="Inventarios">Inventarios</button>
+        <button class="chip active sf-chip" data-grp="sf" data-val="Almacenamiento">Almacenamiento</button>
+        <button class="chip active sf-chip" data-grp="sf" data-val="Transporte">Transporte</button>
+        <button class="chip active sf-chip" data-grp="sf" data-val="Post-venta">Post-venta</button>
+        <button class="chip active sf-chip" data-grp="sf" data-val="Curva de Valor Crédito">Curva Valor</button>
+        <button class="chip active sf-chip" data-grp="sf" data-val="Modelo de Riesgos">Riesgos</button>
+        <button class="chip active sf-chip" data-grp="sf" data-val="FOE">FOE</button>
+        <button class="chip active sf-chip" data-grp="sf" data-val="E2E proceso de Crédito">E2E Crédito</button>
+      </div>
+    </div>
+
+    <div class="fg">
+      <div class="fg-lbl">Estado</div>
+      <div class="chip-row">
+        <button class="chip l1 active" data-grp="stage" data-val="L1">L1</button>
+        <button class="chip l2 active" data-grp="stage" data-val="L2">L2</button>
+        <button class="chip l3 active" data-grp="stage" data-val="L3">L3</button>
+        <button class="chip l4 active" data-grp="stage" data-val="L4">L4</button>
+        <button class="chip l5 active" data-grp="stage" data-val="L5">L5</button>
+      </div>
+    </div>
+
+    <div class="fg">
+      <div class="fg-lbl">Categoría</div>
+      <div class="chip-row">
+        <button class="chip cat-bc active" data-grp="cat" data-val="Caso de Negocio">Caso de negocio</button>
+        <button class="chip cat-hab active" data-grp="cat" data-val="Habilitadora">Habilitadora</button>
+        <button class="chip cat-mvp active" data-grp="cat" data-val="MVP">MVP</button>
+      </div>
+    </div>
+
+    <button class="reset-btn" id="reset-btn">↺ Reset</button>
+  </div>
+  <div id="sf-selection-banner"></div>
+  </div>
+</div>
+
+<!-- KPI ROW -->
+
+
+<!-- EXECUTIVE SUMMARY -->
+<div style="padding:var(--gap) 24px 0;">
+  <div class="section-hdr">Resumen Ejecutivo del Portafolio <span style="font-weight:400;font-size:9.5px;text-transform:none;letter-spacing:0;margin-left:8px;color:#999;">— se actualiza con los filtros activos</span></div>
+  <div id="exec-summary-grid" style="display:grid;grid-template-columns:auto 1fr 1fr;gap:var(--gap);align-items:start;"></div>
+</div>
+
+<!-- FRENTES VIEW -->
+<div class="section">
+  <div class="section-hdr">Vista de Frentes y Sub-frentes <span style="font-weight:400;font-size:9.5px;text-transform:none;letter-spacing:0;margin-left:8px;color:#999;">— se actualiza con los filtros activos</span></div>
+  <div class="frentes-grid" id="frentes-grid"></div>
+</div>
+
+<!-- GLOBAL ACTIVITIES BY SUB-FRENTE -->
+<div class="section">
+  <div class="section-hdr">📊 Actividades Globales por Sub-frente <span style="font-weight:400;font-size:9.5px;text-transform:none;letter-spacing:0;margin-left:8px;color:#999;">— hitos vinculados en Jira Software</span></div>
+  <div id="sf-activities-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--gap);"></div>
+</div>
+
+
+
+<!-- ACCORDION TABLE -->
+<div class="section" style="padding-bottom:24px;">
+  <div class="section-hdr">Detalle de Iniciativas por Sub-frente</div>
+  <div style="background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;">
+    <div style="display:flex;gap:10px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);">
+      <input id="search" type="text" placeholder="🔍 Buscar iniciativa, owner..." style="flex:1;padding:6px 12px;border:1px solid var(--border);border-radius:5px;font-size:12px;font-family:inherit;">
+      <div id="tbl-count" style="font-size:10.5px;color:#999;white-space:nowrap;"></div>
+    </div>
+    <div id="accordion-body"></div>
+  </div>
+</div>
+
+<div class="footnote">* Impacto recurrente en Miles USD · Impacto one time parcialmente registrado · Datos en tiempo real desde Jira | McKinsey × Jamar</div>
+
+<script>
+/* ============================================================
+   DATA — 66 iniciativas desde Jira MO (JPD)
+   rec = customfield_11094 (Miles USD estimado, parcial)
+   ot  = customfield_11091 (pendiente de carga en Jira)
+============================================================ */
+const DATA = [
+  {key:'MO-1',frente:'Operaciones',subfrente:'S&OP',summary:'1D. Implementar el proceso de S&OE',status:'L3',cat:'Habilitadora',owner:'Sebastian Rivero',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-1',sw:'SOE',tasks:{total:99,done:20,prog:16,todo:63,late:0}},
+  {key:'MO-2',frente:'Operaciones',subfrente:'S&OP',summary:'1E. Depuración del portafolio',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'COL',rec:1082,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-2',sw:'DEP',tasks:{total:139,done:5,prog:15,todo:119,late:0}},
+  {key:'MO-3',frente:'Operaciones',subfrente:'S&OP',summary:'1A. Mejorar el proceso de S&OP',status:'L3',cat:'Caso de Negocio',owner:'Leandro Candama',pais:'COL',rec:119,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-3',sw:'MSOP',tasks:{total:29,done:8,prog:4,todo:17,late:0}},
+  {key:'MO-4',frente:'Operaciones',subfrente:'S&OP',summary:'1B. Mejorar la asertividad del forecast',status:'L3',cat:'Habilitadora',owner:'Christian Saker',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-4',sw:'MEJ',tasks:{total:37,done:0,prog:0,todo:37,late:0}},
+  {key:'MO-5',frente:'Operaciones',subfrente:'S&OP',summary:'1C. Implementar modelo de trabajo con proveedores',status:'L3',cat:'Habilitadora',owner:'Yamit Fernandez',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-5',sw:'PROVED',tasks:{total:37,done:0,prog:0,todo:37,late:0}},
+  {key:'MO-6',frente:'Operaciones',subfrente:'Inventarios',summary:'2C. Asegurar las herramientas para la gestión de inventario',status:'Backlog',cat:'Habilitadora',owner:'Edwin Collazos',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-6',sw:'',tasks:null},
+  {key:'MO-7',frente:'Operaciones',subfrente:'Inventarios',summary:'2A. Ejecutar la optimización de inventarios',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-7',sw:'ECI',tasks:{total:29,done:3,prog:3,todo:23,late:1}},
+  {key:'MO-8',frente:'Operaciones',subfrente:'Inventarios',summary:'2D. Diseñar la estrategia de inventario en tienda',status:'L2',cat:'MVP',owner:'Adela Hereira',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-8',sw:'DEIT',tasks:{total:67,done:33,prog:14,todo:20,late:0}},
+  {key:'MO-10',frente:'Operaciones',subfrente:'Inventarios',summary:'2B. Ejecutar la liquidación de inventario de baja rotación, obsoletos - Muebles',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-10',sw:'SLOBM',tasks:{total:14,done:3,prog:2,todo:9,late:0}},
+  {key:'MO-11',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3E. Optimizar cross-docking con vendedores y proveedores para colchones',status:'L3',cat:'Caso de Negocio',owner:'Jose Sarmiento',pais:'COL',rec:15,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-11',sw:'PTMZR',tasks:{total:12,done:4,prog:4,todo:4,late:0}},
+  {key:'MO-12',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3B. Implementar zonificación y slotting en bodega',status:'L2',cat:'Habilitadora',owner:'Sneider Chacon',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-12',sw:'',tasks:null},
+  {key:'MO-13',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3D. Diseñar el empaque y proceso de empaque, y migrar a flujo de una sola pieza',status:'L2',cat:'Caso de Negocio',owner:'Mario Marino',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-13',sw:'EMPA',tasks:{total:10,done:0,prog:0,todo:10,late:1}},
+  {key:'MO-24',frente:'Operaciones',subfrente:'Transporte',summary:'4A. Reducir costos de flete tercerizado y propio',status:'L3',cat:'Caso de Negocio',owner:'Marla Lambertino',pais:'COL',rec:148,ot:-3,url:'https://hubdigitaljamar.atlassian.net/browse/MO-24',sw:'RCD3',tasks:{total:45,done:6,prog:0,todo:39,late:4}},
+  {key:'MO-25',frente:'Operaciones',subfrente:'Transporte',summary:'4E. Gestionar el pico de despachos de fin de mes / cuarto',status:'L2',cat:'Habilitadora',owner:'Tatiana Zuluaga',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-25',sw:'',tasks:null},
+  {key:'MO-26',frente:'Operaciones',subfrente:'Transporte',summary:'4C. Definir mix óptimo de insourcing y outsourcing de transporte',status:'L3',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-26',sw:'MIOT',tasks:{total:1,done:0,prog:0,todo:1,late:0}},
+  {key:'MO-27',frente:'Operaciones',subfrente:'Transporte',summary:'4D. Mejorar entrega en primer intento, cumplimiento de citas y entrega a tiempo',status:'L3',cat:'Caso de Negocio',owner:'Marla Lambertino',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-27',sw:'',tasks:null},
+  {key:'MO-28',frente:'Operaciones',subfrente:'Transporte',summary:'4B. Implementar cobro por segunda entrega',status:'L3',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'COL',rec:81,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-28',sw:'IMPCSE',tasks:{total:24,done:5,prog:1,todo:18,late:0}},
+  {key:'MO-29',frente:'Operaciones',subfrente:'Transporte',summary:'4FP. Optimizar ruteo (Mejorar utilizacion y costo de entrega)',status:'L1',cat:'Habilitadora',owner:'Reinaldo Justiniani',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-29',sw:'',tasks:null},
+  {key:'MO-30',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3A. Implementar la metodología de Lean Warehouse',status:'L2',cat:'Caso de Negocio',owner:'Sneider Chacon',pais:'COL',rec:85,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-30',sw:'',tasks:null},
+  {key:'MO-31',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3F. Mejorar la tecnología de Almacenamiento',status:'L2',cat:'Habilitadora',owner:'Jorge Mejia',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-31',sw:'',tasks:null},
+  {key:'MO-32',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3C. Estandarizar proceso de recepción y recibos',status:'L2',cat:'Habilitadora',owner:'José Calderón',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-32',sw:'',tasks:null},
+  {key:'MO-33',frente:'Operaciones',subfrente:'Post-venta',summary:'5F. Mejorar políticas de posventa',status:'L2',cat:'Caso de Negocio',owner:'Juan Goez',pais:'COL',rec:179,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-33',sw:'ZT5F',tasks:{total:13,done:0,prog:2,todo:11,late:0}},
+  {key:'MO-34',frente:'Operaciones',subfrente:'Post-venta',summary:'5D. Fortalecer control de calidad y desempeño de armado',status:'L2',cat:'Caso de Negocio',owner:'Yasenis Jimenez',pais:'COL',rec:138,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-34',sw:'',tasks:{total:34,done:1,prog:5,todo:28,late:0}},
+  {key:'MO-35',frente:'Operaciones',subfrente:'Post-venta',summary:'5B. Mejorar el diagnóstico inicial de incidencias',status:'L2',cat:'Caso de Negocio',owner:'Juan Goez',pais:'COL',rec:22,ot:-5,url:'https://hubdigitaljamar.atlassian.net/browse/MO-35',sw:'WF5',tasks:{total:28,done:0,prog:0,todo:28,late:0}},
+  {key:'MO-36',frente:'Operaciones',subfrente:'Post-venta',summary:'5C. Elevar la calidad de producto con proveedores',status:'L2',cat:'Habilitadora',owner:'Angie Torres',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-36',sw:'SDR',tasks:{total:24,done:1,prog:4,todo:19,late:0}},
+  {key:'MO-37',frente:'Operaciones',subfrente:'Post-venta',summary:'5A. Rediseñar portafolio de soluciones de posventa',status:'L2',cat:'Caso de Negocio',owner:'Juan Goez',pais:'COL',rec:862,ot:41,url:'https://hubdigitaljamar.atlassian.net/browse/MO-37',sw:'PDSP',tasks:{total:96,done:38,prog:6,todo:52,late:8}},
+  {key:'MO-40',frente:'Operaciones',subfrente:'Post-venta',summary:'5E. Implementar LEAN en procesamiento de devoluciones en bodega',status:'L2',cat:'Caso de Negocio',owner:'Yasenis Jimenez',pais:'COL',rec:110,ot:366,url:'https://hubdigitaljamar.atlassian.net/browse/MO-40',sw:'IM',tasks:{total:21,done:1,prog:2,todo:18,late:1}},
+  {key:'MO-41',frente:'Operaciones',subfrente:'Post-venta',summary:'5G. Optimizar gestión de quejas',status:'L2',cat:'Habilitadora',owner:'Milena Rodriguez',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-41',sw:'OP',tasks:{total:48,done:2,prog:1,todo:45,late:0}},
+  {key:'MO-44',frente:'Crédito',subfrente:'FOE',summary:'4A. Transformación de gestión de leads',status:'L3',cat:'Caso de Negocio',owner:'Carlos Barrera',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-44',sw:'TLGDL',tasks:{total:12,done:0,prog:2,todo:10,late:1}},
+  {key:'MO-45',frente:'Crédito',subfrente:'FOE',summary:'4B. Evolución modelo operativo CNP',status:'L3',cat:'Caso de Negocio',owner:'Carlos Barrera',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-45',sw:'EEMOC',tasks:{total:10,done:0,prog:0,todo:10,late:0}},
+  {key:'MO-46',frente:'Crédito',subfrente:'FOE',summary:'4C. Asegurar la sostenibilidad del modelo FOE',status:'L3',cat:'Caso de Negocio',owner:'Mauren Añez',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-46',sw:'SF',tasks:{total:47,done:0,prog:8,todo:39,late:0}},
+  {key:'MO-47',frente:'Crédito',subfrente:'FOE',summary:'4D. Diseñar y desplegar estructura operativa de ventas y crédito',status:'L3',cat:'Caso de Negocio',owner:'Reinaldo Gomez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-47',sw:'EODV',tasks:{total:42,done:2,prog:8,todo:32,late:9}},
+  {key:'MO-48',frente:'Crédito',subfrente:'FOE',summary:'4E. Rediseñar el sistema de comisiones e incentivos',status:'L3',cat:'Caso de Negocio',owner:'Reinaldo Gomez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-48',sw:'',tasks:null},
+  {key:'MO-49',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2A. Desarrollar modelo de optimización de oferta mueble-crédito',status:'L2',cat:'Habilitadora',owner:'William Contreras',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-49',sw:'',tasks:null},
+  {key:'MO-50',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2B. Fortalecer control operacional, de calidad E2E y backtesting de modelos',status:'L3',cat:'Caso de Negocio',owner:'Carlos Velasquez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-50',sw:'',tasks:{total:9,done:2,prog:0,todo:7,late:0}},
+  {key:'MO-52',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2D. Desarrollar modelo de comportamiento (behavior)',status:'L2',cat:'Caso de Negocio',owner:'Juan Felipe Latorre',pais:'PAN',rec:0,ot:17405,url:'https://hubdigitaljamar.atlassian.net/browse/MO-52',sw:'MDCB',tasks:{total:9,done:0,prog:1,todo:8,late:0}},
+  {key:'MO-53',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2E. Nuevo modelo de provisiones',status:'L2',cat:'Habilitadora',owner:'Juan Felipe Latorre',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-53',sw:'',tasks:null},
+  {key:'MO-54',frente:'Crédito',subfrente:'E2E proceso de Crédito',summary:'3A. Implementar eficiencias para reducir fugas en el funnel de crédito',status:'L3',cat:'Caso de Negocio',owner:'Sandra Ibañez',pais:'PAN',rec:0,ot:2878332,url:'https://hubdigitaljamar.atlassian.net/browse/MO-54',sw:'IEPRFEEFDC',tasks:{total:70,done:7,prog:7,todo:56,late:0}},
+  {key:'MO-55',frente:'Crédito',subfrente:'FOE',summary:'4F. Implementar Salesforce Marketing Cloud',status:'L1',cat:'Caso de Negocio',owner:'Heidy Marquez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-55',sw:'',tasks:{total:3,done:0,prog:0,todo:3,late:0}},
+  {key:'MO-56',frente:'Crédito',subfrente:'E2E proceso de Crédito',summary:'3B. Implementar crédito digital',status:'L4',cat:'Caso de Negocio',owner:'Nataly De Arco',pais:'PAN',rec:0,ot:129600,url:'https://hubdigitaljamar.atlassian.net/browse/MO-56',sw:'ICD',tasks:{total:34,done:8,prog:4,todo:22,late:0}},
+  {key:'MO-58',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1A. Implementar palanca diferenciada para clientes de alto riesgo',status:'L3',cat:'Caso de Negocio',owner:'Sandra Ibañez',pais:'PAN',rec:78,ot:691693,url:'https://hubdigitaljamar.atlassian.net/browse/MO-58',sw:'IPDPCDAR',tasks:{total:50,done:25,prog:15,todo:10,late:0}},
+  {key:'MO-59',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1B. Implementar palanca diferenciada para clientes de bajo riesgo',status:'L3',cat:'Caso de Negocio',owner:'Manuelita Sarmiento',pais:'PAN',rec:0,ot:1142539,url:'https://hubdigitaljamar.atlassian.net/browse/MO-59',sw:'IPDPCDBR',tasks:{total:54,done:3,prog:3,todo:48,late:0}},
+  {key:'MO-60',frente:'Operaciones',subfrente:'S&OP',summary:'1AP. Mejorar Proceso de S&OP',status:'L2',cat:'Caso de Negocio',owner:'Ruby Torres',pais:'PAN',rec:15,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-60',sw:'',tasks:null},
+  {key:'MO-61',frente:'',subfrente:'S&OP',summary:'1EP. Depuración del portafolio',status:'L1',cat:'',owner:'Sin asignar',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-61',sw:'',tasks:null},
+  {key:'MO-62',frente:'Operaciones',subfrente:'S&OP',summary:'1EP. Depuración del portafolio',status:'L3',cat:'Caso de Negocio',owner:'Ruby Torres',pais:'PAN',rec:617,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-62',sw:'',tasks:null},
+  {key:'MO-65',frente:'Operaciones',subfrente:'Inventarios',summary:'2BP. Ejecutar la liquidación de inventario de baja rotación y obsoletos - Muebles',status:'L3',cat:'Caso de Negocio',owner:'Ruby Torres',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-65',sw:'JCTR',tasks:{total:58,done:5,prog:11,todo:42,late:0}},
+  {key:'MO-66',frente:'Operaciones',subfrente:'Inventarios',summary:'2C. Ejecutar la liquidación de inventario de baja rotación y obsoletos - Decoración',status:'L3',cat:'Caso de Negocio',owner:'Maria Camila Betancourt',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-66',sw:'SLOBDECO',tasks:{total:20,done:2,prog:4,todo:14,late:0}},
+  {key:'MO-67',frente:'Operaciones',subfrente:'Inventarios',summary:'2CP. Ejecutar la liquidación de inventario de baja rotación y obsoletos - Decoración',status:'L3',cat:'Caso de Negocio',owner:'Maria Camila Betancourt',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-67',sw:'SLOBDECPA',tasks:{total:6,done:0,prog:0,todo:6,late:0}},
+  {key:'MO-69',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3AP. Implementar la metodología de Lean Warehouse',status:'L2',cat:'Caso de Negocio',owner:'Sergio Gil',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-69',sw:'',tasks:null},
+  {key:'MO-70',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3BP. Implementar zonificación y slotting en bodega',status:'L2',cat:'Habilitadora',owner:'Sergio Gil',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-70',sw:'',tasks:null},
+  {key:'MO-71',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3EP. Optimizar cross-docking con vendedores y proveedores para colchones',status:'L1',cat:'Caso de Negocio',owner:'Sergio Gil',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-71',sw:'',tasks:null},
+  {key:'MO-72',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3GP. Liberar espacio en bodega',status:'L1',cat:'Caso de Negocio',owner:'TBD',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-72',sw:'',tasks:null},
+  {key:'MO-73',frente:'Operaciones',subfrente:'Transporte',summary:'4AP. Reducir costos de flete tercerizado y propio',status:'L1',cat:'Caso de Negocio',owner:'Reinaldo Justiniani',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-73',sw:'',tasks:null},
+  {key:'MO-74',frente:'Operaciones',subfrente:'Transporte',summary:'4CP. Definir mix óptimo de insourcing y outsourcing de transporte',status:'L1',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-74',sw:'',tasks:null},
+  {key:'MO-75',frente:'Operaciones',subfrente:'Transporte',summary:'4DP. Mejorar entrega en primer intento, cumplimiento de citas y entrega a tiempo',status:'L1',cat:'Caso de Negocio',owner:'Reinaldo Justiniani',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-75',sw:'',tasks:null},
+  {key:'MO-76',frente:'Operaciones',subfrente:'Transporte',summary:'4F. Optimizar ruteo (Mejorar utilizacion y costo de entrega)',status:'L3',cat:'Habilitadora',owner:'Ervin Trujillo',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-76',sw:'OPR',tasks:{total:20,done:3,prog:1,todo:16,late:1}},
+  {key:'MO-77',frente:'Operaciones',subfrente:'Transporte',summary:'4G. Nuevo Mix armado (Entrega y armado el mismo dia)',status:'L3',cat:'Habilitadora',owner:'Marla Lambertino',pais:'COL',rec:304,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-77',sw:'',tasks:null},
+  {key:'MO-78',frente:'Operaciones',subfrente:'Post-venta',summary:'5AP. Rediseñar portafolio y gestión de soluciones de posventa',status:'L1',cat:'Caso de Negocio',owner:'Juan Goez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-78',sw:'',tasks:null},
+  {key:'MO-79',frente:'Operaciones',subfrente:'Post-venta',summary:'5DP. Fortalecer control de calidad y desempeño de armado',status:'L1',cat:'Caso de Negocio',owner:'Ana de Souza',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-79',sw:'',tasks:null},
+  {key:'MO-80',frente:'Operaciones',subfrente:'Post-venta',summary:'5EP. Implementar LEAN en procesamiento de devoluciones en bodega',status:'L1',cat:'Habilitadora',owner:'Kellineth Ureña',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-80',sw:'',tasks:null},
+  {key:'MO-81',frente:'Operaciones',subfrente:'Post-venta',summary:'5GP. Optimizar gestión de quejas',status:'L1',cat:'Habilitadora',owner:'Ana de Souza',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-81',sw:'',tasks:null},
+  {key:'MO-82',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2C. Desarrollar Modelo de estimación de ingresos',status:'L2',cat:'Habilitadora',owner:'Juan Felipe Latorre',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-82',sw:'',tasks:null},
+  {key:'MO-86',frente:'Crédito',subfrente:'FOE',summary:'Front Office Excellence (Crédito)',status:'L3',cat:'Caso de Negocio',owner:'Adela Hereira',pais:'PAN',rec:0,ot:4251425,url:'https://hubdigitaljamar.atlassian.net/browse/MO-86',sw:'',tasks:null},
+  {key:'MO-87',frente:'Crédito',subfrente:'FOE',summary:'Front Office Excellence (Contado)',status:'L3',cat:'Caso de Negocio',owner:'Adela Hereira',pais:'PAN',rec:0,ot:2148425,url:'https://hubdigitaljamar.atlassian.net/browse/MO-87',sw:'',tasks:null},
+  {key:'MO-88',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1C. Propuesta de valor para cliente conocido',status:'L3',cat:'Caso de Negocio',owner:'Manuelita Sarmiento',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-88',sw:'PROP',tasks:{total:22,done:9,prog:5,todo:8,late:0}},
+  {key:'MO-89',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1D. Implementar palancas transversales para clientes',status:'L3',cat:'Caso de Negocio',owner:'Manuelita Sarmiento',pais:'PAN',rec:0,ot:173596,url:'https://hubdigitaljamar.atlassian.net/browse/MO-89',sw:'RF1D',tasks:{total:9,done:0,prog:4,todo:5,late:0}}
+];
+
+
+
+/* ============================================================
+   STATE & FILTER LOGIC
+============================================================ */
+const STATE = {
+  pais: 'Global',
+  frentes: {Operaciones:true, 'Crédito':true},
+  stages: {L1:true,L2:true,L3:true,L4:true,L5:true},
+  cats: {'Caso de Negocio':true, Habilitadora:true, MVP:true},
+  sfs: {'S&OP':true,'Inventarios':true,'Almacenamiento':true,'Transporte':true,'Post-venta':true,'Curva de Valor Crédito':true,'Modelo de Riesgos':true,'FOE':true,'E2E proceso de Crédito':true},
+  search: '',
+  sort: {field:'frente', dir:1}
+};
+
+function passes(d) {
+  if(STATE.pais !== 'Global' && d.pais !== STATE.pais && d.pais !== 'Global') return false;
+  if(!STATE.frentes[d.frente]) return false;
+  if(!STATE.sfs[d.subfrente]) return false;
+  if(!STATE.stages[d.status]) return false;
+  if(!STATE.cats[d.cat]) return false;
+  if(STATE.search) {
+    const q = STATE.search.toLowerCase();
+    if(![d.summary,d.owner,d.subfrente,d.key].some(v=>v.toLowerCase().includes(q))) return false;
+  }
+  return true;
+}
+
+function getFiltered() {
+  return DATA.filter(passes);
+}
+
+/* ============================================================
+   HELPERS
+============================================================ */
+function fmtImp(v) {
+  if(!v || v===0) return '<span class="dash">—</span>';
+  const sign = v<0 ? '-$' : '$';
+  return `<span class="imp-val">${sign}${Math.abs(v).toLocaleString('es-CO',{maximumFractionDigits:1})}</span>`;
+}
+function fmtImpPlain(v) {
+  if(!v || v===0) return '—';
+  const sign = v<0 ? '-$' : '$';
+  return `${sign}${Math.abs(v).toLocaleString('es-CO',{maximumFractionDigits:1})}`;
+}
+function stageBadgeClass(s) {
+  return {L1:'b-l1',L2:'b-l2',L3:'b-l3',L4:'b-l4',L5:'b-l5'}[s]||'b-l4';
+}
+function catBadgeClass(c) {
+  return {'Caso de Negocio':'b-bc','Habilitadora':'b-hab','MVP':'b-mvp'}[c]||'b-hab';
+}
+
+/* ============================================================
+   RENDER
+============================================================ */
+function render() {
+  const data = getFiltered();
+  renderKPIs(data);
+  renderFrentes(data);
+  renderSFActivities(data);
+  renderTable(data);
+}
+
+/* ── EXECUTIVE SUMMARY ── */
+function renderKPIs(data) {
+  const total = data.length;
+  const totalRec = data.reduce(function(s,d){return s+(d.rec||0);},0);
+  const totalOT  = data.reduce(function(s,d){return s+(d.ot||0);},0);
+  const STAGES = ['L1','L2','L3','L4','L5'];
+  const CATS = [
+    {k:'Caso de Negocio',cls:'bc',lbl:'Caso de negocio'},
+    {k:'Habilitadora',cls:'hab',lbl:'Habilitadora'},
+    {k:'MVP',cls:'mvp',lbl:'MVP'}
+  ];
+  const L_COLORS = {L1:'var(--l1c)',L2:'var(--l2c)',L3:'var(--l3c)',L4:'var(--l4c)',L5:'var(--l5c)'};
+  const opCount = data.filter(function(d){return d.frente==='Operaciones';}).length;
+  const crCount = data.filter(function(d){return d.frente==='Crédito';}).length;
+  const l3Count = data.filter(function(d){return d.status==='L3';}).length;
+
+  // Primary card
+  let primaryHtml = '<div style="background:var(--slate-dk);color:#fff;border-radius:var(--r);padding:18px 20px;min-width:180px;">'
+    +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:.9px;color:rgba(255,255,255,.6);margin-bottom:6px;">Total iniciativas</div>'
+    +'<div style="font-size:54px;font-weight:900;line-height:1;letter-spacing:-2px;">'+total+'</div>'
+    +'<div style="font-size:11px;color:rgba(255,255,255,.7);margin-bottom:14px;">en la selección</div>'
+    +'<div style="border-top:1px solid rgba(255,255,255,.15);padding-top:10px;display:flex;gap:16px;margin-bottom:10px;">'
+    +'<div><div style="font-size:20px;font-weight:800;color:#6DD5FA;">'+opCount+'</div><div style="font-size:9px;color:rgba(255,255,255,.6);">Operaciones</div></div>'
+    +'<div><div style="font-size:20px;font-weight:800;color:#C39BD3;">'+crCount+'</div><div style="font-size:9px;color:rgba(255,255,255,.6);">Crédito</div></div>'
+    +'<div><div style="font-size:20px;font-weight:800;color:var(--mint);">'+l3Count+'</div><div style="font-size:9px;color:rgba(255,255,255,.6);">En L3</div></div>'
+    +'</div>'
+    +'<div style="border-top:1px solid rgba(255,255,255,.15);padding-top:10px;">'
+    +'<div style="font-size:9px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.6px;">Rec. MUSD</div>'
+    +'<div style="font-size:16px;font-weight:800;margin-top:1px;">'+(totalRec>0?fmtImpPlain(totalRec):'—')+'</div>'
+    +'<div style="font-size:9px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.6px;margin-top:6px;">OT MUSD</div>'
+    +'<div style="font-size:16px;font-weight:800;margin-top:1px;">'+(totalOT!==0?fmtImpPlain(totalOT):'—')+'</div>'
+    +'</div></div>';
+
+  // Stages card
+  let stagesHtml = '<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px;">'
+    +'<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:#888;margin-bottom:12px;">Resumen por Estado L</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;">';
+  STAGES.forEach(function(stage){
+    const items = data.filter(function(d){return d.status===stage;});
+    const cnt = items.length;
+    const pct = total>0 ? Math.round(cnt/total*100) : 0;
+    const rec = items.reduce(function(s,d){return s+(d.rec||0);},0);
+    const ot  = items.reduce(function(s,d){return s+(d.ot||0);},0);
+    stagesHtml += '<div style="background:#FAFAFA;border-radius:6px;overflow:hidden;border-top:3px solid '+L_COLORS[stage]+';">'
+      +'<div style="padding:7px 6px;text-align:center;border-bottom:1px solid rgba(0,0,0,.04);">'
+      +'<span style="font-size:8.5px;font-weight:700;text-transform:uppercase;color:#888;display:block;">'+stage+'</span>'
+      +'<span style="font-size:20px;font-weight:800;color:var(--slate-dk);display:block;line-height:1.1;">'+cnt+'</span>'
+      +'<span style="font-size:9px;color:#999;display:block;">'+pct+'%</span>'
+      +'</div>'
+      +'<div style="padding:5px 6px;text-align:center;border-bottom:1px solid rgba(0,0,0,.04);">'
+      +'<span style="font-size:8px;color:#aaa;display:block;">Rec.</span>'
+      +'<span style="font-size:9.5px;font-weight:700;color:var(--slate-dk);display:block;">'+(rec>0?fmtImpPlain(rec):'—')+'</span>'
+      +'</div>'
+      +'<div style="padding:5px 6px;text-align:center;">'
+      +'<span style="font-size:8px;color:#aaa;display:block;">OT</span>'
+      +'<span style="font-size:9.5px;font-weight:700;color:var(--slate-dk);display:block;">'+(ot!==0?fmtImpPlain(ot):'—')+'</span>'
+      +'</div>'
+      +'</div>';
+  });
+  stagesHtml += '</div></div>';
+
+  // Category card
+  let catHtml = '<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px;">'
+    +'<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:#888;margin-bottom:12px;">Resumen por Categoría</div>'
+    +'<div style="display:flex;flex-direction:column;gap:8px;">';
+  const CAT_COLORS = {'Caso de Negocio':'var(--red)','Habilitadora':'var(--slate)','MVP':'var(--burgundy)'};
+  CATS.forEach(function(cat){
+    const items = data.filter(function(d){return d.cat===cat.k;});
+    const cnt = items.length;
+    const pct = total>0 ? Math.round(cnt/total*100) : 0;
+    const rec = items.reduce(function(s,d){return s+(d.rec||0);},0);
+    const barW = pct;
+    catHtml += '<div style="background:#FAFAFA;border-radius:6px;border-left:3px solid '+CAT_COLORS[cat.k]+';padding:8px 10px;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">'
+      +'<div style="font-size:11px;font-weight:600;color:var(--slate-dk);">'+cat.lbl+'</div>'
+      +'<div style="font-size:18px;font-weight:800;color:var(--slate-dk);">'+cnt+' <span style="font-size:10px;color:#999;font-weight:400;">'+pct+'%</span></div>'
+      +'</div>'
+      +'<div style="height:5px;background:#E8E8E8;border-radius:3px;overflow:hidden;margin-bottom:4px;">'
+      +'<div style="height:100%;background:'+CAT_COLORS[cat.k]+';width:'+barW+'%;border-radius:3px;"></div>'
+      +'</div>'
+      +'<div style="font-size:10px;color:#888;">Rec: <strong style="color:var(--slate-dk);">'+(rec>0?fmtImpPlain(rec):'—')+'</strong> MUSD</div>'
+      +'</div>';
+  });
+  catHtml += '</div></div>';
+
+  const el = document.getElementById('exec-summary-grid');
+  if(el) el.innerHTML = primaryHtml + stagesHtml + catHtml;
+
+  // Update sf banner
+  updateSFBanner();
+}
+
+function updateSFBanner() {
+  const allOn = Object.values(STATE.sfs).every(function(v){return v;});
+  const banner = document.getElementById('sf-selection-banner');
+  if(!banner) return;
+  if(allOn){banner.innerHTML='';return;}
+  const active = Object.keys(STATE.sfs).filter(function(k){return STATE.sfs[k];});
+  banner.innerHTML = 'Filtrando por sub-frente: <span>'+active.join(' · ')+'</span>';
+}
+
+
+/* ── FRENTES GRID (interactive) ── */
+// Build lookup: subfrente → initiatives with tasks
+function buildSFPanelHTML(sfItems) {
+  // Group by initiative, show plan status
+  let html = '<div class="sf-panel-ini-grid">';
+  let anyPlan = false;
+
+  sfItems.forEach(function(d) {
+    const swInfo = d.sw ? SW_PROJECTS[d.sw] : null;
+    const t = swInfo ? swInfo.tasks : (d.tasks || null);
+    const stBadge = stageBadgeClass(d.status);
+    const catBadge = catBadgeClass(d.cat);
+
+    html += '<div class="sf-ini-row">';
+    html += '<div>';
+    html += '<div class="sf-ini-name">' + d.summary + '</div>';
+    html += '<div class="sf-ini-meta">';
+    html += '<span class="badge ' + stBadge + '">' + d.status + '</span>';
+    html += '<span class="badge ' + catBadge + '">' + d.cat + '</span>';
+    html += '<span class="badge ' + (d.pais==='COL'?'b-col':'b-pan') + '">' + (d.pais==='COL'?'🇨🇴 COL':'🇵🇦 PAN') + '</span>';
+    if(d.owner) html += '<span style="font-size:10px;color:#888;">' + d.owner + '</span>';
+    html += '</div>';
+
+    if(t) {
+      anyPlan = true;
+      const total = t.total, done=t.done, prog=t.prog||0, todo=t.todo, late=t.late||0;
+      const pct = total>0 ? Math.round(done/total*100) : 0;
+      html += '<div style="margin-top:8px;">';
+      html += '<div class="hitos-bar">'
+        + '<div class="hb-d" style="flex:'+done+'"></div>'
+        + '<div class="hb-p" style="flex:'+prog+'"></div>'
+        + (late?'<div class="hb-l" style="flex:'+late+'"></div>':'')
+        + '<div class="hb-t" style="flex:'+(todo-late)+'"></div>'
+        + '</div>';
+      html += '<div class="hitos-counts">'
+        + '<span class="hc d"><span class="dot"></span>'+done+' completadas</span>'
+        + '<span class="hc p"><span class="dot"></span>'+prog+' en curso</span>'
+        + '<span class="hc t"><span class="dot"></span>'+todo+' por hacer</span>'
+        + (late?'<span class="hc l"><span class="dot"></span>'+late+' atrasadas</span>':'')
+        + '</div>';
+      html += '<div style="font-size:9.5px;color:#888;margin-top:3px;">'+total+' hitos · <strong style="color:var(--done)">'+pct+'%</strong> completado</div>';
+      if(late && LATE_TASKS[d.key]) {
+        html += '<div style="margin-top:5px;"><span class="late-badge" id="late-btn-sf-'+d.key+'" onclick="toggleLateTasks(\'sf-'+d.key+'\',this,\''+d.key+'\')">🔴 '+late+' atrasada'+(late>1?'s':'')+' ▾</span></div>';
+      }
+            var sfTodayStr = new Date().toISOString().split('T')[0];
+      var sfWeekArr = (WEEK_TASKS[d.key]||[]).filter(function(tk){
+        var dd = Math.floor((new Date(tk.duedate) - new Date(sfTodayStr)) / 86400000);
+        return dd >= 0 && dd <= 7;
+      });
+      if(sfWeekArr.length > 0) {
+        html += '<div style="margin-top:4px;"><span class="week-badge" id="week-btn-sf-'+d.key+'" onclick="toggleWeekTasksTbl(\'sf-'+d.key+'\',this)">📅 '+sfWeekArr.length+' esta semana ▾</span></div>';
+      }
+      html += '</div>';
+    } else if(d.sw) {
+      html += '<div class="no-hitos">⏳ Plan en construcción — proyecto '+d.sw+'</div>';
+    } else {
+      html += '<div class="no-hitos">Sin plan detallado vinculado aún</div>';
+    }
+    html += '</div>'; // left col
+    html += '<div class="sf-ini-right">';
+    if(d.rec>0) html += '<div style="font-size:11px;font-weight:700;">'+fmtImpPlain(d.rec)+'</div><div style="font-size:9px;color:#aaa;">Rec. MUSD</div>';
+    if(d.ot && d.ot!==0) html += '<div style="font-size:10px;font-weight:700;color:var(--teal);margin-top:4px;">'+fmtImpPlain(d.ot)+'</div><div style="font-size:9px;color:#aaa;">OT MUSD</div>';
+    html += '</div>';
+    html += '</div>'; // sf-ini-row
+    // Late panel below card
+    if(LATE_TASKS[d.key] && LATE_TASKS[d.key].length > 0) {
+      var lt2 = LATE_TASKS[d.key];
+      var today2 = new Date().toISOString().split('T')[0];
+      var ltRows2 = lt2.map(function(task){
+        var dd2 = Math.floor((new Date(today2)-new Date(task.duedate))/86400000);
+        var dc2 = dd2>14?'late-due critical':'late-due';
+        return '<tr><td><a href="https://hubdigitaljamar.atlassian.net/browse/'+task.key+'" target="_blank">'+task.key+'</a></td>'
+          +'<td class="late-summary">'+task.summary+'</td>'
+          +'<td class="'+dc2+'">'+task.duedate+'<br><span style="font-size:9px;color:#888;">+'+dd2+(dd2===1?' día':' días')+'</span></td>'
+          +'<td class="late-assignee">'+task.assignee+'</td></tr>';
+      }).join('');
+      html += '<div class="late-detail-card" id="late-detail-sf-'+d.key+'" style="display:none;">'
+        +'<div class="late-panel">'
+        +'<div class="late-panel-title">⚠️ Tareas vencidas ('+lt2.length+')</div>'
+        +'<table class="late-tbl"><thead><tr>'
+        +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:120px">Vence</th><th style="width:160px">Responsable</th>'
+        +'</tr></thead><tbody>'+ltRows2+'</tbody></table>'
+        +'</div></div>';
+    }
+    // Week panel
+    var sfWkToday = new Date().toISOString().split('T')[0];
+    var sfWkArr = (WEEK_TASKS[d.key]||[]).filter(function(tk){
+      var dd = Math.floor((new Date(tk.duedate) - new Date(sfWkToday)) / 86400000);
+      return dd >= 0 && dd <= 7;
+    });
+    if(sfWkArr.length > 0) {
+      var wRows = sfWkArr.map(function(task){
+        var dDiff = Math.floor((new Date(task.duedate)-new Date(sfWkToday))/86400000);
+        var dc = dDiff<=2?'week-due soon':'week-due';
+        var label = dDiff===0?'Hoy':dDiff===1?'Mañana':dDiff+' días';
+        return '<tr><td><a href="https://hubdigitaljamar.atlassian.net/browse/'+task.key+'" target="_blank">'+task.key+'</a></td>'
+          +'<td class="late-summary">'+task.summary+'</td>'
+          +'<td class="'+dc+'">'+task.duedate+'<br><span style="font-size:9px;color:#888;">'+label+'</span></td>'
+          +'<td class="late-assignee">'+task.assignee+'</td></tr>';
+      }).join('');
+      html += '<div class="week-detail-card" id="week-detail-sf-'+d.key+'" style="display:none;">'
+        +'<div class="week-panel">'
+        +'<div class="week-panel-title">📅 Actividades de la Semana ('+sfWkArr.length+')</div>'
+        +'<table class="week-tbl"><thead><tr>'
+        +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:120px">Vence en</th><th style="width:160px">Responsable</th>'
+        +'</tr></thead><tbody>'+wRows+'</tbody></table>'
+        +'</div></div>';
+    }
+  });
+
+  html += '</div>';
+  return html;
+}
+
+function renderFrentes(data) {
+  const FRENTES_CFG = [
+    {key:'Operaciones', cls:'op', icon:'⚙️', sfs:['S&OP','Inventarios','Almacenamiento','Transporte','Post-venta']},
+    {key:'Crédito',     cls:'cr', icon:'💳', sfs:['Curva de Valor Crédito','Modelo de Riesgos','FOE','E2E proceso de Crédito']}
+  ];
+  let html = '';
+  FRENTES_CFG.forEach(function({key,cls,icon,sfs}) {
+    const fitems = data.filter(d=>d.frente===key);
+    if(!fitems.length) return;
+    const fRec = fitems.reduce((s,d)=>s+(d.rec||0),0);
+    const fL3  = fitems.filter(d=>d.status==='L3').length;
+    html += '<div class="frente-block">'
+      + '<div class="frente-hdr '+cls+'">'
+      + '<h2>'+icon+' '+key+'</h2>'
+      + '<div class="fh-meta">'
+      + '<div class="fh-stat"><div class="fs-val">'+fitems.length+'</div><div class="fs-lbl">Iniciativas</div></div>'
+      + '<div class="fh-stat"><div class="fs-val">'+fL3+'</div><div class="fs-lbl">En L3</div></div>'
+      + (fRec>0?'<div class="fh-stat"><div class="fs-val" style="font-size:13px;">'+fmtImpPlain(fRec)+'</div><div class="fs-lbl">Rec. MUSD</div></div>':'')
+      + '</div></div>'
+      + '<div class="sf-list">';
+
+    sfs.forEach(function(sf) {
+      const sfItems = fitems.filter(d=>d.subfrente===sf);
+      if(!sfItems.length) return;
+      const sfRec = sfItems.reduce((s,d)=>s+(d.rec||0),0);
+      const l1=sfItems.filter(d=>d.status==='L1').length;
+      const l2=sfItems.filter(d=>d.status==='L2').length;
+      const l3=sfItems.filter(d=>d.status==='L3').length;
+      const tot=sfItems.length;
+      const sfId = 'sf-' + key.replace(/[^a-z]/gi,'') + '-' + sf.replace(/[^a-z]/gi,'');
+
+      const pills = [
+        l1?'<span class="sf-pill l1">L1: '+l1+'</span>':'',
+        l2?'<span class="sf-pill l2">L2: '+l2+'</span>':'',
+        l3?'<span class="sf-pill l3">L3: '+l3+'</span>':''
+      ].filter(Boolean).join('');
+
+      const barParts = [
+        l1?'<div class="sf-bar-seg" style="flex:'+l1+';background:var(--l1c)"></div>':'',
+        l2?'<div class="sf-bar-seg" style="flex:'+l2+';background:var(--l2c)"></div>':'',
+        l3?'<div class="sf-bar-seg" style="flex:'+l3+';background:var(--l3c)"></div>':''
+      ].filter(Boolean).join('');
+
+      // Encode panel data as JSON in data attribute
+      const panelHtml = buildSFPanelHTML(sfItems).replace(/'/g,"&#39;");
+
+      html += '<div class="sf-row" onclick="toggleSFPanel(this)" data-sfid="'+sfId+'">'
+        + '<div class="sf-left">'
+        + '<div class="sf-name"><span class="sf-chevron">▶</span> '+sf+'</div>'
+        + '<div class="sf-pills">'+pills+'</div>'
+        + (tot>0?'<div class="sf-bar">'+barParts+'</div>':'')
+        + '</div>'
+        + '<div class="sf-right">'
+        + '<div class="sf-count '+cls+'">'+tot+'</div>'
+        + '<div class="sf-imp">'+(sfRec>0?fmtImpPlain(sfRec):'—')+'</div>'
+        + '</div>'
+        + '</div>'
+        + '<div class="sf-panel" id="'+sfId+'">'
+        + '<div class="sf-panel-title">📋 Hitos por Iniciativa — '+sf+'</div>'
+        + panelHtml
+        + '</div>';
+    });
+
+    html += '</div></div>';
+  });
+  document.getElementById('frentes-grid').innerHTML = html;
+}
+
+function toggleSFPanel(row) {
+  const sfId = row.dataset.sfid;
+  const panel = document.getElementById(sfId);
+  const isOpen = panel.classList.contains('open');
+  // Close all panels in same frente block
+  const block = row.closest('.sf-list');
+  block.querySelectorAll('.sf-row').forEach(function(r){r.classList.remove('active');});
+  block.querySelectorAll('.sf-panel').forEach(function(p){p.classList.remove('open');});
+  // Toggle this one
+  if(!isOpen) {
+    row.classList.add('active');
+    panel.classList.add('open');
+  }
+}
+
+/* ── SF GLOBAL ACTIVITIES ── */
+
+
+function toggleNodateTasks(moKey, badge) {
+  var row = document.getElementById('nodate-detail-' + moKey);
+  if(!row) return;
+  var isOpen = row.style.display !== 'none' && row.style.display !== '';
+  row.style.display = isOpen ? 'none' : 'table-row';
+  badge.classList.toggle('open', !isOpen);
+  var n = (NO_DATE_TASKS[moKey]||[]).length;
+  badge.textContent = isOpen ? '⏳ '+n+' sin fecha ▾' : '⏳ '+n+' sin fecha ▴';
+}
+
+
+function toggleNoDatTbl(moKey, badge) {
+  var row = document.getElementById('nodate-detail-' + moKey);
+  if(!row) return;
+  var isOpen = row.style.display !== 'none' && row.style.display !== '';
+  row.style.display = isOpen ? 'none' : 'table-row';
+  badge.textContent = isOpen
+    ? '⬜ ' + (NO_DATE_TASKS[moKey]||[]).length + ' sin fecha ▾'
+    : '⬜ ' + (NO_DATE_TASKS[moKey]||[]).length + ' sin fecha ▴';
+}
+
+function toggleWeekTasksTbl(moKey, badge) {
+  var row = document.getElementById('week-detail-' + moKey);
+  if(!row) return;
+  var isOpen = row.style.display !== 'none' && row.style.display !== '';
+  row.style.display = isOpen ? 'none' : 'table-row';
+  badge.classList.toggle('open', !isOpen);
+  badge.textContent = isOpen
+    ? '📅 ' + (WEEK_TASKS[moKey]||[]).length + ' esta semana ▾'
+    : '📅 ' + (WEEK_TASKS[moKey]||[]).length + ' esta semana ▴';
+}
+
+function toggleWeekTasks(id, btn, key) {
+  var el = document.getElementById('week-detail-'+id);
+  if (!el) return;
+  var open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open
+    ? '📅 ' + (WEEK_TASKS[key]||[]).length + ' esta semana ▾'
+    : '📅 ' + (WEEK_TASKS[key]||[]).length + ' esta semana ▴';
+}
+
+function renderSFActivities(filtered) {
+  const SF_ORDER = [
+    {sf:'S&OP',frente:'Operaciones'},{sf:'Inventarios',frente:'Operaciones'},
+    {sf:'Almacenamiento',frente:'Operaciones'},{sf:'Transporte',frente:'Operaciones'},
+    {sf:'Post-venta',frente:'Operaciones'},{sf:'Curva de Valor Crédito',frente:'Crédito'},
+    {sf:'Modelo de Riesgos',frente:'Crédito'},{sf:'FOE',frente:'Crédito'},
+    {sf:'E2E proceso de Crédito',frente:'Crédito'}
+  ];
+  const el = document.getElementById('sf-activities-grid');
+  let html = '';
+  SF_ORDER.forEach(function(cfg){
+    const sfItems = filtered.filter(function(d){return d.subfrente===cfg.sf;});
+    if(!sfItems.length) return;
+    // Aggregate tasks across all initiatives in this sf
+    let total=0, done=0, prog=0, todo=0, late=0, hasPlan=false;
+    sfItems.forEach(function(d){
+      const swInfo = d.sw ? SW_PROJECTS[d.sw] : null;
+      const t = swInfo ? swInfo.tasks : (d.tasks||null);
+      if(t){
+        hasPlan=true;
+        total+=t.total; done+=t.done; prog+=(t.prog||0); todo+=t.todo; late+=(t.late||0);
+      }
+    });
+    const isCr = cfg.frente==='Crédito';
+    const clr = isCr ? 'var(--cr)' : 'var(--op)';
+    const pct = total>0 ? Math.round(done/total*100) : 0;
+    html += '<div class="sf-act-card" style="border-top:3px solid '+clr+';">';
+    html += '<div class="sf-act-hdr">';
+    html += '<div><div class="sf-act-name">'+cfg.sf+'</div><div class="sf-act-frente">'+cfg.frente+' · '+sfItems.length+' iniciativas</div></div>';
+    if(hasPlan){
+      html += '<div><div class="sf-act-total" style="color:'+clr+'">'+total+'</div><div class="sf-act-total-lbl">hitos</div></div>';
+    }
+    html += '</div>';
+    if(hasPlan){
+      html += '<div class="sf-act-bar">'
+        +'<div class="hb-d" style="flex:'+done+'"></div>'
+        +'<div class="hb-p" style="flex:'+prog+'"></div>'
+        +(late?'<div class="hb-l" style="flex:'+late+'"></div>':'')
+        +'<div class="hb-t" style="flex:'+(todo-late)+'"></div>'
+        +'</div>';
+      html += '<div class="sf-act-stats">'
+        +'<div class="sf-act-stat d"><div class="asn">'+done+'</div><div class="asl">Completadas</div></div>'
+        +'<div class="sf-act-stat p"><div class="asn">'+prog+'</div><div class="asl">En Curso</div></div>'
+        +'<div class="sf-act-stat t"><div class="asn">'+todo+'</div><div class="asl">Por Hacer</div></div>'
+        +'<div class="sf-act-stat l"><div class="asn">'+late+'</div><div class="asl">Atrasadas</div></div>'
+        +'</div>';
+      html += '<div class="sf-act-pct"><strong style="color:var(--done)">'+pct+'%</strong> completado</div>';
+      // Late tasks summary for this sub-frente
+      var sfLate = sfItems.filter(function(d){return LATE_TASKS[d.key] && LATE_TASKS[d.key].length>0;});
+      if(sfLate.length > 0) {
+        var totalLate = sfLate.reduce(function(s,d){return s+(LATE_TASKS[d.key]||[]).length;},0);
+        var sfActId = cfg.sf.replace(/[^a-z]/gi,'');
+        html += '<div style="margin-top:8px;border-top:1px solid #FFCDD2;padding-top:6px;">'
+          +'<span class="late-badge" id="late-btn-act-'+sfActId+'" '
+          +'onclick="toggleSFActLate(\''+cfg.sf+'\',this)">🔴 '+totalLate+' tarea'+(totalLate>1?'s':'')+' atrasada'+(totalLate>1?'s':'')+' ▾</span>'
+          +'</div>';
+        html += '<div class="late-detail-card" id="late-act-'+sfActId+'" style="display:none;margin-top:6px;">'
+          +'<table class="late-tbl"><thead><tr>'
+          +'<th>Tarea</th><th>Actividad</th><th>Vence</th><th>Responsable</th>'
+          +'</tr></thead><tbody>';
+        sfLate.forEach(function(d){
+          var today3=new Date().toISOString().split('T')[0];
+          (LATE_TASKS[d.key]||[]).forEach(function(task){
+            var dd3=Math.floor((new Date(today3)-new Date(task.duedate))/86400000);
+            var dc3=dd3>14?'late-due critical':'late-due';
+            html+='<tr>'
+              +'<td><a href="https://hubdigitaljamar.atlassian.net/browse/'+task.key+'" target="_blank">'+task.key+'</a></td>'
+              +'<td class="late-summary">'+task.summary+'</td>'
+              +'<td class="'+dc3+'">'+task.duedate+'<br><span style="font-size:9px;color:#888;">+'+dd3+(dd3===1?' día':' días')+'</span></td>'
+              +'<td class="late-assignee">'+task.assignee+'</td>'
+              +'</tr>';
+          });
+        });
+        html += '</tbody></table></div>';
+      }
+    } else {
+      html += '<div class="sf-no-act">⏳ Plan en construcción</div>';
+    }
+    html += '</div>';
+  });
+  el.innerHTML = html || '<p style="color:#aaa;font-size:11px;">Sin sub-frentes visibles en la selección.</p>';
+}
+
+/* ── PLAN CARDS ── */
+const SW_PROJECTS = {
+  /* ── S&OP ── */
+  'SOE':{name:"1D. Implementar el proceso de S&OE",frente:"Operaciones",subfrente:"S&OP",tasks:{total:99,done:20,prog:16,todo:63,late:0}},
+  'DEP':{name:"1E. Depuración del portafolio",frente:"Operaciones",subfrente:"S&OP",tasks:{total:139,done:5,prog:15,todo:119,late:0}},
+  'MSOP':{name:"1A. Mejora del Proceso S&OP",frente:"Operaciones",subfrente:"S&OP",tasks:{total:29,done:8,prog:4,todo:17,late:0}},
+  'MEJ':{name:"1B. Mejorar la asertividad del Forecast",frente:"Operaciones",subfrente:"S&OP",tasks:{total:37,done:0,prog:0,todo:37,late:0}},
+  'PROVED':{name:"1C. Modelo de trabajo con proveedores",frente:"Operaciones",subfrente:"S&OP",tasks:{total:37,done:0,prog:0,todo:37,late:0}},
+  /* ── Inventarios ── */
+  'ECI':{name:"2A. Ejecutar la optimización de inventarios",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:29,done:3,prog:3,todo:23,late:1}},
+  'DEIT':{name:"2F. Estrategia de inventario en tienda",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:67,done:33,prog:14,todo:20,late:0}},
+  'SLOBM':{name:"2D. Liquidación SLOB Muebles",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:14,done:3,prog:2,todo:9,late:0}},
+  'JCTR':{name:"2DP. Liquidación SLOB Muebles Panamá",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:58,done:5,prog:11,todo:42,late:0}},
+  'SLOBDECO':{name:"2E. Liquidación SLOB Decoración",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:20,done:2,prog:4,todo:14,late:0}},
+  'SLOBDECPA':{name:"2EP. Liquidación SLOB Decoración Panamá",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:6,done:0,prog:0,todo:6,late:0}},
+  /* ── Transporte ── */
+  'RCD3':{name:"4A. Reducir costos de flete",frente:"Operaciones",subfrente:"Transporte",tasks:{total:19,done:0,prog:0,todo:19,late:0}},
+  'IMPCSE':{name:"4B. Cobro segunda entrega",frente:"Operaciones",subfrente:"Transporte",tasks:{total:24,done:5,prog:1,todo:18,late:0}},
+  'MIOT':{name:"4C. Mix insourcing/outsourcing",frente:"Operaciones",subfrente:"Transporte",tasks:{total:1,done:0,prog:0,todo:1,late:0}},
+  'OPR':{name:"4F. Optimizar ruteo",frente:"Operaciones",subfrente:"Transporte",tasks:{total:20,done:3,prog:1,todo:16,late:1}},
+  /* ── Post-venta ── */
+  'ZT5F':{name:"5F. Mejorar políticas posventa",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:13,done:0,prog:0,todo:13,late:3}},
+  'FCCDA':{name:"5D. Fortalecer control calidad y armado",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:34,done:1,prog:5,todo:28,late:0}},
+  'WF5':{name:"5B. Mejorar diagnóstico inicial",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:28,done:0,prog:0,todo:28,late:2}},
+  'SDR':{name:"5C. Elevar calidad producto",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:24,done:1,prog:4,todo:19,late:0}},
+  'PDSP':{name:"5A. Rediseñar portafolio posventa",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:96,done:38,prog:6,todo:52,late:8}},
+  'IM':{name:"5E. LEAN procesamiento devoluciones",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:21,done:1,prog:2,todo:18,late:1}},
+  'OP':{name:"5G. Optimizar gestión de quejas",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:48,done:2,prog:1,todo:45,late:0}},
+  /* ── FOE Crédito ── */
+  'TLGDL':{name:"4A. Transformación gestión de leads",frente:"Crédito",subfrente:"FOE",tasks:{total:12,done:0,prog:2,todo:10,late:1}},
+  'EEMOC':{name:"4B. Evolución modelo operativo CNP",frente:"Crédito",subfrente:"FOE",tasks:{total:10,done:0,prog:0,todo:10,late:0}},
+  'SF':{name:"4C. Sostenibilidad FOE",frente:"Crédito",subfrente:"FOE",tasks:{total:47,done:0,prog:8,todo:39,late:0}},
+  'EODV':{name:"4D. Estructura operativa de ventas",frente:"Crédito",subfrente:"FOE",tasks:{total:42,done:2,prog:8,todo:32,late:9}},
+  'SDC':{name:"4E. Rediseñar sistema comisiones",frente:"Crédito",subfrente:"FOE",tasks:null},
+  'ISMC':{name:"4F. Implementar Salesforce Marketing Cloud",frente:"Crédito",subfrente:"FOE",tasks:{total:3,done:0,prog:0,todo:3,late:0}},
+  /* ── E2E Crédito ── */
+  'IEPRFEEFDC':{name:"3A. Eficiencias para reducir fugas",frente:"Crédito",subfrente:"E2E proceso de Crédito",tasks:{total:70,done:7,prog:7,todo:56,late:0}},
+  'ICD':{name:"3B. Implementar crédito digital",frente:"Crédito",subfrente:"E2E proceso de Crédito",tasks:{total:34,done:8,prog:4,todo:22,late:0}},
+  /* ── Modelo de Riesgos ── */
+  'MDOOMC':{name:"2A. Modelo optimización oferta",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:null},
+  'CODCEYBM':{name:"2B. Control operacional E2E",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:{total:9,done:2,prog:0,todo:7,late:0}},
+  'MDCB':{name:"2D. Modelo de comportamiento",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:{total:9,done:0,prog:1,todo:8,late:0}},
+  'EDP':{name:"2E. Nuevo modelo de provisiones",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:null},
+  /* ── Curva de Valor Crédito ── */
+  'IPDPCDAR':{name:"1A. Palanca — alto riesgo",frente:"Crédito",subfrente:"Curva de Valor Crédito",tasks:{total:50,done:25,prog:15,todo:10,late:0}},
+  'IPDPCDBR':{name:"1B. Palanca — bajo riesgo",frente:"Crédito",subfrente:"Curva de Valor Crédito",tasks:{total:54,done:3,prog:3,todo:48,late:0}},
+  'RF1D':{name:"1D. Implementar palancas transversales",frente:"Crédito",subfrente:"Curva de Valor Crédito",tasks:{total:9,done:0,prog:4,todo:5,late:0}},
+  'PROP':{name:"1C. Propuesta de valor para cliente conocido",frente:"Crédito",subfrente:"Curva de Valor Crédito",tasks:{total:22,done:9,prog:5,todo:8,late:0}}
+};
+
+/* ── LATE TASKS — tareas vencidas por iniciativa (actualizado 2026-06-16) ── */
+var LATE_TASKS = {
+  // 2026-06-24 — 25 tardías en 7 iniciativas
+  'MO-7': [
+    {key:'ECI-29',summary:"Revisión del documento propuesto por McK",duedate:'2026-06-23',assignee:"Sin asignar"}
+  ],
+  'MO-24': [
+    {key:'RCD3-13',summary:"Contratacion del agente",duedate:'2026-06-22',assignee:"Sin asignar"},
+    {key:'RCD3-12',summary:"Compra y entrega del equipo",duedate:'2026-06-22',assignee:"Sin asignar"},
+    {key:'RCD3-10',summary:"Selección del agente",duedate:'2026-06-22',assignee:"Sin asignar"},
+    {key:'RCD3-8',summary:"Contratacion agente contact",duedate:'2026-06-22',assignee:"Marla Lambertino Perez"}
+  ],
+  'MO-37': [
+    {key:'PDSP-70',summary:"Configurar árbol de solución de colchones",duedate:'2026-06-16',assignee:"Jorge Cesar Mejia Beyeh"},
+    {key:'PDSP-35',summary:"Salida en vivo de solucion en casa Doble",duedate:'2026-06-16',assignee:"Juan Carlos Goez Zapata"},
+    {key:'PDSP-2',summary:"Nuevo modelo de solución-Comedores",duedate:'2026-06-17',assignee:"Juan Carlos Goez Zapata"},
+    {key:'PDSP-53',summary:"Definir KPI´S y estructura de seguimiento",duedate:'2026-06-19',assignee:"Juan Carlos Goez Zapata"},
+    {key:'PDSP-22',summary:"Seguimiento y auditoria solucion casa comedores",duedate:'2026-06-20',assignee:"Juan Carlos Goez Zapata"},
+    {key:'PDSP-92',summary:"Revisar alternativas de automatización del proceso de transformación",duedate:'2026-06-23',assignee:"Jorge Cesar Mejia Beyeh"},
+    {key:'PDSP-67',summary:"Construir modelo de diagnóstico para colchones",duedate:'2026-06-23',assignee:"Juan Carlos Goez Zapata"},
+    {key:'PDSP-57',summary:"Diseñar modelo de recuperación",duedate:'2026-06-23',assignee:"Juan Carlos Goez Zapata"}
+  ],
+  'MO-40': [
+    {key:'IM-10',summary:"Modelo To Be: Diseño del flujo estándar de recepción y clasificación",duedate:'2026-06-15',assignee:"Yasenis Jiménez"}
+  ],
+  'MO-44': [
+    {key:'TLGDL-11',summary:"Diagnosticar brechas funcionales entre Salesforce Citrix y App de ventas",duedate:'2026-06-22',assignee:"Carlos Mario Barrera Vega"}
+  ],
+  'MO-47': [
+    {key:'EODV-25',summary:"Estructurar plan de cultura Jamar Panamá",duedate:'2026-06-06',assignee:"rgomez"},
+    {key:'EODV-22',summary:"Determinar capex",duedate:'2026-06-06',assignee:"rgomez"},
+    {key:'EODV-6',summary:"Inventario de personal para FDS",duedate:'2026-06-06',assignee:"rgomez"},
+    {key:'EODV-26',summary:"Proceso de socialización de adaptación de AC en Panamá",duedate:'2026-06-13',assignee:"rgomez"},
+    {key:'EODV-8',summary:"Construcción de malla de horarios FDS de junio a diciembre de 2026",duedate:'2026-06-13',assignee:"rgomez"},
+    {key:'EODV-7',summary:"Socialización del programa con personal escogido.",duedate:'2026-06-13',assignee:"rgomez"},
+    {key:'EODV-2',summary:"Gobernabilidad FDS",duedate:'2026-06-13',assignee:"rgomez"},
+    {key:'EODV-18',summary:"Proceso de selección con Headhunter",duedate:'2026-06-15',assignee:"rgomez"},
+    {key:'EODV-4',summary:"Definir condiciones salariales y demás reconocimiento",duedate:'2026-06-15',assignee:"rgomez"}
+  ],
+  'MO-76': [
+    {key:'OPR-17',summary:"Creación de nuevas zonas con IA",duedate:'2026-06-19',assignee:"Ervin Trujillo Rojas"}
+  ],
+};
+
+
+var WEEK_TASKS = {
+  // 2026-06-25 — 131 actividades próximas en 23 iniciativas
+  'MO-1': [
+    {key:'SOE-19',summary:"H4.5 Definición de tableros, KPIs y reportes de control",duedate:'2026-06-25',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-20',summary:"H4.6 Socialización del modelo con áreas involucradas",duedate:'2026-06-28',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-17',summary:"H4.3 Definición de acuerdos y reglas de operación",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-2': [
+    {key:'DEP-99',summary:"Establecer baseline pre-despliegue por SKU × tienda",duedate:'2026-06-29',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-23',summary:"Establecer la cadencia de revisión del portafolio (mensual operativa, trimestral estrategica)",duedate:'2026-06-29',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-18',summary:"Definir criterios de entrada y salida de SKUs (venta mínima 6m, margen mínimo, rotación)",duedate:'2026-06-29',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-17',summary:"Definir mix objetivo por rango (Alto / Medio / Bajo) y Eje de estilo por sublínea",duedate:'2026-06-29',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-96',summary:"Calcular inventario semilla por SKU × tienda (60 días)",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-94',summary:"Construir plan de despliegue por tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-93',summary:"Validar disponibilidad de espacio físico por tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-92',summary:"Revisar 14 SKUs FS de I4 (100% con inv) — confirmar catalogación",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-91',summary:"Filtrar los 272 SKUs Pareto asignados a I4",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-88',summary:"Ejecutar cambios de precio / costo / descuento en SAP",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-87',summary:"Decidir por SKU: subir precio, renegociar costo o eliminar descuento",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-62',summary:"Filtrar los ~318 SKUs en Ola 1 con BZ>0",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-59',summary:"Aprobación masiva en comité de surtido",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-58',summary:"Validar con Postventa que ninguno tiene garantías activas o reposiciones pendientes",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-57',summary:"Filtrar los 1.429 SKUs en Ola 1 con BZ=0 desde Portafolio",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-52',summary:"Aprobar lista de 48 SKUs a descontinuar en comité",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-50',summary:"Clasificar: (A) descontinuar 48 más negativos / (B) ajustar 112 a margen 0%",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-49',summary:"Filtrar los 160 SKUs con margen negativo asignados a I3",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-30',summary:"Aprobación masiva en comité de surtido",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-29',summary:"Validar con Postventa que ninguno tiene garantías activas o reposiciones pendientes",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-15',summary:"Definir puntos de precio por sublínea",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-12',summary:"Definir tamaño objetivo del portafolio total (# SKUs activos meta) por sublineas",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-4': [
+    {key:'MEJ-34',summary:"Alinear con los requerimientos para el lanzamiento del ciclo de S&OP supervisado para las reuniones de Demand Review",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-33',summary:"Alinear con los requerimientos para el lanzamiento del ciclo de S&OP supervisado para las reuniones de PMR",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-21',summary:"Trabajo previo de preparación al lanzamiento del lanzamiento de S&OP",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-20',summary:"Establecer con el equipo comercial las reglas de juego para los ajustes de forecast siempre respaldados con datos",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-10',summary:"Asegurar la inclusión de las políticas de gestión de productos (replacements, proceso de asociación de historía de venta en sustitutos, proceso de asociación de historia de venta en base a atributos, etc.)",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-9',summary:"Definri modelo del segmento o modelos de los segmentos para el primer piloto y pautas generales que sirvan de base para el escalado",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-7',summary:"Segmentación de los SKUs (Socializar y alinear los segmentos con equipos comerciales)",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-4',summary:"Revisión del product lifecyle (identificar productos nuevos a discontinuar)",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-3',summary:"Revisión de expectativas de futuro para el equipo de comercial y el input que se requiere para el ajuste estadístico del forecast",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-2',summary:"Revisión de los resultados del forecast sistémico vs. Forecast ajustado; incluye principales indicadores (forecast bias, accuracy and value) y el analisis de top 5 over and under",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-1',summary:"Socializar con equipos comerciales los resultados de forecast sistémico vs forecast ajustado para generar conciencia del impacto que genera un ajuste erróneo",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-7': [
+    {key:'ECI-2',summary:"Kick-Off de la iniciativa",duedate:'2026-06-26',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-10': [
+    {key:'SLOBM-15',summary:"Promoción en piso Marcación",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBM-14',summary:"Exhibición / Zonas de Oportunidades",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBM-9',summary:"Combos",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBM-8',summary:"Pricing SLOB ( Todas las Agencias Col )",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'SLOBM-7',summary:"Selección de tiendas (Zonas liquidación, Tiendas outlet)",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'SLOBM-3',summary:"Definición SLOB",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBM-1',summary:"SLOB Muebles Colombia",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-11': [
+    {key:'PTMZR-9',summary:"Levantamiento espacios en cendis Galapa",duedate:'2026-06-25',assignee:"Sebastian Rivero",status:"En curso" },
+    {key:'PTMZR-10',summary:"Revisión portafolio con Categoría",duedate:'2026-06-30',assignee:"Sebastian Rivero",status:"En curso" },
+    {key:'PTMZR-11',summary:"Selección de SKUs piloto y Activacion Comercial",duedate:'2026-06-30',assignee:"Sebastian Rivero",status:"En curso" }
+  ],
+  'MO-28': [
+    {key:'IMPCSE-25',summary:"Reunión con el equipo de crédito",duedate:'2026-06-25',assignee:"Ervin Trujillo Rojas",status:"Tareas por hacer" },
+    {key:'IMPCSE-7',summary:"Go live piloto cobro segunda entrega piloto 1",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"Tareas por hacer" },
+    {key:'IMPCSE-2',summary:"Piloto con una tienda pequeña",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"En curso" }
+  ],
+  'MO-33': [
+    {key:'ZT5F-6',summary:"Revisión Legal y Compliance",duedate:'2026-06-27',assignee:"Juan Carlos Goez Zapata",status:"Tareas por hacer" }
+  ],
+  'MO-34': [
+    {key:'FCCDA-2',summary:"Palanca 1 - Diagnóstico y visibilidad del inventario",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"Tareas por hacer" },
+    {key:'FCCDA-5',summary:"Contratación de agentes de confirmación",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"En curso" },
+    {key:'FCCDA-6',summary:"Adquisición de Equipos",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"En curso" },
+    {key:'FCCDA-7',summary:"Diseño de modelo de gestión",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"En curso" },
+    {key:'FCCDA-8',summary:"Diseño de guión y protocolo de llamada",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"Tareas por hacer" },
+    {key:'FCCDA-9',summary:"Configuración de flujo de trabajos",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"En curso" },
+    {key:'FCCDA-10',summary:"Capacitación y Entrenamiento del personal",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"Tareas por hacer" },
+    {key:'FCCDA-11',summary:"Socialización con Proveedores",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"Tareas por hacer" }
+  ],
+  'MO-36': [
+    {key:'SDR-26',summary:"Revisar desde la data cruda como podemos validar el lote",duedate:'2026-06-30',assignee:"Juan Carlos Goez Zapata",status:"Tareas por hacer" }
+  ],
+  'MO-41': [
+    {key:'OP-13',summary:"Diagnosticar el proceso de atención inbound",duedate:'2026-06-30',assignee:"Milena Rodríguez",status:"Por hacer" }
+  ],
+  'MO-44': [
+    {key:'TLGDL-10',summary:"Ejecutar piloto rápido de mangos bajitos con 5 vendedores híbridos",duedate:'2026-06-26',assignee:"Carlos Mario Barrera Vega",status:"En curso" }
+  ],
+  'MO-46': [
+    {key:'SF-58',summary:"Definir métricas de medición para el APF",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"En curso" },
+    {key:'SF-57',summary:"Definir métricas de medición para alianzas Tablero Homologar tablero Colombia",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"En curso" },
+    {key:'SF-56',summary:"Modelo Operativo: Entender el marco legal y el funcionamiento de los medios de pago en Panamá.",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"Tareas por hacer" },
+    {key:'SF-34',summary:"Diseñar un modelo para la Implementacón Scripts Comerciales y manejo de Objeciones",duedate:'2026-06-30',assignee:"bsilva",status:"En curso" }
+  ],
+  'MO-47': [
+    {key:'EODV-41',summary:"Realizar el plan de Renovación del 30% de la planta de personal (7 posiciones)",duedate:'2026-06-30',assignee:"ERIKA GUTIERREZ",status:"En curso" },
+    {key:'EODV-40',summary:"Redefinir Perfil Asesor de punto",duedate:'2026-06-30',assignee:"Dayra Lizbeth Aguilar",status:"En curso" },
+    {key:'EODV-34',summary:"Definir estructura y Roles de la Operación de Crédito",duedate:'2026-06-30',assignee:"ERIKA GUTIERREZ",status:"En curso" },
+    {key:'EODV-1',summary:"Creación del cargo: Jefe de torre de control",duedate:'2026-06-30',assignee:"rgomez",status:"Definición" },
+    {key:'EODV-27',summary:"Traslado de AC a Panamá",duedate:'2026-07-01',assignee:"rgomez",status:"En curso" }
+  ],
+  'MO-52': [
+    {key:'MDCB-1',summary:"Crear Mapa de impacto de impactos para la implementación",duedate:'2026-06-26',assignee:"Felix Diaz Miranda",status:"En curso" }
+  ],
+  'MO-54': [
+    {key:'IEPRFEEFDC-31',summary:"Construir backlog de oportunidades",duedate:'2026-06-25',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-30',summary:"Priorizar quick wins vs iniciativas estructurales",duedate:'2026-06-25',assignee:"msarmiento",status:"En curso" },
+    {key:'IEPRFEEFDC-29',summary:"Estimar volumen marginal recuperable",duedate:'2026-06-25',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-28',summary:"Cuantificar impacto económico por fuga",duedate:'2026-06-25',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-26',summary:"Priorizar fugas por impacto",duedate:'2026-06-25',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-24',summary:"Clasificar causas: comerciales operativas tecnológicas riesgo experiencia cliente",duedate:'2026-06-25',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-16',summary:"construir pmv funnel accionable",duedate:'2026-06-27',assignee:"German Centanaro",status:"En curso" },
+    {key:'IEPRFEEFDC-90',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes bajo  riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-89',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes alto riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-38',summary:"Diseñar mecanismos de recuperación de clientes fugados",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-37',summary:"Construir lógica de escalamiento y uso del playbook",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-36',summary:"Definir playbooks por tipo de fuga",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-35',summary:"Construir catálogo de acciones correctivas: comerciales operativas experiencia producto pricing riesgo",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-34',summary:"Diseño de acciones de mejora por etapa del funnel",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-32',summary:"Definir responsables y tiempos de ejecución",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-27',summary:"Construir  matriz de oportunidades",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-20',summary:"Identificar y priorizar de oportunidades de fuga",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En ejecución" },
+    {key:'IEPRFEEFDC-40',summary:"Seleccionar tiendas piloto",duedate:'2026-07-01',assignee:"sandra ibañez",status:"Tareas por hacer" }
+  ],
+  'MO-56': [
+    {key:'ICD-50',summary:"Grooming  con Equipo de Cumplimiento  para el entendimiento de Matriz",duedate:'2026-06-26',assignee:"Miguel Ramirez Donado",status:"Tareas por hacer" },
+    {key:'ICD-43',summary:"Reunion tecnica con los equipos de custodia y TI",duedate:'2026-06-26',assignee:"Jenifer",status:"Tareas por hacer" },
+    {key:'ICD-45',summary:"Cerrar Negociacion  con provedor de custodia",duedate:'2026-06-30',assignee:"msarmiento",status:"En curso" },
+    {key:'ICD-41',summary:"Diseñar flujo de custodia del pagare",duedate:'2026-06-30',assignee:"Nataly de arco",status:"En curso" },
+    {key:'ICD-33',summary:"Diagnostico de los procesos impactado",duedate:'2026-06-30',assignee:"Miguel Ramirez Donado",status:"Tareas por hacer" },
+    {key:'ICD-32',summary:"Dibujar la Experiencia del Usuario",duedate:'2026-07-01',assignee:"Miguel Ramirez Donado",status:"Tareas por hacer" },
+    {key:'ICD-31',summary:"Configurar las rutas de aprobación en Salesforce, para la asignación automatica segun el flujo definido  definido para cada ruta.",duedate:'2026-07-01',assignee:"Jenifer",status:"Dev En progreso" },
+    {key:'ICD-57',summary:"Reconfigurar las  politicas de autorizador minimizando requisitos",duedate:'2026-07-02',assignee:"Nataly de arco",status:"Tareas por hacer" }
+  ],
+  'MO-58': [
+    {key:'IPDPCDAR-51',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IPDPCDAR-46',summary:"Piloto codeudores GAAD",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En ejecución" },
+    {key:'IPDPCDAR-38',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IPDPCDAR-26',summary:"definir y ejecutar acciones asociadas a los productos cliente alto riesgo para mejorar ebitda",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IPDPCDAR-7',summary:"Optimizar  palancas actuales de curva de valor para cliente alto riesgo",duedate:'2026-07-01',assignee:"sandra ibañez",status:"En ejecución" }
+  ],
+  'MO-59': [
+    {key:'IPDPCDBR-68',summary:"ejecutar ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-67',summary:"Diseñar  ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-66',summary:"Definición de escalamiento de un piloto a producto",duedate:'2026-06-30',assignee:"Hernan Soto",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-50',summary:"Ajustar narrativa según resultados",duedate:'2026-06-30',assignee:"bsilva",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-49',summary:"Identificar mejores prácticas",duedate:'2026-06-30',assignee:"bsilva",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-48',summary:"Evaluar impacto en conversión",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-46',summary:"Seguimiento de adopción",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-11',summary:"Identificar productos con mayor potencial de cierre",duedate:'2026-06-30',assignee:"msarmiento",status:"En curso" },
+    {key:'IPDPCDBR-9',summary:"Diagnósticar y definir el portafolio para clientes bajo riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"En curso" }
+  ],
+  'MO-65': [
+    {key:'JCTR-31',summary:"Ecommerce",duedate:'2026-06-26',assignee:"Sin asignar",status:"Bloqueado" },
+    {key:'JCTR-6',summary:"Selección de tiendas (Zonas liquidación, Tiendas outlet)",duedate:'2026-06-26',assignee:"Sin asignar",status:"En curso" },
+    {key:'JCTR-5',summary:"Cubrir con fueras de surtido los espacios de la curva",duedate:'2026-06-26',assignee:"Sin asignar",status:"En curso" },
+    {key:'JCTR-4',summary:"Estrategias de evacuación (Promo , Ambiente )",duedate:'2026-06-26',assignee:"Sin asignar",status:"En curso" },
+    {key:'JCTR-57',summary:"Trasladar mercancia a megamall, americas  y los andes",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'JCTR-1',summary:"Definición SLOB",duedate:'2026-06-30',assignee:"Sin asignar",status:"En ejecución" }
+  ],
+  'MO-66': [
+    {key:'SLOBDECO-17',summary:"Campaña urgencia \"Ultimas unidades\"",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-16',summary:"Feria liquidación",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-13',summary:"Incentivo FV escalado - LR tardía",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-12',summary:"Redes sociales - SLOB semanal",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-11',summary:"Clearance day mensual",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-9',summary:"Zona Outlet en tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'SLOBDECO-3',summary:"Descuento 30% LR Temprana: POP y STOPPER de precio especial",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-2',summary:"Exhibición Especial: Reubicar SLOB LR Temprana a zonas de alto tráfico — entrada y esquinas calientes de tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-76': [
+    {key:'OPR-20',summary:"Piloto ruteo con IA",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"Tareas por hacer" },
+    {key:'OPR-19',summary:"Pruebas planeación y ruteo actual con IA basado en nuevas zonas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"Tareas por hacer" },
+    {key:'OPR-15',summary:"Análisis de la data actual de planeación y rutas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"En curso" },
+    {key:'OPR-17',summary:"Validación rutas con IA",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"En curso" }
+  ],
+  'MO-89': [
+    {key:'RF1D-7',summary:"Definiciones legales del piloto",duedate:'2026-06-30',assignee:"Jhonnattan A Mercado A",status:"En curso" }
+  ],
+};
+
+var NO_DATE_TASKS = {
+  // 2026-06-25 — 100 sin fecha en 6 iniciativas
+  'MO-1': [
+    {key:'SOE-99',summary:"Transferencia formal del modelo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-98',summary:"Mecanismo de mejora continua",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-97',summary:"Definir foros y cadencia",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-96',summary:"Definir dueño permanente S&OE",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-95',summary:"Aprobación SteerCo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-94',summary:"Estimación de recursos",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-93',summary:"Priorización de nuevas categorías/Cendis",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-92',summary:"Plan de escalamiento por waves",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-91',summary:"Re-validación con SteerCo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-90',summary:"Actualización de documentación",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-89',summary:"Lista de ajustes priorizados",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-88',summary:"Sesión de retrospectiva",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-87',summary:"Reporte cualitativo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-86',summary:"Documentar cambios culturales",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-85',summary:"Entrevistas a champions",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-84',summary:"Encuesta de adopción",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-83',summary:"Reporte ejecutivo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-82',summary:"Análisis de causa raíz de desviaciones",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-81',summary:"Comparativo vs baseline",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-80',summary:"Medición semanal y mensual de KPIs",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-79',summary:"Sesiones de mejora continua",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-78',summary:"Tablero de riesgos",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-77',summary:"Escalamiento al SteerCo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-76',summary:"Log de bloqueos",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-75',summary:"Sesiones de retroalimentación",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-74',summary:"Tracking de alertas y respuesta",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-73',summary:"Bitácora de decisiones",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-72',summary:"Ritual semanal recurrente",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-71',summary:"Soporte intensivo primeras semanas",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-70',summary:"Comunicación de arranque",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-69',summary:"Tableros operativos publicados",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-68',summary:"Primera sesión semanal S&OE",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-4': [
+    {key:'MEJ-39',summary:"Interfaz para modificación del forecast",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-38',summary:"Modulación del código y repositorio",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-30',summary:"Analisis de Restricción de inventarios",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-29',summary:"Análisis de canibalización",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-26',summary:"Otros Hitos: Revisar encaje en la planificacion post-cambios bases en el forecast",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-18',summary:"Realizar análisis en paralelo (revisar fechas en base a capacidad de equipo y prioridad) (fechas a encajar con los hitos prioritarios para el lanzamiento de S&OP)",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-17',summary:"Diseñar y ejecutar la segmentación de los SKUs",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-16',summary:"Desgloce al nivel de tiendas",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-15',summary:"Modelamiento SKUs sin historia",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-14',summary:"Actualización Fecha a emisión de orden",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-13',summary:"Ejecutar mejoras genericas en el modelo, en linea con el resto de los hitos",duedate:'',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-5': [
+    {key:'PROVED-37',summary:"Escalamiento Panamá: base de mapeo disponible desde M1 (Ruby Torres). Activar gobierno, SLAs, tableros y dinámica para proveedores locales PAN.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-36',summary:"Roll-out Dormitorio COL: replicar modelo completo con Sebastián Rivero (mapeo, dinámica L-V, SLAs, scorecards, tableros, S&OE). Solo si Gate G3 positivo.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-35',summary:"Escalamiento: Dormitorio y Panama",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-34',summary:"Gobierno mensual: comité situación proveedores, decisiones, compromisos mejora, visión 6M S&OP actualizada para Gestión Intensiva.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-33',summary:"Gate G3 — evaluación semana 8: OTIF ≥ 75% con tendencia positiva semanas 5-8 → autorizar escalamiento Dormitorio y Panamá. Meta estado estable del modelo: OTIF ≥ 85%.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-32',summary:"Control SLAs y scorecards: cumplimiento compromisos, evolución proveedores, migración entre grupos si riesgo aumenta. Gobierno mensual activo.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-31',summary:"Entrada semanal S&OE: 1 página riesgos proveedor disponible cada jueves. Dinámica L-V sostenida. Riesgos escalados con trazabilidad de decisión y acción.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-30',summary:"Tableros situación proveedor: semáforo RAG semanal, OTIF, Fill Rate, brecha plan vs oferta, evolución restricciones, acciones abiertas/cerradas/vencidas, cumplimiento SLAs.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-29',summary:"Controlar tableros, gate e integración S&OE",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-28',summary:"PILOTO Social COL Semanas 5-8: medición formal tendencia OTIF y Fill Rate. Seguimiento semanal de acciones. 1 página S&OE activa cada jueves. Gate G3 evaluación semana 8.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-27',summary:"Integración Categorías: reunión jueves formalizada como insumo de decisión. Trazabilidad de ajustes y su impacto en disponibilidad y venta.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-26',summary:"Planes de acción y compromisos bilaterales: acciones correctivas y preventivas, fechas compromiso, responsables, seguimiento semanal.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-25',summary:"Scorecards: mensual (Gestión Intensiva) y trimestral (Seguimiento Activo). OTIF, Fill Rate, brecha plan vs oferta, cumplimiento acciones, lead time, restricciones recurrentes.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-24',summary:"SLAs por grupo operacional: Gestión Intensiva (SLA negociado + bilateral + compromisos mutuos) / Seguimiento Activo (SLA estándar + alerta por desempeño).",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-23',summary:"Mejorar/Integrar: SLAs, Scorecard y compromisos",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-22',summary:"Reunión jueves con directores Categoría (permanente desde M2): oferta conversada → decisiones ajuste, alternativas y riesgos → entrada formal S&OE.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-21',summary:"Dashboard KPIs Tableau-SAP: OTIF, Fill Rate, brecha plan vs oferta, acciones abiertas/cerradas/vencidas, semáforo RAG por proveedor, evolución semanal.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-20',summary:"Priorización proveedores en riesgo → preparación 1 página S&OE semanal. Restricciones recurrentes y dependencias críticas identificadas.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-19',summary:"Análisis brechas plan vs oferta real. Causas raíz de incumplimiento: capacidad, materia prima, confirmación tardía, lead time subestimado.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-18',summary:"Analisis de brechas, causas y riesgos",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-17',summary:"Dinámica L-V activada. Reunión jueves directores Categoría: oferta conversada, decisiones de ajuste, prioridades y riesgos. Entrada S&OE (1 pág.) cada jueves.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-16',summary:"Línea base OTIF y Fill Rate. 9 proveedores Social COL desde día 1. Validación plan vs oferta real. Revisión semanal: oferta, capacidad, restricciones, insumos críticos, novedades.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-15',summary:"Piloto Social: Carril 2",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-14',summary:"Agrupación 2 grupos operacionales: Gestión Intensiva (alto impacto, baja sustitución, visión S&OP 6M) / Seguimiento Activo (alternativas disponibles, revisión trimestral).",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-13',summary:"Mapeo locales Panamá — EN PARALELO desde M1. Ruby Torres (Dir. Logística PAN) lidera in situ. Misma ficha técnica estándar Colombia.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-12',summary:"Mapeo proveedores internacionales Brasil y China COL.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-11',summary:"Levantamiento insumos críticos, restricciones productivas, dolencias del proveedor, riesgos de cumplimiento, capacidad de reacción, dependencias y contacto responsable.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-10',summary:"Mapeo operativo proveedores nacionales COL: capacidad normal/máxima, banda de operación, lote óptimo diario, lead time real, días ocupados por plan Jamar, capacidad disponible.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-9',summary:"Medir mapeo operativo transversal: Carril 1",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-8',summary:"Protocolo S&OP: visión de demanda 6 meses para proveedores Gestión Intensiva. Señal anticipada para preparar capacidad, insumos y restricciones. No reemplaza la OC firme.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-7',summary:"Protocolo S&OE: 1 página semanal de riesgos proveedor (proveedor · SKU/cat. · plan requerido · oferta real · brecha · causa · impacto en disponibilidad/venta/cita · acción · responsable · fecha). Disponible cada jueves",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-6',summary:"Gobierno mínimo del piloto: roles, calendario L-V, reglas de operación, criterio Gate G3. Reglas OTIF: SKU único por entrega, entrega 90 obligatoria, MB51 fuente primaria, ME80AN alternativa, VL06I compromiso.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-5',summary:"Definir problema, objetivo, alcance y enfoque dos carriles: Carril 1 (mapeo transversal) + Carril 2 (piloto Social COL — 9 proveedores, 8 semanas). Charter aprobado.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-4',summary:"Definir problema, objetivo y Gobierno",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-3',summary:"Socialización externa: presentar Modelo de Trabajo con Proveedores a los 9 proveedores Social COL. Propósito colaborativo (no auditoría), roles, calendario, dinámica de trabajo y compromiso de participación.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-2',summary:"Socialización interna: alinear equipo Jamar (Leandro, Yamit, Sebastián, Categorías, Logística, Data, Calidad). Definir roles, dinámica L-V, protocolo S&OE, formato piloto y mensaje único.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-1',summary:"Socializar y alinear",duedate:'',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-58': [
+    {key:'IPDPCDAR-84',summary:"Escalamiento del piloto TAFI",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-83',summary:"Escalamiento del piloto Crediviva",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-82',summary:"Escalamiento del piloto CrediYa",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-81',summary:"Seguimiento del piloto TaFI",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-80',summary:"Seguimiento del piloto crediviva",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-79',summary:"Seguimiento del piloto CrediYa",duedate:'',assignee:"Sin asignar",status:"En curso" },
+    {key:'IPDPCDAR-78',summary:"Implementación piloto TAFI",duedate:'',assignee:"Sin asignar",status:"En curso" },
+    {key:'IPDPCDAR-76',summary:"Implementación piloto Crediviva",duedate:'',assignee:"Sin asignar",status:"En curso" },
+    {key:'IPDPCDAR-75',summary:"Formalización del convenio con TAFI",duedate:'',assignee:"Sin asignar",status:"En curso" },
+    {key:'IPDPCDAR-72',summary:"Escalamiento de las alternativas",duedate:'',assignee:"VIRGILIO DE LA HOZ",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-71',summary:"Seguimiento de las alternativas implementadas",duedate:'',assignee:"VIRGILIO DE LA HOZ",status:"En curso" },
+    {key:'IPDPCDAR-70',summary:"Implementación y pilotaje de las alternativas creadas",duedate:'',assignee:"VIRGILIO DE LA HOZ",status:"En curso" },
+    {key:'IPDPCDAR-66',summary:"Permitir que el vendedor identifique desde antes de generar la op que se encuentra atendiendo a un cliente de alto riesgo",duedate:'',assignee:"Jenifer",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-40',summary:"Construcción del modelo económico para escalamiento del piloto (hito monetario)",duedate:'',assignee:"sandra ibañez",status:"Tareas por hacer" }
+  ],
+  'MO-59': [
+    {key:'IPDPCDBR-80',summary:"permitir que el vendedor pueda identificar antes de generar la orden de pedido que atiende a un cliente bajo riesgo",duedate:'',assignee:"Jenifer",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-79',summary:"Marca de identificación del perfil del cliente bajo riesgo desde visor",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-78',summary:"automatización de variable días de vida para flujo tasa preferencia",duedate:'',assignee:"Jenifer",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-77',summary:"Recuperación cliente bajo riesgo.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-88': [
+    {key:'PROP-21',summary:"Te igualo la cuota con el mercado",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROP-3',summary:"Cliente conocido con saldo",duedate:'',assignee:"msarmiento",status:"En ejecución" }
+  ],
+};
+var NODATE_TASKS = {
+  // 2026-06-25 - 200 actividades sin fecha
+  'MO-1': [
+    {key:'SOE-99',summary:"Transferencia formal del modelo",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-98',summary:"Mecanismo de mejora continua",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-97',summary:"Definir foros y cadencia",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-96',summary:"Definir dueño permanente S&OE",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-95',summary:"Aprobación SteerCo",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-94',summary:"Estimación de recursos",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-93',summary:"Priorización de nuevas categorías/Cendis",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-92',summary:"Plan de escalamiento por waves",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-91',summary:"Re-validación con SteerCo",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-90',summary:"Actualización de documentación",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-89',summary:"Lista de ajustes priorizados",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-88',summary:"Sesión de retrospectiva",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-87',summary:"Reporte cualitativo",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-86',summary:"Documentar cambios culturales",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-85',summary:"Entrevistas a champions",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-84',summary:"Encuesta de adopción",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-83',summary:"Reporte ejecutivo",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-82',summary:"Análisis de causa raíz de desviaciones",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-81',summary:"Comparativo vs baseline",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-80',summary:"Medición semanal y mensual de KPIs",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-79',summary:"Sesiones de mejora continua",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-78',summary:"Tablero de riesgos",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-77',summary:"Escalamiento al SteerCo",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-76',summary:"Log de bloqueos",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-75',summary:"Sesiones de retroalimentación",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-74',summary:"Tracking de alertas y respuesta",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-73',summary:"Bitácora de decisiones",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-72',summary:"Ritual semanal recurrente",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-71',summary:"Soporte intensivo primeras semanas",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-70',summary:"Comunicación de arranque",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-69',summary:"Tableros operativos publicados",duedate:'',assignee:"Sin asignar"},
+    {key:'SOE-68',summary:"Primera sesión semanal S&OE",duedate:'',assignee:"Sin asignar"}
+  ],
+  'MO-2': [
+    {key:'DEP-148',summary:"Definir portafolio segundo semestre (Jul -Dic) 2026",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-145',summary:"Proceso de optimización del portafolio",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-144',summary:"Medir Δ margen consolidado y validar +0,14 pp",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-143',summary:"Baja administrativa de SKUs evacuados y descatalogación de familias",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-142',summary:"Cierre",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-141',summary:"Liquidación con descuento para SKUs con stock alto al mes 6",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-140',summary:"Monitorear evacuación natural de stock T2-T3",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-139',summary:"Suspender reposición de inventario para SKUs de las 69 familias",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-138',summary:"Ejecución gradual",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-137',summary:"Comunicar a equipo comercial decisión y plan",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-136',summary:"Aprobar lista en comité de surtido",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-135',summary:"Comunicación y aprobaciones",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-134',summary:"Validar caso por caso: declive natural vs potencial de relanzamiento",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-133',summary:"Filtrar 69 familias asignadas a I7",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-132',summary:"Identificación de familias",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-131',summary:"Implementar pricing diferencial en olas y medir impacto",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-130',summary:"Validar con TI capacidad de cambiar precio por tienda en POS",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-129',summary:"Construir reglas de pricing diferenciado por SKU × tienda × canal",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-128',summary:"Fase 3 — Pricing diferencial escalado",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-127',summary:"Analizar resultados: identificar SKUs que aceptan premium",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-126',summary:"Ejecutar pilotos y monitorear venta semanalmente",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-125',summary:"Diseñar experimento controlado: +3-5% precio en 3-5 tiendas / 8 semanas",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-124',summary:"Seleccionar 30-50 SKUs Pareto con baja sensibilidad teórica",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-123',summary:"Fase 2 — Pilotos de pricing",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-122',summary:"Actualizar costo en SAP y medir margen efectivo",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-121',summary:"Ejecutar negociación con proveedores (lógica idéntica a I2)",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-120',summary:"Filtrar los 579 SKUs con margen 40-50% asignados a I6",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-119',summary:"Fase 1 — Renegociación ampliada",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-118',summary:"Medir mensualmente % meses con quiebre por SKU",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-117',summary:"Revisar y ajustar frecuencia de despachos CD → tienda",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-116',summary:"Asegurar abastecimiento continuo CD → tienda",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-115',summary:"Configurar alertas tempranas (semáforos) de cobertura CD",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-114',summary:"Definir ritmo mensual de S&OP",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-113',summary:"Implementar S&OP mensual con alertas",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-112',summary:"Ajustar parámetros de reposición en SAP",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-111',summary:"Calcular safety stock óptimo por SKU según CV y lead time",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-110',summary:"Definir nivel de inventario de seguridad",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-109',summary:"Revisar 105 SKUs FS de I5 (10,5% con inv) — depurar scope",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-108',summary:"Filtrar los 322 SKUs asignados a I5",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-107',summary:"Identificación de SKUs en quiebre crítico",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-102',summary:"Modelo de Surtido",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-98',summary:"Medición de uplift",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-95',summary:"Logística y abastecimiento de inventario semilla",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-90',summary:"Selección de SKUs y matriz tienda-SKU",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-86',summary:"Ajuste de 112 SKUs a margen 0%",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-76',summary:"Actualización de sistema y seguimiento",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-72',summary:"Negociación con proveedores",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-69',summary:"Identificación y priorización de SKUs",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-67',summary:"Cierre y reporte",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-61',summary:"Identificar zombies con inventario para evacuar",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-56',summary:"Identificar zombies sin inventario (baja directa)",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-51',summary:"Descontinuación de 48 SKUs",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-48',summary:"Diagnóstico SKU por SKU",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-45',summary:"Actualización de sistema y seguimiento",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-41',summary:"Negociación con proveedores",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-38',summary:"Identificación y priorización de SKUs",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-27',summary:"Cierre y reporte",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-26',summary:"Identificar zombies con inventario para evacuar",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-25',summary:"Identificar zombies sin inventario (baja directa)",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-16',summary:"Definir # máximo de SKUs x  punto de precio para evitar canibalización (politica Arquit)",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-14',summary:"Definir tamaño mínimo y máximo de SKUs por familia (mínimo 2, máximo 8 SKUs)",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-13',summary:"Establecer # máximo de familias por sublínea",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-11',summary:"Definir tamaño y politicas del portafolio",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-10',summary:"Gobierno y aprobaciones",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-8',summary:"Familias declive margen <40%",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-7',summary:"Modelo de Pricing",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-6',summary:"Eliminar quiebres estrella/vaca",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-5',summary:"Surtido y Cobertura Pareto en Tiendas",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-4',summary:"Eliminar SKUs margen negativo",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-3',summary:"Renegociación 20-40%",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-2',summary:"Baja Administrativa Zombis",duedate:'',assignee:"Sin asignar"},
+    {key:'DEP-1',summary:"Marco del portafolio",duedate:'',assignee:"Sin asignar"}
+  ],
+  'MO-4': [
+    {key:'MEJ-39',summary:"Interfaz para modificación del forecast",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-38',summary:"Modulación del código y repositorio",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-30',summary:"Analisis de Restricción de inventarios",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-29',summary:"Análisis de canibalización",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-26',summary:"Otros Hitos: Revisar encaje en la planificacion post-cambios bases en el forecast",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-18',summary:"Realizar análisis en paralelo (revisar fechas en base a capacidad de equipo y prioridad) (fechas a encajar con los hitos prioritarios para el lanzamiento de S&OP)",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-17',summary:"Diseñar y ejecutar la segmentación de los SKUs",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-16',summary:"Desgloce al nivel de tiendas",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-15',summary:"Modelamiento SKUs sin historia",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-14',summary:"Actualización Fecha a emisión de orden",duedate:'',assignee:"Sin asignar"},
+    {key:'MEJ-13',summary:"Ejecutar mejoras genericas en el modelo, en linea con el resto de los hitos",duedate:'',assignee:"Sin asignar"}
+  ],
+  'MO-5': [
+    {key:'PROVED-37',summary:"Escalamiento Panamá: base de mapeo disponible desde M1 (Ruby Torres). Activar gobierno, SLAs, tableros y dinámica para proveedores locales PAN.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-36',summary:"Roll-out Dormitorio COL: replicar modelo completo con Sebastián Rivero (mapeo, dinámica L-V, SLAs, scorecards, tableros, S&OE). Solo si Gate G3 positivo.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-35',summary:"Escalamiento: Dormitorio y Panama",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-34',summary:"Gobierno mensual: comité situación proveedores, decisiones, compromisos mejora, visión 6M S&OP actualizada para Gestión Intensiva.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-33',summary:"Gate G3 — evaluación semana 8: OTIF ≥ 75% con tendencia positiva semanas 5-8 → autorizar escalamiento Dormitorio y Panamá. Meta estado estable del modelo: OTIF ≥ 85%.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-32',summary:"Control SLAs y scorecards: cumplimiento compromisos, evolución proveedores, migración entre grupos si riesgo aumenta. Gobierno mensual activo.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-31',summary:"Entrada semanal S&OE: 1 página riesgos proveedor disponible cada jueves. Dinámica L-V sostenida. Riesgos escalados con trazabilidad de decisión y acción.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-30',summary:"Tableros situación proveedor: semáforo RAG semanal, OTIF, Fill Rate, brecha plan vs oferta, evolución restricciones, acciones abiertas/cerradas/vencidas, cumplimiento SLAs.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-29',summary:"Controlar tableros, gate e integración S&OE",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-28',summary:"PILOTO Social COL Semanas 5-8: medición formal tendencia OTIF y Fill Rate. Seguimiento semanal de acciones. 1 página S&OE activa cada jueves. Gate G3 evaluación semana 8.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-27',summary:"Integración Categorías: reunión jueves formalizada como insumo de decisión. Trazabilidad de ajustes y su impacto en disponibilidad y venta.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-26',summary:"Planes de acción y compromisos bilaterales: acciones correctivas y preventivas, fechas compromiso, responsables, seguimiento semanal.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-25',summary:"Scorecards: mensual (Gestión Intensiva) y trimestral (Seguimiento Activo). OTIF, Fill Rate, brecha plan vs oferta, cumplimiento acciones, lead time, restricciones recurrentes.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-24',summary:"SLAs por grupo operacional: Gestión Intensiva (SLA negociado + bilateral + compromisos mutuos) / Seguimiento Activo (SLA estándar + alerta por desempeño).",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-23',summary:"Mejorar/Integrar: SLAs, Scorecard y compromisos",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-22',summary:"Reunión jueves con directores Categoría (permanente desde M2): oferta conversada → decisiones ajuste, alternativas y riesgos → entrada formal S&OE.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-21',summary:"Dashboard KPIs Tableau-SAP: OTIF, Fill Rate, brecha plan vs oferta, acciones abiertas/cerradas/vencidas, semáforo RAG por proveedor, evolución semanal.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-20',summary:"Priorización proveedores en riesgo → preparación 1 página S&OE semanal. Restricciones recurrentes y dependencias críticas identificadas.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-19',summary:"Análisis brechas plan vs oferta real. Causas raíz de incumplimiento: capacidad, materia prima, confirmación tardía, lead time subestimado.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-18',summary:"Analisis de brechas, causas y riesgos",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-17',summary:"Dinámica L-V activada. Reunión jueves directores Categoría: oferta conversada, decisiones de ajuste, prioridades y riesgos. Entrada S&OE (1 pág.) cada jueves.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-16',summary:"Línea base OTIF y Fill Rate. 9 proveedores Social COL desde día 1. Validación plan vs oferta real. Revisión semanal: oferta, capacidad, restricciones, insumos críticos, novedades.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-15',summary:"Piloto Social: Carril 2",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-14',summary:"Agrupación 2 grupos operacionales: Gestión Intensiva (alto impacto, baja sustitución, visión S&OP 6M) / Seguimiento Activo (alternativas disponibles, revisión trimestral).",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-13',summary:"Mapeo locales Panamá — EN PARALELO desde M1. Ruby Torres (Dir. Logística PAN) lidera in situ. Misma ficha técnica estándar Colombia.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-12',summary:"Mapeo proveedores internacionales Brasil y China COL.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-11',summary:"Levantamiento insumos críticos, restricciones productivas, dolencias del proveedor, riesgos de cumplimiento, capacidad de reacción, dependencias y contacto responsable.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-10',summary:"Mapeo operativo proveedores nacionales COL: capacidad normal/máxima, banda de operación, lote óptimo diario, lead time real, días ocupados por plan Jamar, capacidad disponible.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-9',summary:"Medir mapeo operativo transversal: Carril 1",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-8',summary:"Protocolo S&OP: visión de demanda 6 meses para proveedores Gestión Intensiva. Señal anticipada para preparar capacidad, insumos y restricciones. No reemplaza la OC firme.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-7',summary:"Protocolo S&OE: 1 página semanal de riesgos proveedor (proveedor · SKU/cat. · plan requerido · oferta real · brecha · causa · impacto en disponibilidad/venta/cita · acción · responsable · fecha). Disponible cada jueves",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-6',summary:"Gobierno mínimo del piloto: roles, calendario L-V, reglas de operación, criterio Gate G3. Reglas OTIF: SKU único por entrega, entrega 90 obligatoria, MB51 fuente primaria, ME80AN alternativa, VL06I compromiso.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-5',summary:"Definir problema, objetivo, alcance y enfoque dos carriles: Carril 1 (mapeo transversal) + Carril 2 (piloto Social COL — 9 proveedores, 8 semanas). Charter aprobado.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-4',summary:"Definir problema, objetivo y Gobierno",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-3',summary:"Socialización externa: presentar Modelo de Trabajo con Proveedores a los 9 proveedores Social COL. Propósito colaborativo (no auditoría), roles, calendario, dinámica de trabajo y compromiso de participación.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-2',summary:"Socialización interna: alinear equipo Jamar (Leandro, Yamit, Sebastián, Categorías, Logística, Data, Calidad). Definir roles, dinámica L-V, protocolo S&OE, formato piloto y mensaje único.",duedate:'',assignee:"Sin asignar"},
+    {key:'PROVED-1',summary:"Socializar y alinear",duedate:'',assignee:"Sin asignar"}
+  ],
+  'MO-7': [
+    {key:'ECI-28',summary:"Revisar lead times de proveedores",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-27',summary:"Analizar prácticas actuales de abastecimiento",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-26',summary:"Recopilar datos históricos de demanda",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-25',summary:"Asignar roles y responsabilidades dentro del equipo",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-24',summary:"Presentar objetivos y alcance de la iniciativa",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-23',summary:"Organizar reunión de lanzamiento del equipo",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-22',summary:"Establecer canales de comunicación y herramientas de colaboración",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-21',summary:"Calibración continua",duedate:'',assignee:"Leandro Candama"},
+    {key:'ECI-20',summary:"Ejecución de planes de accion",duedate:'',assignee:"Leandro Candama"},
+    {key:'ECI-19',summary:"Lanzamiento de las sesiones semanales",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-18',summary:"Comite de torre de control",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-14',summary:"Lanzar Torre de Control",duedate:'',assignee:"Leandro Candama"},
+    {key:'ECI-13',summary:"Despliegue en producción",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-12',summary:"Pruebas de aceptación (UAT)",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-11',summary:"Desarrollo y construcción visual",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-10',summary:"Identificación y extracción de datos",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-9',summary:"Definición de las métricas requeridas para sustentar las politicas y su matematicas",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-8',summary:"Asegurar dashboard de métricas (Alineación Iniciativa Metrica de Inventario)",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-7',summary:"Documentación y Formalización",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-6',summary:"Validación con Stakeholders",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-5',summary:"Modelado y definición de parametros",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-4',summary:"Segmentación del inventario",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-3',summary:"Diagnostico de la situación actual (As-Is)",duedate:'',assignee:"Sin asignar"},
+    {key:'ECI-1',summary:"Definir la politica de Inventarios",duedate:'',assignee:"Sin asignar"}
+  ],
+  'MO-50': [
+    {key:'CODCEYBM-13',summary:"Monitoreo y seguimiento del impacto del control",duedate:'',assignee:"Carlos Andres Velásquez Henao"},
+    {key:'CODCEYBM-12',summary:"Desarrollo del control de huellas de consulta en APC",duedate:'',assignee:"Jenifer"},
+    {key:'CODCEYBM-11',summary:"Construcción REA teléfonos coincidentes.",duedate:'',assignee:"Carlos Andres Velásquez Henao"},
+    {key:'CODCEYBM-10',summary:"Construcción REA direcciones coincidentes.",duedate:'',assignee:"Carlos Andres Velásquez Henao"}
+  ],
+  'MO-58': [
+    {key:'IPDPCDAR-84',summary:"Escalamiento del piloto TAFI",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDAR-83',summary:"Escalamiento del piloto Crediviva",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDAR-82',summary:"Escalamiento del piloto CrediYa",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDAR-81',summary:"Seguimiento del piloto TaFI",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDAR-80',summary:"Seguimiento del piloto crediviva",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDAR-79',summary:"Seguimiento del piloto CrediYa",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDAR-78',summary:"Implementación piloto TAFI",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDAR-76',summary:"Implementación piloto Crediviva",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDAR-75',summary:"Formalización del convenio con TAFI",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDAR-72',summary:"Escalamiento de las alternativas",duedate:'',assignee:"VIRGILIO DE LA HOZ"},
+    {key:'IPDPCDAR-71',summary:"Seguimiento de las alternativas implementadas",duedate:'',assignee:"VIRGILIO DE LA HOZ"},
+    {key:'IPDPCDAR-70',summary:"Implementación y pilotaje de las alternativas creadas",duedate:'',assignee:"VIRGILIO DE LA HOZ"},
+    {key:'IPDPCDAR-66',summary:"Permitir que el vendedor identifique desde antes de generar la op que se encuentra atendiendo a un cliente de alto riesgo",duedate:'',assignee:"Jenifer"},
+    {key:'IPDPCDAR-40',summary:"Construcción del modelo económico para escalamiento del piloto (hito monetario)",duedate:'',assignee:"sandra ibañez"}
+  ],
+  'MO-59': [
+    {key:'IPDPCDBR-80',summary:"permitir que el vendedor pueda identificar antes de generar la orden de pedido que atiende a un cliente bajo riesgo",duedate:'',assignee:"Jenifer"},
+    {key:'IPDPCDBR-79',summary:"Marca de identificación del perfil del cliente bajo riesgo desde visor",duedate:'',assignee:"Sin asignar"},
+    {key:'IPDPCDBR-78',summary:"automatización de variable días de vida para flujo tasa preferencia",duedate:'',assignee:"Jenifer"},
+    {key:'IPDPCDBR-77',summary:"Recuperación cliente bajo riesgo.",duedate:'',assignee:"Sin asignar"}
+  ],
+  'MO-88': [
+    {key:'PROP-21',summary:"Te igualo la cuota con el mercado",duedate:'',assignee:"Sin asignar"},
+    {key:'PROP-3',summary:"Cliente conocido con saldo",duedate:'',assignee:"msarmiento"}
+  ],
+};
+
+var NO_DATE_TASKS = {
+  // 2026-06-25
+  'MO-1': [
+    {key:'SOE-99',summary:"Transferencia formal del modelo",assignee:"Sin asignar"},
+    {key:'SOE-98',summary:"Mecanismo de mejora continua",assignee:"Sin asignar"},
+    {key:'SOE-97',summary:"Definir foros y cadencia",assignee:"Sin asignar"},
+    {key:'SOE-96',summary:"Definir dueño permanente S&OE",assignee:"Sin asignar"},
+    {key:'SOE-95',summary:"Aprobación SteerCo",assignee:"Sin asignar"},
+    {key:'SOE-94',summary:"Estimación de recursos",assignee:"Sin asignar"},
+    {key:'SOE-93',summary:"Priorización de nuevas categorías/Cendis",assignee:"Sin asignar"},
+    {key:'SOE-92',summary:"Plan de escalamiento por waves",assignee:"Sin asignar"},
+    {key:'SOE-91',summary:"Re-validación con SteerCo",assignee:"Sin asignar"},
+    {key:'SOE-90',summary:"Actualización de documentación",assignee:"Sin asignar"},
+    {key:'SOE-89',summary:"Lista de ajustes priorizados",assignee:"Sin asignar"},
+    {key:'SOE-88',summary:"Sesión de retrospectiva",assignee:"Sin asignar"},
+    {key:'SOE-87',summary:"Reporte cualitativo",assignee:"Sin asignar"},
+    {key:'SOE-86',summary:"Documentar cambios culturales",assignee:"Sin asignar"},
+    {key:'SOE-85',summary:"Entrevistas a champions",assignee:"Sin asignar"},
+    {key:'SOE-84',summary:"Encuesta de adopción",assignee:"Sin asignar"},
+    {key:'SOE-83',summary:"Reporte ejecutivo",assignee:"Sin asignar"},
+    {key:'SOE-82',summary:"Análisis de causa raíz de desviaciones",assignee:"Sin asignar"},
+    {key:'SOE-81',summary:"Comparativo vs baseline",assignee:"Sin asignar"},
+    {key:'SOE-80',summary:"Medición semanal y mensual de KPIs",assignee:"Sin asignar"},
+    {key:'SOE-79',summary:"Sesiones de mejora continua",assignee:"Sin asignar"},
+    {key:'SOE-78',summary:"Tablero de riesgos",assignee:"Sin asignar"},
+    {key:'SOE-77',summary:"Escalamiento al SteerCo",assignee:"Sin asignar"},
+    {key:'SOE-76',summary:"Log de bloqueos",assignee:"Sin asignar"},
+    {key:'SOE-75',summary:"Sesiones de retroalimentación",assignee:"Sin asignar"},
+    {key:'SOE-74',summary:"Tracking de alertas y respuesta",assignee:"Sin asignar"},
+    {key:'SOE-73',summary:"Bitácora de decisiones",assignee:"Sin asignar"},
+    {key:'SOE-72',summary:"Ritual semanal recurrente",assignee:"Sin asignar"},
+    {key:'SOE-71',summary:"Soporte intensivo primeras semanas",assignee:"Sin asignar"},
+    {key:'SOE-70',summary:"Comunicación de arranque",assignee:"Sin asignar"},
+    {key:'SOE-69',summary:"Tableros operativos publicados",assignee:"Sin asignar"},
+    {key:'SOE-68',summary:"Primera sesión semanal S&OE",assignee:"Sin asignar"}
+  ],
+  'MO-4': [
+    {key:'MEJ-39',summary:"Interfaz para modificación del forecast",assignee:"Sin asignar"},
+    {key:'MEJ-38',summary:"Modulación del código y repositorio",assignee:"Sin asignar"},
+    {key:'MEJ-30',summary:"Analisis de Restricción de inventarios",assignee:"Sin asignar"},
+    {key:'MEJ-29',summary:"Análisis de canibalización",assignee:"Sin asignar"},
+    {key:'MEJ-26',summary:"Otros Hitos: Revisar encaje en la planificacion post-cambios bases en el forecast",assignee:"Sin asignar"},
+    {key:'MEJ-18',summary:"Realizar análisis en paralelo (revisar fechas en base a capacidad de equipo y prioridad) (fechas a encajar con los hitos prioritarios para el lanzamiento de S&OP)",assignee:"Sin asignar"},
+    {key:'MEJ-17',summary:"Diseñar y ejecutar la segmentación de los SKUs",assignee:"Sin asignar"},
+    {key:'MEJ-16',summary:"Desgloce al nivel de tiendas",assignee:"Sin asignar"},
+    {key:'MEJ-15',summary:"Modelamiento SKUs sin historia",assignee:"Sin asignar"},
+    {key:'MEJ-14',summary:"Actualización Fecha a emisión de orden",assignee:"Sin asignar"},
+    {key:'MEJ-13',summary:"Ejecutar mejoras genericas en el modelo, en linea con el resto de los hitos",assignee:"Sin asignar"}
+  ],
+  'MO-5': [
+    {key:'PROVED-37',summary:"Escalamiento Panamá: base de mapeo disponible desde M1 (Ruby Torres). Activar gobierno, SLAs, tableros y dinámica para proveedores locales PAN.",assignee:"Sin asignar"},
+    {key:'PROVED-36',summary:"Roll-out Dormitorio COL: replicar modelo completo con Sebastián Rivero (mapeo, dinámica L-V, SLAs, scorecards, tableros, S&OE). Solo si Gate G3 positivo.",assignee:"Sin asignar"},
+    {key:'PROVED-35',summary:"Escalamiento: Dormitorio y Panama",assignee:"Sin asignar"},
+    {key:'PROVED-34',summary:"Gobierno mensual: comité situación proveedores, decisiones, compromisos mejora, visión 6M S&OP actualizada para Gestión Intensiva.",assignee:"Sin asignar"},
+    {key:'PROVED-33',summary:"Gate G3 — evaluación semana 8: OTIF ≥ 75% con tendencia positiva semanas 5-8 → autorizar escalamiento Dormitorio y Panamá. Meta estado estable del modelo: OTIF ≥ 85%.",assignee:"Sin asignar"},
+    {key:'PROVED-32',summary:"Control SLAs y scorecards: cumplimiento compromisos, evolución proveedores, migración entre grupos si riesgo aumenta. Gobierno mensual activo.",assignee:"Sin asignar"},
+    {key:'PROVED-31',summary:"Entrada semanal S&OE: 1 página riesgos proveedor disponible cada jueves. Dinámica L-V sostenida. Riesgos escalados con trazabilidad de decisión y acción.",assignee:"Sin asignar"},
+    {key:'PROVED-30',summary:"Tableros situación proveedor: semáforo RAG semanal, OTIF, Fill Rate, brecha plan vs oferta, evolución restricciones, acciones abiertas/cerradas/vencidas, cumplimiento SLAs.",assignee:"Sin asignar"},
+    {key:'PROVED-29',summary:"Controlar tableros, gate e integración S&OE",assignee:"Sin asignar"},
+    {key:'PROVED-28',summary:"PILOTO Social COL Semanas 5-8: medición formal tendencia OTIF y Fill Rate. Seguimiento semanal de acciones. 1 página S&OE activa cada jueves. Gate G3 evaluación semana 8.",assignee:"Sin asignar"},
+    {key:'PROVED-27',summary:"Integración Categorías: reunión jueves formalizada como insumo de decisión. Trazabilidad de ajustes y su impacto en disponibilidad y venta.",assignee:"Sin asignar"},
+    {key:'PROVED-26',summary:"Planes de acción y compromisos bilaterales: acciones correctivas y preventivas, fechas compromiso, responsables, seguimiento semanal.",assignee:"Sin asignar"},
+    {key:'PROVED-25',summary:"Scorecards: mensual (Gestión Intensiva) y trimestral (Seguimiento Activo). OTIF, Fill Rate, brecha plan vs oferta, cumplimiento acciones, lead time, restricciones recurrentes.",assignee:"Sin asignar"},
+    {key:'PROVED-24',summary:"SLAs por grupo operacional: Gestión Intensiva (SLA negociado + bilateral + compromisos mutuos) / Seguimiento Activo (SLA estándar + alerta por desempeño).",assignee:"Sin asignar"},
+    {key:'PROVED-23',summary:"Mejorar/Integrar: SLAs, Scorecard y compromisos",assignee:"Sin asignar"},
+    {key:'PROVED-22',summary:"Reunión jueves con directores Categoría (permanente desde M2): oferta conversada → decisiones ajuste, alternativas y riesgos → entrada formal S&OE.",assignee:"Sin asignar"},
+    {key:'PROVED-21',summary:"Dashboard KPIs Tableau-SAP: OTIF, Fill Rate, brecha plan vs oferta, acciones abiertas/cerradas/vencidas, semáforo RAG por proveedor, evolución semanal.",assignee:"Sin asignar"},
+    {key:'PROVED-20',summary:"Priorización proveedores en riesgo → preparación 1 página S&OE semanal. Restricciones recurrentes y dependencias críticas identificadas.",assignee:"Sin asignar"},
+    {key:'PROVED-19',summary:"Análisis brechas plan vs oferta real. Causas raíz de incumplimiento: capacidad, materia prima, confirmación tardía, lead time subestimado.",assignee:"Sin asignar"},
+    {key:'PROVED-18',summary:"Analisis de brechas, causas y riesgos",assignee:"Sin asignar"},
+    {key:'PROVED-17',summary:"Dinámica L-V activada. Reunión jueves directores Categoría: oferta conversada, decisiones de ajuste, prioridades y riesgos. Entrada S&OE (1 pág.) cada jueves.",assignee:"Sin asignar"},
+    {key:'PROVED-16',summary:"Línea base OTIF y Fill Rate. 9 proveedores Social COL desde día 1. Validación plan vs oferta real. Revisión semanal: oferta, capacidad, restricciones, insumos críticos, novedades.",assignee:"Sin asignar"},
+    {key:'PROVED-15',summary:"Piloto Social: Carril 2",assignee:"Sin asignar"},
+    {key:'PROVED-14',summary:"Agrupación 2 grupos operacionales: Gestión Intensiva (alto impacto, baja sustitución, visión S&OP 6M) / Seguimiento Activo (alternativas disponibles, revisión trimestral).",assignee:"Sin asignar"},
+    {key:'PROVED-13',summary:"Mapeo locales Panamá — EN PARALELO desde M1. Ruby Torres (Dir. Logística PAN) lidera in situ. Misma ficha técnica estándar Colombia.",assignee:"Sin asignar"},
+    {key:'PROVED-12',summary:"Mapeo proveedores internacionales Brasil y China COL.",assignee:"Sin asignar"},
+    {key:'PROVED-11',summary:"Levantamiento insumos críticos, restricciones productivas, dolencias del proveedor, riesgos de cumplimiento, capacidad de reacción, dependencias y contacto responsable.",assignee:"Sin asignar"},
+    {key:'PROVED-10',summary:"Mapeo operativo proveedores nacionales COL: capacidad normal/máxima, banda de operación, lote óptimo diario, lead time real, días ocupados por plan Jamar, capacidad disponible.",assignee:"Sin asignar"},
+    {key:'PROVED-9',summary:"Medir mapeo operativo transversal: Carril 1",assignee:"Sin asignar"},
+    {key:'PROVED-8',summary:"Protocolo S&OP: visión de demanda 6 meses para proveedores Gestión Intensiva. Señal anticipada para preparar capacidad, insumos y restricciones. No reemplaza la OC firme.",assignee:"Sin asignar"},
+    {key:'PROVED-7',summary:"Protocolo S&OE: 1 página semanal de riesgos proveedor (proveedor · SKU/cat. · plan requerido · oferta real · brecha · causa · impacto en disponibilidad/venta/cita · acción · responsable · fecha). Disponible cada jueves",assignee:"Sin asignar"},
+    {key:'PROVED-6',summary:"Gobierno mínimo del piloto: roles, calendario L-V, reglas de operación, criterio Gate G3. Reglas OTIF: SKU único por entrega, entrega 90 obligatoria, MB51 fuente primaria, ME80AN alternativa, VL06I compromiso.",assignee:"Sin asignar"},
+    {key:'PROVED-5',summary:"Definir problema, objetivo, alcance y enfoque dos carriles: Carril 1 (mapeo transversal) + Carril 2 (piloto Social COL — 9 proveedores, 8 semanas). Charter aprobado.",assignee:"Sin asignar"},
+    {key:'PROVED-4',summary:"Definir problema, objetivo y Gobierno",assignee:"Sin asignar"},
+    {key:'PROVED-3',summary:"Socialización externa: presentar Modelo de Trabajo con Proveedores a los 9 proveedores Social COL. Propósito colaborativo (no auditoría), roles, calendario, dinámica de trabajo y compromiso de participación.",assignee:"Sin asignar"},
+    {key:'PROVED-2',summary:"Socialización interna: alinear equipo Jamar (Leandro, Yamit, Sebastián, Categorías, Logística, Data, Calidad). Definir roles, dinámica L-V, protocolo S&OE, formato piloto y mensaje único.",assignee:"Sin asignar"},
+    {key:'PROVED-1',summary:"Socializar y alinear",assignee:"Sin asignar"}
+  ],
+  'MO-58': [
+    {key:'IPDPCDAR-84',summary:"Escalamiento del piloto TAFI",assignee:"Sin asignar"},
+    {key:'IPDPCDAR-83',summary:"Escalamiento del piloto Crediviva",assignee:"Sin asignar"},
+    {key:'IPDPCDAR-82',summary:"Escalamiento del piloto CrediYa",assignee:"Sin asignar"},
+    {key:'IPDPCDAR-81',summary:"Seguimiento del piloto TaFI",assignee:"Sin asignar"},
+    {key:'IPDPCDAR-80',summary:"Seguimiento del piloto crediviva",assignee:"Sin asignar"},
+    {key:'IPDPCDAR-79',summary:"Seguimiento del piloto CrediYa",assignee:"Sin asignar"},
+    {key:'IPDPCDAR-78',summary:"Implementación piloto TAFI",assignee:"Sin asignar"},
+    {key:'IPDPCDAR-76',summary:"Implementación piloto Crediviva",assignee:"Sin asignar"},
+    {key:'IPDPCDAR-75',summary:"Formalización del convenio con TAFI",assignee:"Sin asignar"},
+    {key:'IPDPCDAR-72',summary:"Escalamiento de las alternativas",assignee:"VIRGILIO DE LA HOZ"},
+    {key:'IPDPCDAR-71',summary:"Seguimiento de las alternativas implementadas",assignee:"VIRGILIO DE LA HOZ"},
+    {key:'IPDPCDAR-70',summary:"Implementación y pilotaje de las alternativas creadas",assignee:"VIRGILIO DE LA HOZ"},
+    {key:'IPDPCDAR-66',summary:"Permitir que el vendedor identifique desde antes de generar la op que se encuentra atendiendo a un cliente de alto riesgo",assignee:"Jenifer"},
+    {key:'IPDPCDAR-40',summary:"Construcción del modelo económico para escalamiento del piloto (hito monetario)",assignee:"sandra ibañez"}
+  ],
+  'MO-59': [
+    {key:'IPDPCDBR-80',summary:"permitir que el vendedor pueda identificar antes de generar la orden de pedido que atiende a un cliente bajo riesgo",assignee:"Jenifer"},
+    {key:'IPDPCDBR-79',summary:"Marca de identificación del perfil del cliente bajo riesgo desde visor",assignee:"Sin asignar"},
+    {key:'IPDPCDBR-78',summary:"automatización de variable días de vida para flujo tasa preferencia",assignee:"Jenifer"},
+    {key:'IPDPCDBR-77',summary:"Recuperación cliente bajo riesgo.",assignee:"Sin asignar"}
+  ],
+  'MO-88': [
+    {key:'PROP-21',summary:"Te igualo la cuota con el mercado",assignee:"Sin asignar"},
+    {key:'PROP-3',summary:"Cliente conocido con saldo",assignee:"msarmiento"}
+  ],
+};
+function renderPlanCards(filtered) {
+  const visibleSws = new Set(filtered.filter(d=>d.sw).map(d=>d.sw));
+  const el = document.getElementById('plan-grid');
+  if(!visibleSws.size){
+    el.innerHTML='<p style="color:#aaa;font-size:11px;padding:8px 0;">Ninguna iniciativa con plan detallado visible en la selección actual.</p>';
+    return;
+  }
+  let html = '';
+  for(const [sw, proj] of Object.entries(SW_PROJECTS)){
+    if(!visibleSws.has(sw)) continue;
+    const t = proj.tasks;
+    const clr = proj.frente==='Crédito' ? 'var(--cr)' : 'var(--op)';
+    if(t){
+      const pct = t.total>0 ? Math.round(t.done/t.total*100) : 0;
+      html += '<div class="plan-card">'
+        + '<div class="plan-card-hdr"><h3>📌 ' + sw + '</h3>'
+        + '<span class="plan-sub" style="color:' + clr + ';font-weight:600;">' + proj.frente + ' · ' + proj.subfrente + '</span></div>'
+        + '<div style="font-size:11.5px;font-weight:600;color:var(--slate-dk);margin-bottom:12px;">' + proj.name + '</div>'
+        + '<div class="plan-stats-row">'
+        + '<div class="pstat done"><div class="ps-num">' + t.done + '</div><div class="ps-lbl">✅ Completadas</div></div>'
+        + '<div class="pstat prog"><div class="ps-num">' + t.prog + '</div><div class="ps-lbl">🔄 En Curso</div></div>'
+        + '<div class="pstat todo"><div class="ps-num">' + t.todo + '</div><div class="ps-lbl">⬜ Por Hacer</div></div>'
+        + '<div class="pstat late"><div class="ps-num">' + t.late + '</div><div class="ps-lbl">🔴 Atrasadas</div></div>'
+        + '</div>'
+        + '<div class="plan-progress-row">'
+        + '<div class="plan-prog-bar">'
+        + '<div class="ppb-d" style="flex:' + t.done + '"></div>'
+        + '<div class="ppb-p" style="flex:' + t.prog + '"></div>'
+        + '<div class="ppb-t" style="flex:' + t.todo + '"></div>'
+        + '</div>'
+        + '<div class="plan-prog-meta">' + t.total + ' actividades · <strong style="color:var(--done)">' + pct + '% completado</strong></div>'
+        + '</div></div>';
+    } else {
+      html += '<div class="plan-card" style="border-left:3px solid ' + clr + ';">'
+        + '<div class="plan-card-hdr"><h3>📋 ' + sw + '</h3>'
+        + '<span class="plan-sub" style="color:' + clr + ';font-weight:600;">' + proj.frente + ' · ' + proj.subfrente + '</span></div>'
+        + '<div style="font-size:11.5px;font-weight:600;color:var(--slate-dk);margin-bottom:10px;">' + proj.name + '</div>'
+        + '<div class="plan-note"><strong>Proyecto vinculado en Jira Software.</strong> El equipo está construyendo su plan detallado. Las actividades aparecerán aquí en tiempo real una vez sean cargadas.</div>'
+        + '</div>';
+    }
+  }
+  el.innerHTML = html;
+}
+
+/* ── TABLE ── */
+/* ── ACCORDION TABLE ── */
+const ACC_STATE = {};  // sfKey -> open/closed
+
+function renderTable(data) {
+  document.getElementById('tbl-count').textContent = data.length + ' de ' + DATA.length + ' iniciativas';
+  const FRENTES = ['Operaciones','Crédito'];
+  const SF_ORDER = {
+    'Operaciones': ['S&OP','Inventarios','Almacenamiento','Transporte','Post-venta'],
+    'Crédito': ['Curva de Valor Crédito','Modelo de Riesgos','FOE','E2E proceso de Crédito']
+  };
+  let html = '';
+  FRENTES.forEach(function(frente){
+    const fitems = data.filter(function(d){return d.frente===frente;});
+    if(!fitems.length) return;
+    const isCr = frente==='Crédito';
+    html += '<div class="acc-frente'+(isCr?' cr':'')+'"><span>'+(isCr?'💳':'⚙️')+' '+frente.toUpperCase()+'</span><span style="font-size:10px;font-weight:400;opacity:.8;">'+fitems.length+' iniciativas</span></div>';
+    SF_ORDER[frente].forEach(function(sf){
+      const sfItems = fitems.filter(function(d){return d.subfrente===sf;});
+      if(!sfItems.length) return;
+      const sfKey = frente+'::'+sf;
+      const isOpen = ACC_STATE[sfKey] !== false; // default open
+      const sfRec = sfItems.reduce(function(s,d){return s+(d.rec||0);},0);
+      const sfOT  = sfItems.reduce(function(s,d){return s+(d.ot||0);},0);
+      const l1=sfItems.filter(function(d){return d.status==='L1';}).length;
+      const l2=sfItems.filter(function(d){return d.status==='L2';}).length;
+      const l3=sfItems.filter(function(d){return d.status==='L3';}).length;
+      const pills = [
+        l1?'<span class="sf-pill l1">L1:'+l1+'</span>':'',
+        l2?'<span class="sf-pill l2">L2:'+l2+'</span>':'',
+        l3?'<span class="sf-pill l3">L3:'+l3+'</span>':''
+      ].filter(Boolean).join('');
+
+      html += '<div class="acc-sf-hdr'+(isOpen?' open':'') +'" data-key="'+encodeURIComponent(sfKey)+'" onclick="handleAcc(this)">'
+        +'<div class="acc-sf-title"><span class="acc-chevron">▶</span>'+sf
+        +'<span style="font-weight:400;font-size:10px;color:#999;margin-left:4px;">('+sfItems.length+')</span>'
+        +pills+'</div>'
+        +'<div class="acc-sf-meta">'
+        +(sfRec>0?'<span style="font-size:10.5px;font-weight:700;color:var(--slate-dk);">'+fmtImpPlain(sfRec)+' Rec</span>':'')
+        +(sfOT!==0?'<span style="font-size:10px;color:var(--teal);">'+fmtImpPlain(sfOT)+' OT</span>':'')
+        +'</div></div>';
+
+      html += '<div class="acc-body'+(isOpen?' open':'')+'" id="acc-'+sfKey.replace(/[^a-z0-9]/gi,'_')+'">'
+        +'<table class="acc-table"><thead><tr>'
+        +'<th>ID</th><th>Iniciativa</th><th>Estado</th><th>Cat.</th><th>Owner</th><th>País</th>'
+        +'<th class="num">Rec.</th><th class="num">OT</th><th>Actividades</th>'
+        +'</tr></thead><tbody>';
+
+      sfItems.sort(function(a,b){return a.summary.localeCompare(b.summary,'es',{numeric:true});}).forEach(function(d){
+        var stBadge = stageBadgeClass(d.status);
+        var ctBadge = catBadgeClass(d.cat);
+        var swInfo  = d.sw ? SW_PROJECTS[d.sw] : null;
+        var t       = swInfo ? swInfo.tasks : (d.tasks || null);
+        var todayStr = new Date().toISOString().split('T')[0];
+
+        // ── Categoría 1: Atrasadas (LATE_TASKS) ──────────────────────────────
+        var lateArr  = LATE_TASKS[d.key] || [];
+        var lateCount = lateArr.length;
+
+        // ── Categoría 2: Esta semana (WEEK_TASKS, 0-7 días) ──────────────────
+        var weekArr  = (WEEK_TASKS[d.key]||[]).filter(function(tk){
+          var dd = Math.floor((new Date(tk.duedate) - new Date(todayStr)) / 86400000);
+          return dd >= 0 && dd <= 7;
+        });
+        var weekCount = weekArr.length;
+
+        // ── Categoría 3: Sin fecha (NO_DATE_TASKS) ────────────────────────────
+        var nodateArr   = NO_DATE_TASKS[d.key] || [];
+        var nodateCount = nodateArr.length;
+
+        // ── Badges ────────────────────────────────────────────────────────────
+        var lateBadge = lateCount > 0
+          ? '<div><span class="late-badge" id="late-btn-'+d.key+'" onclick="toggleLateTasks(\''+d.key+'\',this)">\uD83D\uDD34 '+lateCount+' atrasada'+(lateCount>1?'s':'')+' \u25BE</span></div>'
+          : '';
+
+        var weekBadge = weekCount > 0
+          ? '<div><span class="week-badge" id="week-btn-'+d.key+'" onclick="toggleWeekTasksTbl(\''+d.key+'\',this)">\uD83D\uDCC5 '+weekCount+' esta semana \u25BE</span></div>'
+          : '<div style="font-size:9px;color:#bbb;margin-top:2px;">\uD83D\uDCC5 Sin actividades esta semana</div>';
+
+        var nodateBadge = nodateCount > 0
+          ? '<div><span class="nodate-badge" id="nodate-btn-'+d.key+'" onclick="toggleNoDatTbl(\''+d.key+'\',this)">\u2B1C '+nodateCount+' sin fecha \u25BE</span></div>'
+          : '';
+
+        // ── Celda de actividades ──────────────────────────────────────────────
+        var taskCell;
+        if(t){
+          var pct = t.total > 0 ? Math.round(t.done / t.total * 100) : 0;
+          taskCell = '<div class="task-mini">'
+            +'<div style="font-size:9px;color:#666;">'+t.done+'\u2705 '+(t.prog||0)+'\uD83D\uDD04 '+t.todo+'\u2B1C</div>'
+            +lateBadge + weekBadge + nodateBadge
+            +'<div class="task-bar"><div class="tb-d" style="flex:'+t.done+'"></div><div class="tb-p" style="flex:'+(t.prog||0)+'"></div><div class="tb-t" style="flex:'+t.todo+'"></div></div>'
+            +'<div style="font-size:9px;color:#aaa;">'+pct+'% \u00B7 '+t.total+' hitos</div>'
+            +'</div>';
+        } else {
+          taskCell = (d.sw ? '<span style="font-size:9.5px;color:var(--teal);">\u23F3 '+d.sw+'</span>' : '<span class="no-plan">Sin plan</span>')
+            + (lateCount > 0 ? '<br>'+lateBadge : '') + weekBadge + nodateBadge;
+        }
+
+        // ── Pais badge ────────────────────────────────────────────────────────
+        var paisBadge = d.pais==='COL'
+          ? '<span class="badge b-col">\uD83C\uDDE8\uD83C\uDDF4 COL</span>'
+          : d.pais==='PAN'
+            ? '<span class="badge b-pan">\uD83C\uDDF5\uD83C\uDDE6 PAN</span>'
+            : '<span class="badge b-global">\uD83C\uDF0E Global</span>';
+
+        html += '<tr>'
+          +'<td><a href="'+d.url+'" target="_blank" style="color:var(--op);font-weight:700;font-size:11px;">'+d.key+'</a></td>'
+          +'<td>'+d.summary+'</td>'
+          +'<td><span class="badge '+stBadge+'">'+d.status+'</span></td>'
+          +'<td><span class="badge '+ctBadge+'">'+d.cat+'</span></td>'
+          +'<td style="font-size:11px;">'+d.owner+'</td>'
+          +'<td>'+paisBadge+'</td>'
+          +'<td class="num">'+fmtImp(d.rec)+'</td>'
+          +'<td class="num">'+fmtImp(d.ot)+'</td>'
+          +'<td>'+taskCell+'</td>'
+          +'</tr>';
+
+        // ── Panel 1: Atrasadas ────────────────────────────────────────────────
+        if(lateCount > 0){
+          var ltRows = lateArr.map(function(task){
+            var daysDiff = Math.floor((new Date(todayStr) - new Date(task.duedate)) / 86400000);
+            var daysLabel = daysDiff === 1 ? '1 d\u00EDa' : daysDiff + ' d\u00EDas';
+            var dueClass  = daysDiff > 14 ? 'late-due critical' : 'late-due';
+            return '<tr>'
+              +'<td><a href="https://hubdigitaljamar.atlassian.net/browse/'+task.key+'" target="_blank">'+task.key+'</a></td>'
+              +'<td class="late-summary">'+task.summary+'</td>'
+              +'<td class="'+dueClass+'">'+task.duedate+'<br><span style="font-size:9px;font-weight:400;color:#888;">+'+daysLabel+'</span></td>'
+              +'<td class="late-assignee">'+task.assignee+'</td>'
+              +'</tr>';
+          }).join('');
+          html += '<tr class="late-detail-row" id="late-detail-'+d.key+'">'
+            +'<td colspan="9"><div class="late-panel">'
+            +'<div class="late-panel-title">\u26A0\uFE0F Tareas vencidas ('+lateCount+')</div>'
+            +'<table class="late-tbl"><thead><tr>'
+            +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:130px">Vence / Retraso</th><th style="width:160px">Responsable</th>'
+            +'</tr></thead><tbody>'+ltRows+'</tbody></table>'
+            +'</div></td></tr>';
+        }
+
+        // ── Panel 2: Esta semana ──────────────────────────────────────────────
+        if(weekCount > 0){
+          var wRows = weekArr.map(function(task){
+            var dDiff = Math.floor((new Date(task.duedate) - new Date(todayStr)) / 86400000);
+            var dc    = dDiff <= 2 ? 'week-due soon' : 'week-due';
+            var label = dDiff === 0 ? 'Hoy' : dDiff === 1 ? 'Ma\u00F1ana' : dDiff + ' d\u00EDas';
+            return '<tr>'
+              +'<td><a href="https://hubdigitaljamar.atlassian.net/browse/'+task.key+'" target="_blank">'+task.key+'</a></td>'
+              +'<td class="late-summary">'+task.summary+'</td>'
+              +'<td class="'+dc+'">'+task.duedate+'<br><span style="font-size:9px;font-weight:400;color:#888;">'+label+'</span></td>'
+              +'<td class="late-assignee">'+(task.assignee||'Sin asignar')+'</td>'
+              +'</tr>';
+          }).join('');
+          html += '<tr class="week-detail-row" id="week-detail-'+d.key+'">'
+            +'<td colspan="9"><div class="week-panel">'
+            +'<div class="week-panel-title">\uD83D\uDCC5 Actividades de la Semana ('+weekCount+')</div>'
+            +'<table class="week-tbl"><thead><tr>'
+            +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:130px">Vence en</th><th style="width:160px">Responsable</th>'
+            +'</tr></thead><tbody>'+wRows+'</tbody></table>'
+            +'</div></td></tr>';
+        }
+
+        // ── Panel 3: Sin fecha ────────────────────────────────────────────────
+        if(nodateCount > 0){
+          var ndRows = nodateArr.map(function(task){
+            var stBg = task.status && task.status.indexOf('curso')!==-1?'#66BB6A':task.status&&task.status.indexOf('hacer')!==-1?'#90A4AE':'#FFA726';
+            return '<tr>'
+              +'<td><a href="https://hubdigitaljamar.atlassian.net/browse/'+task.key+'" target="_blank">'+task.key+'</a></td>'
+              +'<td class="late-summary">'+task.summary+'</td>'
+              +'<td><span class="nodate-status" style="background:'+stBg+'">'+task.status+'</span></td>'
+              +'<td class="late-assignee">'+(task.assignee||'Sin asignar')+'</td>'
+              +'</tr>';
+          }).join('');
+          html += '<tr class="nodate-detail-row" id="nodate-detail-'+d.key+'">'
+            +'<td colspan="9"><div class="nodate-panel">'
+            +'<div class="nodate-panel-title">\u2B1C Actividades sin fecha asignada ('+nodateCount+')</div>'
+            +'<table class="nodate-tbl"><thead><tr>'
+            +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:130px">Estado</th><th style="width:160px">Responsable</th>'
+            +'</tr></thead><tbody>'+ndRows+'</tbody></table>'
+            +'</div></td></tr>';
+        }
+      });
+
+      html += '</tbody></table></div>';
+    });
+  });
+
+  const body = document.getElementById('accordion-body');
+  if(body) body.innerHTML = html || '<div style="padding:20px;text-align:center;color:#aaa;">Sin iniciativas que coincidan con los filtros.</div>';
+}
+
+function toggleLateTasks(moKey, badge, dataKey) {
+  var realKey = dataKey || moKey;
+  // Find the panel — could be table-row (accordion) or div (frentes card)
+  var rowTbl = document.getElementById('late-detail-' + moKey);
+  var rowDiv = document.getElementById('late-detail-sf-' + realKey);
+  var row = rowTbl || rowDiv;
+  if(!row) return;
+  var isTbl = !!rowTbl;
+  var isOpen = row.style.display !== 'none' && row.style.display !== '';
+  row.style.display = isOpen ? 'none' : (isTbl ? 'table-row' : 'block');
+  badge.classList.toggle('open', !isOpen);
+  badge.textContent = isOpen
+    ? '🔴 ' + (LATE_TASKS[moKey]||[]).length + ' atrasada' + ((LATE_TASKS[moKey]||[]).length>1?'s':'') + ' ▾'
+    : '🔴 ' + (LATE_TASKS[moKey]||[]).length + ' atrasada' + ((LATE_TASKS[moKey]||[]).length>1?'s':'') + ' ▴';
+}
+
+function toggleSFActLate(sfName, badge) {
+  var id = 'late-act-' + sfName.replace(/[^a-z]/gi,'');
+  var panel = document.getElementById(id);
+  if(!panel) return;
+  var isOpen = panel.style.display !== 'none' && panel.style.display !== '';
+  panel.style.display = isOpen ? 'none' : 'block';
+  badge.classList.toggle('open', !isOpen);
+  var cnt = badge.textContent.match(/\d+/);
+  badge.textContent = badge.textContent.replace(/[▾▴]/, isOpen ? '▾' : '▴');
+}
+
+function handleAcc(hdr) {
+  const sfKey = decodeURIComponent(hdr.dataset.key||'');
+  toggleAcc(sfKey, hdr);
+}
+function toggleAcc(sfKey, hdr) {
+  const bodyId = 'acc-'+(sfKey||'').replace(/[^a-z0-9]/gi,'_');
+  const body = document.getElementById(bodyId);
+  if(!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  hdr.classList.toggle('open', !isOpen);
+  ACC_STATE[sfKey] = !isOpen;
+}
+
+
+/* EVENTS */
+document.getElementById('pais-toggle').addEventListener('click',function(e){
+  const btn=e.target.closest('[data-pais]');
+  if(!btn) return;
+  document.querySelectorAll('.pais-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  STATE.pais=btn.dataset.pais;
+  render();
+});
+document.querySelectorAll('.chip[data-grp]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    const grp=btn.dataset.grp, val=btn.dataset.val;
+    if(grp==='frente') STATE.frentes[val]=!STATE.frentes[val];
+    else if(grp==='stage') STATE.stages[val]=!STATE.stages[val];
+    else if(grp==='cat') STATE.cats[val]=!STATE.cats[val];
+    else if(grp==='sf') STATE.sfs[val]=!STATE.sfs[val];
+    btn.classList.toggle('active');
+    render();
+  });
+});
+document.getElementById('search').addEventListener('input',function(e){
+  STATE.search=e.target.value; render();
+});
+document.getElementById('reset-btn').addEventListener('click',function(){
+  STATE.pais='Global';
+  Object.keys(STATE.frentes).forEach(function(k){STATE.frentes[k]=true;});
+  Object.keys(STATE.stages).forEach(function(k){STATE.stages[k]=true;});
+  Object.keys(STATE.cats).forEach(function(k){STATE.cats[k]=true;});
+  Object.keys(STATE.sfs).forEach(function(k){STATE.sfs[k]=true;});
+  STATE.search='';
+  document.querySelectorAll('.pais-btn').forEach(function(b,i){b.classList.toggle('active',i===0);});
+  document.querySelectorAll('.chip[data-grp]').forEach(function(b){b.classList.add('active');});
+  document.querySelectorAll('.sf-chip').forEach(function(b){b.classList.add('active');});
+  document.getElementById('search').value='';
+  render();
+});
+
+/* ── SYNC TIMER & INDICATOR ── */
+var REFRESH_INTERVAL_MS = 15 * 60 * 1000; // 15 min default
+var lastSyncTime = null;
+var nextSyncTime = null;
+var countdownTimer = null;
+var autoRefreshTimer = null;
+var isSyncing = false;
+
+function fmt2(n){ return String(n).padStart(2,'0'); }
+
+function formatRelative(date) {
+  if(!date) return '—';
+  var diff = Math.floor((new Date() - date) / 1000);
+  if(diff < 5)  return 'hace un momento';
+  if(diff < 60) return 'hace ' + diff + 's';
+  if(diff < 3600) return 'hace ' + Math.floor(diff/60) + ' min';
+  return date.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+}
+
+function updateSyncBar() {
+  var lblLast = document.getElementById('last-sync-lbl');
+  var lblCd   = document.getElementById('countdown-txt');
+  var fill    = document.getElementById('sync-progress-fill');
+  var status  = document.getElementById('sync-status-lbl');
+
+  if(lblLast && lastSyncTime) {
+    lblLast.textContent = formatRelative(lastSyncTime) + ' (' + lastSyncTime.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}) + ')';
+  }
+
+  if(nextSyncTime && lblCd && fill) {
+    var now  = new Date();
+    var remaining = Math.max(0, Math.floor((nextSyncTime - now) / 1000));
+    var elapsed   = REFRESH_INTERVAL_MS/1000 - remaining;
+    var pct = Math.min(100, Math.round(elapsed / (REFRESH_INTERVAL_MS/1000) * 100));
+
+    var mm = Math.floor(remaining / 60);
+    var ss = remaining % 60;
+    lblCd.textContent = 'Próxima en ' + (mm > 0 ? mm + 'm ' : '') + fmt2(ss) + 's';
+    fill.style.width = pct + '%';
+
+    // Color: green when fresh, yellow approaching, blue in last 30s
+    if(remaining > 120) fill.style.background = '#43A047';
+    else if(remaining > 30) fill.style.background = '#FFA726';
+    else fill.style.background = '#1565C0';
+  }
+
+  if(!isSyncing && status) status.textContent = '';
+}
+
+function setSyncStatus(msg, color) {
+  var el = document.getElementById('sync-status-lbl');
+  if(el){ el.textContent = msg; el.style.color = color||'#4EB9A7'; }
+}
+
+function manualRefresh() {
+  if(isSyncing) return;
+  var email = localStorage.getItem('dash_jira_email');
+  var token = localStorage.getItem('dash_jira_token');
+  if(!email || !token) { openJiraConfig(); return; }
+  doSync();
+}
+
+function openJiraConfig() {
+  var modal = document.getElementById('jira-modal');
+  modal.style.display = 'flex';
+  var saved = localStorage.getItem('dash_jira_email') || '';
+  document.getElementById('jira-email-input').value = saved;
+  document.getElementById('jira-token-input').value = '';
+  document.getElementById('jira-modal-status').style.display = 'none';
+}
+
+function closeJiraConfig() {
+  document.getElementById('jira-modal').style.display = 'none';
+}
+
+function saveJiraConfig() {
+  var email = document.getElementById('jira-email-input').value.trim();
+  var token = document.getElementById('jira-token-input').value.trim();
+  var statusEl = document.getElementById('jira-modal-status');
+  if(!email || !token) {
+    statusEl.textContent = 'Completa ambos campos.';
+    statusEl.style.display = 'block';
+    return;
+  }
+  localStorage.setItem('dash_jira_email', email);
+  localStorage.setItem('dash_jira_token', token);
+  closeJiraConfig();
+  setSyncStatus('🔄 Sincronizando...','#FFA726');
+  setTimeout(doSync, 300);
+}
+
+function doSync() {
+  if(isSyncing) return;
+  isSyncing = true;
+  var btn = document.getElementById('btn-refresh-bar');
+  if(btn){ btn.disabled=true; btn.textContent='⟳ Actualizando...'; btn.classList.add('syncing'); }
+  setSyncStatus('🔄 Sincronizando...','#FFA726');
+
+  // Reschedule next auto-refresh from now
+  clearTimeout(autoRefreshTimer);
+
+  var JIRA_BASE = 'https://hubdigitaljamar.atlassian.net';
+  var TODAY = new Date().toISOString().split('T')[0];
+  var email = localStorage.getItem('dash_jira_email') || '';
+  var token = localStorage.getItem('dash_jira_token') || '';
+
+  if(!email || !token) {
+    setSyncStatus('⚠ Configura credenciales Jira', '#EF5350');
+    isSyncing = false;
+    if(btn){ btn.disabled=false; btn.textContent='⟳ Actualizar ahora'; btn.classList.remove('syncing'); }
+    return;
+  }
+
+  var authHeader = 'Basic ' + btoa(email + ':' + token);
+  var DONE_NAMES = new Set(['finalizada','cerrado','done','completado','hecho','listo','closed','finalizado','tareas por hacer que se realizaron']);
+
+  function jiraQuery(jql, fields, cb) {
+    var params = new URLSearchParams({jql:jql, fields:fields.join(','), maxResults:100, startAt:0});
+    fetch(JIRA_BASE + '/rest/api/3/search?' + params, {
+      headers:{Authorization:authHeader,'Content-Type':'application/json'}
+    }).then(function(r){
+      if(!r.ok) throw new Error('Jira error ' + r.status);
+      return r.json();
+    }).then(cb).catch(function(e){
+      setSyncStatus('⚠ Error Jira: ' + e.message,'#EF5350');
+      isSyncing = false;
+      if(btn){ btn.disabled=false; btn.textContent='⟳ Actualizar ahora'; btn.classList.remove('syncing'); }
+    });
+  }
+
+  // Query SW projects
+  var SW_KEYS = [
+    'SOE','DEP','MSOP','MEJ','PROVED',
+    'ECI','DEIT','SLOBM','JCTR','SLOBDECO','SLOBDECPA',
+    'RCD3','IMPCSE','MIOT','OPR',
+    'ZT5F','FCCDA','WF5','SDR','PDSP','IM','OP',
+    'TLGDL','EEMOC','SF','EODV','SDC','ISMC',
+    'IEPRFEEFDC','ICD',
+    'MDOOMC','CODCEYBM','MDCB','EDP',
+    'IPDPCDAR','IPDPCDBR','RF1D'
+  ];
+  setSyncStatus('Consultando Jira...','#FFA726');
+
+  jiraQuery('project in (' + SW_KEYS.join(',') + ') ORDER BY project ASC',
+    ['summary','status','issuetype','project','duedate'], function(swData) {
+
+    var projStats = {};
+    (swData.issues||[]).forEach(function(iss){
+      var pk = iss.fields.project.key;
+      if(!projStats[pk]) projStats[pk]={total:0,done:0,prog:0,todo:0,late:0};
+      var s = projStats[pk];
+      var sname = iss.fields.status.name.toLowerCase();
+      var scat  = iss.fields.status.statusCategory.key;
+      var due   = iss.fields.duedate || '';
+      var isDone = scat==='done' || DONE_NAMES.has(sname);
+      var isProg = scat==='indeterminate' && !isDone;
+      var isLate = !isDone && due && due < TODAY;
+      s.total++;
+      if(isDone) s.done++; else if(isProg) s.prog++; else s.todo++;
+      if(isLate) s.late++;
+    });
+
+    // Update SW_PROJECTS tasks
+    SW_KEYS.forEach(function(k){
+      if(SW_PROJECTS[k] && projStats[k]) {
+        SW_PROJECTS[k].tasks = projStats[k];
+      }
+    });
+
+    // Update DATA tasks
+    DATA.forEach(function(d){
+      if(d.sw && projStats[d.sw]) d.tasks = projStats[d.sw];
+    });
+
+    // Update LATE_TASKS with live data
+    var SW_TO_MO_MAP = {
+      /* S&OP */ 'SOE':'MO-1','DEP':'MO-2','MSOP':'MO-3','MEJ':'MO-4','PROVED':'MO-5',
+      /* Inventarios */ 'ECI':'MO-7','DEIT':'MO-8','SLOBM':'MO-10','JCTR':'MO-65','SLOBDECO':'MO-66','SLOBDECPA':'MO-67',
+      /* Transporte */ 'RCD3':'MO-24','MIOT':'MO-26','IMPCSE':'MO-28','OPR':'MO-76',
+      /* Post-venta */ 'ZT5F':'MO-33','FCCDA':'MO-34','WF5':'MO-35','SDR':'MO-36','PDSP':'MO-37','IM':'MO-40','OP':'MO-41',
+      /* FOE */ 'TLGDL':'MO-44','EEMOC':'MO-45','SF':'MO-46','EODV':'MO-47','SDC':'MO-48','ISMC':'MO-55',
+      /* E2E */ 'IEPRFEEFDC':'MO-54','ICD':'MO-56',
+      /* Riesgos */ 'MDOOMC':'MO-49','CODCEYBM':'MO-50','MDCB':'MO-52','EDP':'MO-53',
+      /* Curva Valor */ 'IPDPCDAR':'MO-58','IPDPCDBR':'MO-59','RF1D':'MO-89'
+    };
+    jiraQuery('project in (' + SW_KEYS.join(',') + ') AND duedate < "' + TODAY + '" AND statusCategory != Done ORDER BY duedate ASC',
+      ['summary','status','duedate','assignee','project'], function(lateData) {
+      // Clear and rebuild LATE_TASKS from live data
+      Object.keys(LATE_TASKS).forEach(function(k){ delete LATE_TASKS[k]; });
+      (lateData.issues||[]).forEach(function(iss){
+        var proj = iss.fields.project ? iss.fields.project.key : '';
+        var mo = SW_TO_MO_MAP[proj];
+        if(!mo) return;
+        if(!LATE_TASKS[mo]) LATE_TASKS[mo] = [];
+        LATE_TASKS[mo].push({
+          key: iss.key,
+          summary: iss.fields.summary || '',
+          duedate: iss.fields.duedate || '',
+          assignee: iss.fields.assignee ? iss.fields.assignee.displayName : 'Sin asignar'
+        });
+      });
+
+    // Query MO for L-stage updates
+    jiraQuery('project = MO ORDER BY created ASC',
+      ['summary','status','customfield_11022','customfield_11055','customfield_11094','customfield_11297','customfield_11264'], function(moData) {
+
+      var MO_MAP = {};
+      (moData.issues||[]).forEach(function(iss){ MO_MAP[iss.key] = iss; });
+
+      DATA.forEach(function(d){
+        var iss = MO_MAP[d.key];
+        if(!iss) return;
+        d.status = iss.fields.status.name.split(':')[0].trim();
+        d.rec = iss.fields.customfield_11094 || 0;
+        d.ot  = iss.fields.customfield_11297 || 0;
+      });
+
+      // Done — update UI
+      lastSyncTime = new Date();
+      nextSyncTime = new Date(lastSyncTime.getTime() + REFRESH_INTERVAL_MS);
+      isSyncing = false;
+      if(btn){ btn.disabled=false; btn.textContent='⟳ Actualizar ahora'; btn.classList.remove('syncing'); }
+      setSyncStatus('✓ Actualizado','#4EB9A7');
+      setTimeout(function(){ setSyncStatus('',''); }, 3000);
+
+      render();
+      scheduleNextSync();
+    });
+    }); // late tasks query
+  });
+}
+
+function scheduleNextSync() {
+  clearTimeout(autoRefreshTimer);
+  autoRefreshTimer = setTimeout(doSync, REFRESH_INTERVAL_MS);
+}
+
+/* INIT */
+document.getElementById('upd-date').textContent = new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});
+
+// Start countdown tick
+setInterval(updateSyncBar, 1000);
+
+// Load saved credentials
+var savedEmail = localStorage.getItem('dash_jira_email');
+var savedToken = localStorage.getItem('dash_jira_token');
+
+// Render with embedded data first (instant)
+render();
+
+// If credentials available, sync immediately
+if(savedEmail && savedToken) {
+  setTimeout(doSync, 1000);
+} else {
+  // Show config prompt in sync bar — clicking the button opens the modal
+  setSyncStatus('⚙ Haz clic en "Credenciales Jira" para activar la sincronización', '#FFA726');
+  var cfgBtn = document.getElementById('btn-jira-config');
+  if(cfgBtn) { cfgBtn.style.background='#FFA726'; cfgBtn.style.color='#fff'; cfgBtn.style.borderColor='#FFA726'; }
+}
+</script>
+</body>
+</html>
