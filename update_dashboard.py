@@ -23,17 +23,18 @@ def jira_auth():
             "Content-Type": "application/json"}
 
 def jira_search(jql, fields, max_results=200):
-    url = JIRA_BASE + "/rest/api/3/search"
+    url = JIRA_BASE + "/rest/api/3/search/jql"
     payload = json.dumps({"jql": jql, "fields": fields,
                           "maxResults": max_results, "startAt": 0}).encode("utf-8")
     req = urllib.request.Request(url, data=payload, headers=jira_auth(), method="POST")
     try:
         with urllib.request.urlopen(req) as r:
-            return json.loads(r.read()).get("issues", [])
+            data = json.loads(r.read())
+            return data.get("issues", data.get("values", []))
     except urllib.error.HTTPError as e:
         body = e.read().decode()
         print("  ERROR Jira " + str(e.code) + " | JQL: " + jql[:60])
-        print("  Respuesta: " + body[:200])
+        print("  Respuesta: " + body[:300])
         raise
 
 def gh_headers():
