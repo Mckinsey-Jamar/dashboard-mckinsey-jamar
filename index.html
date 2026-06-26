@@ -396,34 +396,11 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
   </div>
   <span id="sync-status-lbl" style="color:#4EB9A7;font-weight:700;"></span>
   <button onclick="manualRefresh()" id="btn-refresh-bar" style="background:#1565C0;border:none;color:#fff;padding:4px 14px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.4px;white-space:nowrap;">⟳ Actualizar ahora</button>
-  <button onclick="openJiraConfig()" id="btn-jira-config" style="background:transparent;border:1px solid #4EB9A7;color:#4EB9A7;padding:4px 12px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.4px;white-space:nowrap;">⚙ Credenciales Jira</button>
+  
 </div>
 
 <!-- JIRA CREDENTIALS MODAL -->
-<div id="jira-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:10px;padding:28px 32px;max-width:440px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.25);">
-    <h3 style="font-size:15px;color:#1a2f47;margin-bottom:6px;">⚙ Credenciales Jira</h3>
-    <p style="font-size:11.5px;color:#607D8B;margin-bottom:20px;line-height:1.5;">
-      Necesarias para sincronizar datos en tiempo real.<br>
-      Genera tu token en <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank" style="color:#1565C0;">id.atlassian.com → API tokens</a>
-    </p>
-    <div style="margin-bottom:14px;">
-      <label style="font-size:11px;font-weight:700;color:#404B5A;display:block;margin-bottom:4px;">Email de Jira</label>
-      <input id="jira-email-input" type="email" placeholder="tuemail@jamar.com"
-        style="width:100%;padding:8px 10px;border:1px solid #cdd;border-radius:6px;font-size:12px;outline:none;">
-    </div>
-    <div style="margin-bottom:20px;">
-      <label style="font-size:11px;font-weight:700;color:#404B5A;display:block;margin-bottom:4px;">API Token</label>
-      <input id="jira-token-input" type="password" placeholder="ATATxxx..."
-        style="width:100%;padding:8px 10px;border:1px solid #cdd;border-radius:6px;font-size:12px;outline:none;">
-    </div>
-    <div style="display:flex;gap:10px;justify-content:flex-end;">
-      <button onclick="closeJiraConfig()" style="background:transparent;border:1px solid #ccc;color:#607D8B;padding:7px 18px;border-radius:6px;font-size:12px;cursor:pointer;">Cancelar</button>
-      <button onclick="saveJiraConfig()" style="background:#1565C0;border:none;color:#fff;padding:7px 18px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;">Guardar y sincronizar</button>
-    </div>
-    <p id="jira-modal-status" style="font-size:11px;color:#EF5350;margin-top:10px;display:none;"></p>
-  </div>
-</div>
+
 
 <!-- FILTERS -->
 <div class="filters-wrap">
@@ -532,54 +509,54 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
    ot  = customfield_11091 (pendiente de carga en Jira)
 ============================================================ */
 const DATA = [
-  {key:'MO-1',frente:'Operaciones',subfrente:'S&OP',summary:'1D. Implementar el proceso de S&OE',status:'L3',cat:'Habilitadora',owner:'Sebastian Rivero',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-1',sw:'SOE',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-2',frente:'Operaciones',subfrente:'S&OP',summary:'1E. Depuración del portafolio',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'COL',rec:1082,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-2',sw:'DEP',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-3',frente:'Operaciones',subfrente:'S&OP',summary:'1A. Mejorar el proceso de S&OP',status:'L3',cat:'Caso de Negocio',owner:'Leandro Candama',pais:'COL',rec:119,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-3',sw:'MSOP',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-4',frente:'Operaciones',subfrente:'S&OP',summary:'1B. Mejorar la asertividad del forecast',status:'L3',cat:'Habilitadora',owner:'Christian Saker',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-4',sw:'MEJ',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-5',frente:'Operaciones',subfrente:'S&OP',summary:'1C. Implementar modelo de trabajo con proveedores',status:'L3',cat:'Habilitadora',owner:'Yamit Fernandez',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-5',sw:'PROVED',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  {key:'MO-1',frente:'Operaciones',subfrente:'S&OP',summary:'1D. Implementar el proceso de S&OE',status:'L3',cat:'Habilitadora',owner:'Sebastian Rivero',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-1',sw:'SOE',tasks:{total:99,done:20,prog:16,todo:63,late:0}},
+  {key:'MO-2',frente:'Operaciones',subfrente:'S&OP',summary:'1E. Depuración del portafolio',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'COL',rec:1082,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-2',sw:'DEP',tasks:{total:139,done:5,prog:15,todo:119,late:0}},
+  {key:'MO-3',frente:'Operaciones',subfrente:'S&OP',summary:'1A. Mejorar el proceso de S&OP',status:'L3',cat:'Caso de Negocio',owner:'Leandro Candama',pais:'COL',rec:119,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-3',sw:'MSOP',tasks:{total:29,done:8,prog:4,todo:17,late:0}},
+  {key:'MO-4',frente:'Operaciones',subfrente:'S&OP',summary:'1B. Mejorar la asertividad del forecast',status:'L3',cat:'Habilitadora',owner:'Christian Saker',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-4',sw:'MEJ',tasks:{total:37,done:0,prog:0,todo:37,late:0}},
+  {key:'MO-5',frente:'Operaciones',subfrente:'S&OP',summary:'1C. Implementar modelo de trabajo con proveedores',status:'L3',cat:'Habilitadora',owner:'Yamit Fernandez',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-5',sw:'PROVED',tasks:{total:37,done:0,prog:0,todo:37,late:0}},
   {key:'MO-6',frente:'Operaciones',subfrente:'Inventarios',summary:'2C. Asegurar las herramientas para la gestión de inventario',status:'Backlog',cat:'Habilitadora',owner:'Edwin Collazos',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-6',sw:'',tasks:null},
-  {key:'MO-7',frente:'Operaciones',subfrente:'Inventarios',summary:'2A. Ejecutar la optimización de inventarios',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-7',sw:'ECI',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-8',frente:'Operaciones',subfrente:'Inventarios',summary:'2D. Diseñar la estrategia de inventario en tienda',status:'L2',cat:'MVP',owner:'Adela Hereira',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-8',sw:'DEIT',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-10',frente:'Operaciones',subfrente:'Inventarios',summary:'2B. Ejecutar la liquidación de inventario de baja rotación, obsoletos - Muebles',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-10',sw:'SLOBM',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-11',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3E. Optimizar cross-docking con vendedores y proveedores para colchones',status:'L3',cat:'Caso de Negocio',owner:'Jose Sarmiento',pais:'COL',rec:15,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-11',sw:'PTMZR',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  {key:'MO-7',frente:'Operaciones',subfrente:'Inventarios',summary:'2A. Ejecutar la optimización de inventarios',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-7',sw:'ECI',tasks:{total:29,done:3,prog:3,todo:23,late:1}},
+  {key:'MO-8',frente:'Operaciones',subfrente:'Inventarios',summary:'2D. Diseñar la estrategia de inventario en tienda',status:'L2',cat:'MVP',owner:'Adela Hereira',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-8',sw:'DEIT',tasks:{total:67,done:33,prog:14,todo:20,late:0}},
+  {key:'MO-10',frente:'Operaciones',subfrente:'Inventarios',summary:'2B. Ejecutar la liquidación de inventario de baja rotación, obsoletos - Muebles',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-10',sw:'SLOBM',tasks:{total:14,done:3,prog:2,todo:9,late:0}},
+  {key:'MO-11',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3E. Optimizar cross-docking con vendedores y proveedores para colchones',status:'L3',cat:'Caso de Negocio',owner:'Jose Sarmiento',pais:'COL',rec:15,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-11',sw:'PTMZR',tasks:{total:12,done:4,prog:4,todo:4,late:0}},
   {key:'MO-12',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3B. Implementar zonificación y slotting en bodega',status:'L2',cat:'Habilitadora',owner:'Sneider Chacon',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-12',sw:'',tasks:null},
   {key:'MO-13',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3D. Diseñar el empaque y proceso de empaque, y migrar a flujo de una sola pieza',status:'L2',cat:'Caso de Negocio',owner:'Mario Marino',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-13',sw:'EMPA',tasks:{total:10,done:0,prog:0,todo:10,late:1}},
-  {key:'MO-24',frente:'Operaciones',subfrente:'Transporte',summary:'4A. Reducir costos de flete tercerizado y propio',status:'L3',cat:'Caso de Negocio',owner:'Marla Lambertino',pais:'COL',rec:148,ot:-3,url:'https://hubdigitaljamar.atlassian.net/browse/MO-24',sw:'RCD3',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  {key:'MO-24',frente:'Operaciones',subfrente:'Transporte',summary:'4A. Reducir costos de flete tercerizado y propio',status:'L3',cat:'Caso de Negocio',owner:'Marla Lambertino',pais:'COL',rec:148,ot:-3,url:'https://hubdigitaljamar.atlassian.net/browse/MO-24',sw:'RCD3',tasks:{total:45,done:6,prog:0,todo:39,late:4}},
   {key:'MO-25',frente:'Operaciones',subfrente:'Transporte',summary:'4E. Gestionar el pico de despachos de fin de mes / cuarto',status:'L2',cat:'Habilitadora',owner:'Tatiana Zuluaga',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-25',sw:'',tasks:null},
-  {key:'MO-26',frente:'Operaciones',subfrente:'Transporte',summary:'4C. Definir mix óptimo de insourcing y outsourcing de transporte',status:'L3',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-26',sw:'MIOT',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  {key:'MO-26',frente:'Operaciones',subfrente:'Transporte',summary:'4C. Definir mix óptimo de insourcing y outsourcing de transporte',status:'L3',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-26',sw:'MIOT',tasks:{total:1,done:0,prog:0,todo:1,late:0}},
   {key:'MO-27',frente:'Operaciones',subfrente:'Transporte',summary:'4D. Mejorar entrega en primer intento, cumplimiento de citas y entrega a tiempo',status:'L3',cat:'Caso de Negocio',owner:'Marla Lambertino',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-27',sw:'',tasks:null},
-  {key:'MO-28',frente:'Operaciones',subfrente:'Transporte',summary:'4B. Implementar cobro por segunda entrega',status:'L3',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'COL',rec:81,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-28',sw:'IMPCSE',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  {key:'MO-28',frente:'Operaciones',subfrente:'Transporte',summary:'4B. Implementar cobro por segunda entrega',status:'L3',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'COL',rec:81,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-28',sw:'IMPCSE',tasks:{total:24,done:5,prog:1,todo:18,late:0}},
   {key:'MO-29',frente:'Operaciones',subfrente:'Transporte',summary:'4FP. Optimizar ruteo (Mejorar utilizacion y costo de entrega)',status:'L1',cat:'Habilitadora',owner:'Reinaldo Justiniani',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-29',sw:'',tasks:null},
   {key:'MO-30',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3A. Implementar la metodología de Lean Warehouse',status:'L2',cat:'Caso de Negocio',owner:'Sneider Chacon',pais:'COL',rec:85,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-30',sw:'',tasks:null},
   {key:'MO-31',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3F. Mejorar la tecnología de Almacenamiento',status:'L2',cat:'Habilitadora',owner:'Jorge Mejia',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-31',sw:'',tasks:null},
   {key:'MO-32',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3C. Estandarizar proceso de recepción y recibos',status:'L2',cat:'Habilitadora',owner:'José Calderón',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-32',sw:'',tasks:null},
-  {key:'MO-33',frente:'Operaciones',subfrente:'Post-venta',summary:'5F. Mejorar políticas de posventa',status:'L2',cat:'Caso de Negocio',owner:'Juan Goez',pais:'COL',rec:179,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-33',sw:'ZT5F',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-34',frente:'Operaciones',subfrente:'Post-venta',summary:'5D. Fortalecer control de calidad y desempeño de armado',status:'L2',cat:'Caso de Negocio',owner:'Yasenis Jimenez',pais:'COL',rec:138,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-34',sw:'',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-35',frente:'Operaciones',subfrente:'Post-venta',summary:'5B. Mejorar el diagnóstico inicial de incidencias',status:'L2',cat:'Caso de Negocio',owner:'Juan Goez',pais:'COL',rec:22,ot:-5,url:'https://hubdigitaljamar.atlassian.net/browse/MO-35',sw:'WF5',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-36',frente:'Operaciones',subfrente:'Post-venta',summary:'5C. Elevar la calidad de producto con proveedores',status:'L2',cat:'Habilitadora',owner:'Angie Torres',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-36',sw:'SDR',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-37',frente:'Operaciones',subfrente:'Post-venta',summary:'5A. Rediseñar portafolio de soluciones de posventa',status:'L2',cat:'Caso de Negocio',owner:'Juan Goez',pais:'COL',rec:862,ot:41,url:'https://hubdigitaljamar.atlassian.net/browse/MO-37',sw:'PDSP',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-40',frente:'Operaciones',subfrente:'Post-venta',summary:'5E. Implementar LEAN en procesamiento de devoluciones en bodega',status:'L2',cat:'Caso de Negocio',owner:'Yasenis Jimenez',pais:'COL',rec:110,ot:366,url:'https://hubdigitaljamar.atlassian.net/browse/MO-40',sw:'IM',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-41',frente:'Operaciones',subfrente:'Post-venta',summary:'5G. Optimizar gestión de quejas',status:'L2',cat:'Habilitadora',owner:'Milena Rodriguez',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-41',sw:'OP',tasks:{total:10,done:3,prog:0,todo:7,late:1}},
+  {key:'MO-33',frente:'Operaciones',subfrente:'Post-venta',summary:'5F. Mejorar políticas de posventa',status:'L2',cat:'Caso de Negocio',owner:'Juan Goez',pais:'COL',rec:179,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-33',sw:'ZT5F',tasks:{total:13,done:0,prog:2,todo:11,late:0}},
+  {key:'MO-34',frente:'Operaciones',subfrente:'Post-venta',summary:'5D. Fortalecer control de calidad y desempeño de armado',status:'L2',cat:'Caso de Negocio',owner:'Yasenis Jimenez',pais:'COL',rec:138,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-34',sw:'',tasks:{total:34,done:1,prog:5,todo:28,late:0}},
+  {key:'MO-35',frente:'Operaciones',subfrente:'Post-venta',summary:'5B. Mejorar el diagnóstico inicial de incidencias',status:'L2',cat:'Caso de Negocio',owner:'Juan Goez',pais:'COL',rec:22,ot:-5,url:'https://hubdigitaljamar.atlassian.net/browse/MO-35',sw:'WF5',tasks:{total:28,done:0,prog:0,todo:28,late:0}},
+  {key:'MO-36',frente:'Operaciones',subfrente:'Post-venta',summary:'5C. Elevar la calidad de producto con proveedores',status:'L2',cat:'Habilitadora',owner:'Angie Torres',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-36',sw:'SDR',tasks:{total:24,done:1,prog:4,todo:19,late:0}},
+  {key:'MO-37',frente:'Operaciones',subfrente:'Post-venta',summary:'5A. Rediseñar portafolio de soluciones de posventa',status:'L2',cat:'Caso de Negocio',owner:'Juan Goez',pais:'COL',rec:862,ot:41,url:'https://hubdigitaljamar.atlassian.net/browse/MO-37',sw:'PDSP',tasks:{total:96,done:38,prog:6,todo:52,late:8}},
+  {key:'MO-40',frente:'Operaciones',subfrente:'Post-venta',summary:'5E. Implementar LEAN en procesamiento de devoluciones en bodega',status:'L2',cat:'Caso de Negocio',owner:'Yasenis Jimenez',pais:'COL',rec:110,ot:366,url:'https://hubdigitaljamar.atlassian.net/browse/MO-40',sw:'IM',tasks:{total:21,done:1,prog:2,todo:18,late:1}},
+  {key:'MO-41',frente:'Operaciones',subfrente:'Post-venta',summary:'5G. Optimizar gestión de quejas',status:'L2',cat:'Habilitadora',owner:'Milena Rodriguez',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-41',sw:'OP',tasks:{total:48,done:2,prog:1,todo:45,late:0}},
   {key:'MO-44',frente:'Crédito',subfrente:'FOE',summary:'4A. Transformación de gestión de leads',status:'L3',cat:'Caso de Negocio',owner:'Carlos Barrera',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-44',sw:'TLGDL',tasks:{total:12,done:0,prog:2,todo:10,late:1}},
   {key:'MO-45',frente:'Crédito',subfrente:'FOE',summary:'4B. Evolución modelo operativo CNP',status:'L3',cat:'Caso de Negocio',owner:'Carlos Barrera',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-45',sw:'EEMOC',tasks:{total:10,done:0,prog:0,todo:10,late:0}},
-  {key:'MO-46',frente:'Crédito',subfrente:'FOE',summary:'4C. Asegurar la sostenibilidad del modelo FOE',status:'L3',cat:'Caso de Negocio',owner:'Mauren Añez',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-46',sw:'SF',tasks:{total:47,done:0,prog:9,todo:38,late:0}},
-  {key:'MO-47',frente:'Crédito',subfrente:'FOE',summary:'4D. Diseñar y desplegar estructura operativa de ventas y crédito',status:'L3',cat:'Caso de Negocio',owner:'Reinaldo Gomez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-47',sw:'EODV',tasks:{total:44,done:10,prog:7,todo:27,late:3}},
+  {key:'MO-46',frente:'Crédito',subfrente:'FOE',summary:'4C. Asegurar la sostenibilidad del modelo FOE',status:'L3',cat:'Caso de Negocio',owner:'Mauren Añez',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-46',sw:'SF',tasks:{total:47,done:0,prog:8,todo:39,late:0}},
+  {key:'MO-47',frente:'Crédito',subfrente:'FOE',summary:'4D. Diseñar y desplegar estructura operativa de ventas y crédito',status:'L3',cat:'Caso de Negocio',owner:'Reinaldo Gomez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-47',sw:'EODV',tasks:{total:42,done:2,prog:8,todo:32,late:9}},
   {key:'MO-48',frente:'Crédito',subfrente:'FOE',summary:'4E. Rediseñar el sistema de comisiones e incentivos',status:'L3',cat:'Caso de Negocio',owner:'Reinaldo Gomez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-48',sw:'',tasks:null},
   {key:'MO-49',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2A. Desarrollar modelo de optimización de oferta mueble-crédito',status:'L2',cat:'Habilitadora',owner:'William Contreras',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-49',sw:'',tasks:null},
-  {key:'MO-50',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2B. Fortalecer control operacional, de calidad E2E y backtesting de modelos',status:'L3',cat:'Caso de Negocio',owner:'Carlos Velasquez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-50',sw:'',tasks:{total:10,done:2,prog:0,todo:8,late:0}},
-  {key:'MO-52',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2D. Desarrollar modelo de comportamiento (behavior)',status:'L2',cat:'Caso de Negocio',owner:'Juan Felipe Latorre',pais:'PAN',rec:0,ot:17405,url:'https://hubdigitaljamar.atlassian.net/browse/MO-52',sw:'MDCB',tasks:{total:12,done:0,prog:2,todo:10,late:0}},
+  {key:'MO-50',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2B. Fortalecer control operacional, de calidad E2E y backtesting de modelos',status:'L3',cat:'Caso de Negocio',owner:'Carlos Velasquez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-50',sw:'',tasks:{total:9,done:2,prog:0,todo:7,late:0}},
+  {key:'MO-52',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2D. Desarrollar modelo de comportamiento (behavior)',status:'L2',cat:'Caso de Negocio',owner:'Juan Felipe Latorre',pais:'PAN',rec:0,ot:17405,url:'https://hubdigitaljamar.atlassian.net/browse/MO-52',sw:'MDCB',tasks:{total:9,done:0,prog:1,todo:8,late:0}},
   {key:'MO-53',frente:'Crédito',subfrente:'Modelo de Riesgos',summary:'2E. Nuevo modelo de provisiones',status:'L2',cat:'Habilitadora',owner:'Juan Felipe Latorre',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-53',sw:'',tasks:null},
-  {key:'MO-54',frente:'Crédito',subfrente:'E2E proceso de Crédito',summary:'3A. Implementar eficiencias para reducir fugas en el funnel de crédito',status:'L3',cat:'Caso de Negocio',owner:'Sandra Ibañez',pais:'PAN',rec:0,ot:2878332,url:'https://hubdigitaljamar.atlassian.net/browse/MO-54',sw:'IEPRFEEFDC',tasks:{total:70,done:7,prog:15,todo:48,late:6}},
+  {key:'MO-54',frente:'Crédito',subfrente:'E2E proceso de Crédito',summary:'3A. Implementar eficiencias para reducir fugas en el funnel de crédito',status:'L3',cat:'Caso de Negocio',owner:'Sandra Ibañez',pais:'PAN',rec:0,ot:2878332,url:'https://hubdigitaljamar.atlassian.net/browse/MO-54',sw:'IEPRFEEFDC',tasks:{total:70,done:7,prog:7,todo:56,late:0}},
   {key:'MO-55',frente:'Crédito',subfrente:'FOE',summary:'4F. Implementar Salesforce Marketing Cloud',status:'L1',cat:'Caso de Negocio',owner:'Heidy Marquez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-55',sw:'',tasks:{total:3,done:0,prog:0,todo:3,late:0}},
-  {key:'MO-56',frente:'Crédito',subfrente:'E2E proceso de Crédito',summary:'3B. Implementar crédito digital',status:'L4',cat:'Caso de Negocio',owner:'Nataly De Arco',pais:'PAN',rec:0,ot:129600,url:'https://hubdigitaljamar.atlassian.net/browse/MO-56',sw:'ICD',tasks:{total:34,done:9,prog:5,todo:20,late:0}},
+  {key:'MO-56',frente:'Crédito',subfrente:'E2E proceso de Crédito',summary:'3B. Implementar crédito digital',status:'L4',cat:'Caso de Negocio',owner:'Nataly De Arco',pais:'PAN',rec:0,ot:129600,url:'https://hubdigitaljamar.atlassian.net/browse/MO-56',sw:'ICD',tasks:{total:34,done:8,prog:4,todo:22,late:0}},
   {key:'MO-58',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1A. Implementar palanca diferenciada para clientes de alto riesgo',status:'L3',cat:'Caso de Negocio',owner:'Sandra Ibañez',pais:'PAN',rec:78,ot:691693,url:'https://hubdigitaljamar.atlassian.net/browse/MO-58',sw:'IPDPCDAR',tasks:{total:50,done:25,prog:15,todo:10,late:0}},
-  {key:'MO-59',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1B. Implementar palanca diferenciada para clientes de bajo riesgo',status:'L3',cat:'Caso de Negocio',owner:'Manuelita Sarmiento',pais:'PAN',rec:0,ot:1142539,url:'https://hubdigitaljamar.atlassian.net/browse/MO-59',sw:'IPDPCDBR',tasks:{total:58,done:8,prog:4,todo:46,late:0}},
+  {key:'MO-59',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1B. Implementar palanca diferenciada para clientes de bajo riesgo',status:'L3',cat:'Caso de Negocio',owner:'Manuelita Sarmiento',pais:'PAN',rec:0,ot:1142539,url:'https://hubdigitaljamar.atlassian.net/browse/MO-59',sw:'IPDPCDBR',tasks:{total:54,done:3,prog:3,todo:48,late:0}},
   {key:'MO-60',frente:'Operaciones',subfrente:'S&OP',summary:'1AP. Mejorar Proceso de S&OP',status:'L2',cat:'Caso de Negocio',owner:'Ruby Torres',pais:'PAN',rec:15,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-60',sw:'',tasks:null},
   {key:'MO-61',frente:'',subfrente:'S&OP',summary:'1EP. Depuración del portafolio',status:'L1',cat:'',owner:'Sin asignar',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-61',sw:'',tasks:null},
   {key:'MO-62',frente:'Operaciones',subfrente:'S&OP',summary:'1EP. Depuración del portafolio',status:'L3',cat:'Caso de Negocio',owner:'Ruby Torres',pais:'PAN',rec:617,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-62',sw:'',tasks:null},
-  {key:'MO-65',frente:'Operaciones',subfrente:'Inventarios',summary:'2BP. Ejecutar la liquidación de inventario de baja rotación y obsoletos - Muebles',status:'L3',cat:'Caso de Negocio',owner:'Ruby Torres',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-65',sw:'JCTR',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-66',frente:'Operaciones',subfrente:'Inventarios',summary:'2C. Ejecutar la liquidación de inventario de baja rotación y obsoletos - Decoración',status:'L3',cat:'Caso de Negocio',owner:'Maria Camila Betancourt',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-66',sw:'SLOBDECO',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  {key:'MO-67',frente:'Operaciones',subfrente:'Inventarios',summary:'2CP. Ejecutar la liquidación de inventario de baja rotación y obsoletos - Decoración',status:'L3',cat:'Caso de Negocio',owner:'Maria Camila Betancourt',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-67',sw:'SLOBDECPA',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  {key:'MO-65',frente:'Operaciones',subfrente:'Inventarios',summary:'2BP. Ejecutar la liquidación de inventario de baja rotación y obsoletos - Muebles',status:'L3',cat:'Caso de Negocio',owner:'Ruby Torres',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-65',sw:'JCTR',tasks:{total:58,done:5,prog:11,todo:42,late:0}},
+  {key:'MO-66',frente:'Operaciones',subfrente:'Inventarios',summary:'2C. Ejecutar la liquidación de inventario de baja rotación y obsoletos - Decoración',status:'L3',cat:'Caso de Negocio',owner:'Maria Camila Betancourt',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-66',sw:'SLOBDECO',tasks:{total:20,done:2,prog:4,todo:14,late:0}},
+  {key:'MO-67',frente:'Operaciones',subfrente:'Inventarios',summary:'2CP. Ejecutar la liquidación de inventario de baja rotación y obsoletos - Decoración',status:'L3',cat:'Caso de Negocio',owner:'Maria Camila Betancourt',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-67',sw:'SLOBDECPA',tasks:{total:6,done:0,prog:0,todo:6,late:0}},
   {key:'MO-69',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3AP. Implementar la metodología de Lean Warehouse',status:'L2',cat:'Caso de Negocio',owner:'Sergio Gil',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-69',sw:'',tasks:null},
   {key:'MO-70',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3BP. Implementar zonificación y slotting en bodega',status:'L2',cat:'Habilitadora',owner:'Sergio Gil',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-70',sw:'',tasks:null},
   {key:'MO-71',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3EP. Optimizar cross-docking con vendedores y proveedores para colchones',status:'L1',cat:'Caso de Negocio',owner:'Sergio Gil',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-71',sw:'',tasks:null},
@@ -587,7 +564,7 @@ const DATA = [
   {key:'MO-73',frente:'Operaciones',subfrente:'Transporte',summary:'4AP. Reducir costos de flete tercerizado y propio',status:'L1',cat:'Caso de Negocio',owner:'Reinaldo Justiniani',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-73',sw:'',tasks:null},
   {key:'MO-74',frente:'Operaciones',subfrente:'Transporte',summary:'4CP. Definir mix óptimo de insourcing y outsourcing de transporte',status:'L1',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-74',sw:'',tasks:null},
   {key:'MO-75',frente:'Operaciones',subfrente:'Transporte',summary:'4DP. Mejorar entrega en primer intento, cumplimiento de citas y entrega a tiempo',status:'L1',cat:'Caso de Negocio',owner:'Reinaldo Justiniani',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-75',sw:'',tasks:null},
-  {key:'MO-76',frente:'Operaciones',subfrente:'Transporte',summary:'4F. Optimizar ruteo (Mejorar utilizacion y costo de entrega)',status:'L3',cat:'Habilitadora',owner:'Ervin Trujillo',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-76',sw:'OPR',tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  {key:'MO-76',frente:'Operaciones',subfrente:'Transporte',summary:'4F. Optimizar ruteo (Mejorar utilizacion y costo de entrega)',status:'L3',cat:'Habilitadora',owner:'Ervin Trujillo',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-76',sw:'OPR',tasks:{total:20,done:3,prog:1,todo:16,late:1}},
   {key:'MO-77',frente:'Operaciones',subfrente:'Transporte',summary:'4G. Nuevo Mix armado (Entrega y armado el mismo dia)',status:'L3',cat:'Habilitadora',owner:'Marla Lambertino',pais:'COL',rec:304,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-77',sw:'',tasks:null},
   {key:'MO-78',frente:'Operaciones',subfrente:'Post-venta',summary:'5AP. Rediseñar portafolio y gestión de soluciones de posventa',status:'L1',cat:'Caso de Negocio',owner:'Juan Goez',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-78',sw:'',tasks:null},
   {key:'MO-79',frente:'Operaciones',subfrente:'Post-venta',summary:'5DP. Fortalecer control de calidad y desempeño de armado',status:'L1',cat:'Caso de Negocio',owner:'Ana de Souza',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-79',sw:'',tasks:null},
@@ -597,7 +574,7 @@ const DATA = [
   {key:'MO-86',frente:'Crédito',subfrente:'FOE',summary:'Front Office Excellence (Crédito)',status:'L3',cat:'Caso de Negocio',owner:'Adela Hereira',pais:'PAN',rec:0,ot:4251425,url:'https://hubdigitaljamar.atlassian.net/browse/MO-86',sw:'',tasks:null},
   {key:'MO-87',frente:'Crédito',subfrente:'FOE',summary:'Front Office Excellence (Contado)',status:'L3',cat:'Caso de Negocio',owner:'Adela Hereira',pais:'PAN',rec:0,ot:2148425,url:'https://hubdigitaljamar.atlassian.net/browse/MO-87',sw:'',tasks:null},
   {key:'MO-88',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1C. Propuesta de valor para cliente conocido',status:'L3',cat:'Caso de Negocio',owner:'Manuelita Sarmiento',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-88',sw:'PROP',tasks:{total:22,done:9,prog:5,todo:8,late:0}},
-  {key:'MO-89',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1D. Implementar palancas transversales para clientes',status:'L3',cat:'Caso de Negocio',owner:'Manuelita Sarmiento',pais:'PAN',rec:0,ot:173596,url:'https://hubdigitaljamar.atlassian.net/browse/MO-89',sw:'RF1D',tasks:{total:9,done:0,prog:4,todo:5,late:1}}
+  {key:'MO-89',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1D. Implementar palancas transversales para clientes',status:'L3',cat:'Caso de Negocio',owner:'Manuelita Sarmiento',pais:'PAN',rec:0,ot:173596,url:'https://hubdigitaljamar.atlassian.net/browse/MO-89',sw:'RF1D',tasks:{total:9,done:0,prog:4,todo:5,late:0}}
 ];
 
 
@@ -1093,49 +1070,49 @@ function renderSFActivities(filtered) {
 /* ── PLAN CARDS ── */
 const SW_PROJECTS = {
   /* ── S&OP ── */
-  'SOE':{name:"1D. Implementar el proceso de S&OE",frente:"Operaciones",subfrente:"S&OP",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'DEP':{name:"1E. Depuración del portafolio",frente:"Operaciones",subfrente:"S&OP",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'MSOP':{name:"1A. Mejora del Proceso S&OP",frente:"Operaciones",subfrente:"S&OP",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'MEJ':{name:"1B. Mejorar la asertividad del Forecast",frente:"Operaciones",subfrente:"S&OP",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'PROVED':{name:"1C. Modelo de trabajo con proveedores",frente:"Operaciones",subfrente:"S&OP",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  'SOE':{name:"1D. Implementar el proceso de S&OE",frente:"Operaciones",subfrente:"S&OP",tasks:{total:99,done:20,prog:16,todo:63,late:0}},
+  'DEP':{name:"1E. Depuración del portafolio",frente:"Operaciones",subfrente:"S&OP",tasks:{total:139,done:5,prog:15,todo:119,late:0}},
+  'MSOP':{name:"1A. Mejora del Proceso S&OP",frente:"Operaciones",subfrente:"S&OP",tasks:{total:29,done:8,prog:4,todo:17,late:0}},
+  'MEJ':{name:"1B. Mejorar la asertividad del Forecast",frente:"Operaciones",subfrente:"S&OP",tasks:{total:37,done:0,prog:0,todo:37,late:0}},
+  'PROVED':{name:"1C. Modelo de trabajo con proveedores",frente:"Operaciones",subfrente:"S&OP",tasks:{total:37,done:0,prog:0,todo:37,late:0}},
   /* ── Inventarios ── */
-  'ECI':{name:"2A. Ejecutar la optimización de inventarios",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'DEIT':{name:"2F. Estrategia de inventario en tienda",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'SLOBM':{name:"2D. Liquidación SLOB Muebles",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'JCTR':{name:"2DP. Liquidación SLOB Muebles Panamá",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'SLOBDECO':{name:"2E. Liquidación SLOB Decoración",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'SLOBDECPA':{name:"2EP. Liquidación SLOB Decoración Panamá",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  'ECI':{name:"2A. Ejecutar la optimización de inventarios",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:29,done:3,prog:3,todo:23,late:1}},
+  'DEIT':{name:"2F. Estrategia de inventario en tienda",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:67,done:33,prog:14,todo:20,late:0}},
+  'SLOBM':{name:"2D. Liquidación SLOB Muebles",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:14,done:3,prog:2,todo:9,late:0}},
+  'JCTR':{name:"2DP. Liquidación SLOB Muebles Panamá",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:58,done:5,prog:11,todo:42,late:0}},
+  'SLOBDECO':{name:"2E. Liquidación SLOB Decoración",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:20,done:2,prog:4,todo:14,late:0}},
+  'SLOBDECPA':{name:"2EP. Liquidación SLOB Decoración Panamá",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:6,done:0,prog:0,todo:6,late:0}},
   /* ── Transporte ── */
   'RCD3':{name:"4A. Reducir costos de flete",frente:"Operaciones",subfrente:"Transporte",tasks:{total:19,done:0,prog:0,todo:19,late:0}},
-  'IMPCSE':{name:"4B. Cobro segunda entrega",frente:"Operaciones",subfrente:"Transporte",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'MIOT':{name:"4C. Mix insourcing/outsourcing",frente:"Operaciones",subfrente:"Transporte",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'OPR':{name:"4F. Optimizar ruteo",frente:"Operaciones",subfrente:"Transporte",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  'IMPCSE':{name:"4B. Cobro segunda entrega",frente:"Operaciones",subfrente:"Transporte",tasks:{total:24,done:5,prog:1,todo:18,late:0}},
+  'MIOT':{name:"4C. Mix insourcing/outsourcing",frente:"Operaciones",subfrente:"Transporte",tasks:{total:1,done:0,prog:0,todo:1,late:0}},
+  'OPR':{name:"4F. Optimizar ruteo",frente:"Operaciones",subfrente:"Transporte",tasks:{total:20,done:3,prog:1,todo:16,late:1}},
   /* ── Post-venta ── */
   'ZT5F':{name:"5F. Mejorar políticas posventa",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:13,done:0,prog:0,todo:13,late:3}},
-  'FCCDA':{name:"5D. Fortalecer control calidad y armado",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
+  'FCCDA':{name:"5D. Fortalecer control calidad y armado",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:34,done:1,prog:5,todo:28,late:0}},
   'WF5':{name:"5B. Mejorar diagnóstico inicial",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:28,done:0,prog:0,todo:28,late:2}},
-  'SDR':{name:"5C. Elevar calidad producto",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'PDSP':{name:"5A. Rediseñar portafolio posventa",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'IM':{name:"5E. LEAN procesamiento devoluciones",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:0,done:0,prog:0,todo:0,late:0}},
-  'OP':{name:"5G. Optimizar gestión de quejas",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:10,done:3,prog:0,todo:7,late:1}},
+  'SDR':{name:"5C. Elevar calidad producto",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:24,done:1,prog:4,todo:19,late:0}},
+  'PDSP':{name:"5A. Rediseñar portafolio posventa",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:96,done:38,prog:6,todo:52,late:8}},
+  'IM':{name:"5E. LEAN procesamiento devoluciones",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:21,done:1,prog:2,todo:18,late:1}},
+  'OP':{name:"5G. Optimizar gestión de quejas",frente:"Operaciones",subfrente:"Post-venta",tasks:{total:48,done:2,prog:1,todo:45,late:0}},
   /* ── FOE Crédito ── */
   'TLGDL':{name:"4A. Transformación gestión de leads",frente:"Crédito",subfrente:"FOE",tasks:{total:12,done:0,prog:2,todo:10,late:1}},
   'EEMOC':{name:"4B. Evolución modelo operativo CNP",frente:"Crédito",subfrente:"FOE",tasks:{total:10,done:0,prog:0,todo:10,late:0}},
-  'SF':{name:"4C. Sostenibilidad FOE",frente:"Crédito",subfrente:"FOE",tasks:{total:47,done:0,prog:9,todo:38,late:0}},
-  'EODV':{name:"4D. Estructura operativa de ventas",frente:"Crédito",subfrente:"FOE",tasks:{total:44,done:10,prog:7,todo:27,late:3}},
+  'SF':{name:"4C. Sostenibilidad FOE",frente:"Crédito",subfrente:"FOE",tasks:{total:47,done:0,prog:8,todo:39,late:0}},
+  'EODV':{name:"4D. Estructura operativa de ventas",frente:"Crédito",subfrente:"FOE",tasks:{total:42,done:2,prog:8,todo:32,late:9}},
   'SDC':{name:"4E. Rediseñar sistema comisiones",frente:"Crédito",subfrente:"FOE",tasks:null},
   'ISMC':{name:"4F. Implementar Salesforce Marketing Cloud",frente:"Crédito",subfrente:"FOE",tasks:{total:3,done:0,prog:0,todo:3,late:0}},
   /* ── E2E Crédito ── */
-  'IEPRFEEFDC':{name:"3A. Eficiencias para reducir fugas",frente:"Crédito",subfrente:"E2E proceso de Crédito",tasks:{total:70,done:7,prog:15,todo:48,late:6}},
-  'ICD':{name:"3B. Implementar crédito digital",frente:"Crédito",subfrente:"E2E proceso de Crédito",tasks:{total:34,done:9,prog:5,todo:20,late:0}},
+  'IEPRFEEFDC':{name:"3A. Eficiencias para reducir fugas",frente:"Crédito",subfrente:"E2E proceso de Crédito",tasks:{total:70,done:7,prog:7,todo:56,late:0}},
+  'ICD':{name:"3B. Implementar crédito digital",frente:"Crédito",subfrente:"E2E proceso de Crédito",tasks:{total:34,done:8,prog:4,todo:22,late:0}},
   /* ── Modelo de Riesgos ── */
   'MDOOMC':{name:"2A. Modelo optimización oferta",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:null},
-  'CODCEYBM':{name:"2B. Control operacional E2E",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:{total:10,done:2,prog:0,todo:8,late:0}},
-  'MDCB':{name:"2D. Modelo de comportamiento",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:{total:12,done:0,prog:2,todo:10,late:0}},
+  'CODCEYBM':{name:"2B. Control operacional E2E",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:{total:9,done:2,prog:0,todo:7,late:0}},
+  'MDCB':{name:"2D. Modelo de comportamiento",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:{total:9,done:0,prog:1,todo:8,late:0}},
   'EDP':{name:"2E. Nuevo modelo de provisiones",frente:"Crédito",subfrente:"Modelo de Riesgos",tasks:null},
   /* ── Curva de Valor Crédito ── */
   'IPDPCDAR':{name:"1A. Palanca — alto riesgo",frente:"Crédito",subfrente:"Curva de Valor Crédito",tasks:{total:50,done:25,prog:15,todo:10,late:0}},
-  'IPDPCDBR':{name:"1B. Palanca — bajo riesgo",frente:"Crédito",subfrente:"Curva de Valor Crédito",tasks:{total:58,done:8,prog:4,todo:46,late:0}},
+  'IPDPCDBR':{name:"1B. Palanca — bajo riesgo",frente:"Crédito",subfrente:"Curva de Valor Crédito",tasks:{total:54,done:3,prog:3,todo:48,late:0}},
   'RF1D':{name:"1D. Implementar palancas transversales",frente:"Crédito",subfrente:"Curva de Valor Crédito",tasks:{total:9,done:0,prog:4,todo:5,late:0}},
   'PROP':{name:"1C. Propuesta de valor para cliente conocido",frente:"Crédito",subfrente:"Curva de Valor Crédito",tasks:{total:22,done:9,prog:5,todo:8,late:0}}
 };
@@ -1186,135 +1163,298 @@ var LATE_TASKS = {
 
 
 var WEEK_TASKS = {
-  // 2026-06-26 — 51 esta semana
+  // 2026-06-25 — 131 actividades próximas en 23 iniciativas
+  'MO-1': [
+    {key:'SOE-19',summary:"H4.5 Definición de tableros, KPIs y reportes de control",duedate:'2026-06-25',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-20',summary:"H4.6 Socialización del modelo con áreas involucradas",duedate:'2026-06-28',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-17',summary:"H4.3 Definición de acuerdos y reglas de operación",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-2': [
+    {key:'DEP-99',summary:"Establecer baseline pre-despliegue por SKU × tienda",duedate:'2026-06-29',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-23',summary:"Establecer la cadencia de revisión del portafolio (mensual operativa, trimestral estrategica)",duedate:'2026-06-29',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-18',summary:"Definir criterios de entrada y salida de SKUs (venta mínima 6m, margen mínimo, rotación)",duedate:'2026-06-29',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-17',summary:"Definir mix objetivo por rango (Alto / Medio / Bajo) y Eje de estilo por sublínea",duedate:'2026-06-29',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-96',summary:"Calcular inventario semilla por SKU × tienda (60 días)",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-94',summary:"Construir plan de despliegue por tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-93',summary:"Validar disponibilidad de espacio físico por tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-92',summary:"Revisar 14 SKUs FS de I4 (100% con inv) — confirmar catalogación",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-91',summary:"Filtrar los 272 SKUs Pareto asignados a I4",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-88',summary:"Ejecutar cambios de precio / costo / descuento en SAP",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-87',summary:"Decidir por SKU: subir precio, renegociar costo o eliminar descuento",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-62',summary:"Filtrar los ~318 SKUs en Ola 1 con BZ>0",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-59',summary:"Aprobación masiva en comité de surtido",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-58',summary:"Validar con Postventa que ninguno tiene garantías activas o reposiciones pendientes",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-57',summary:"Filtrar los 1.429 SKUs en Ola 1 con BZ=0 desde Portafolio",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-52',summary:"Aprobar lista de 48 SKUs a descontinuar en comité",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-50',summary:"Clasificar: (A) descontinuar 48 más negativos / (B) ajustar 112 a margen 0%",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-49',summary:"Filtrar los 160 SKUs con margen negativo asignados a I3",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-30',summary:"Aprobación masiva en comité de surtido",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-29',summary:"Validar con Postventa que ninguno tiene garantías activas o reposiciones pendientes",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'DEP-15',summary:"Definir puntos de precio por sublínea",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'DEP-12',summary:"Definir tamaño objetivo del portafolio total (# SKUs activos meta) por sublineas",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-4': [
+    {key:'MEJ-34',summary:"Alinear con los requerimientos para el lanzamiento del ciclo de S&OP supervisado para las reuniones de Demand Review",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-33',summary:"Alinear con los requerimientos para el lanzamiento del ciclo de S&OP supervisado para las reuniones de PMR",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-21',summary:"Trabajo previo de preparación al lanzamiento del lanzamiento de S&OP",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-20',summary:"Establecer con el equipo comercial las reglas de juego para los ajustes de forecast siempre respaldados con datos",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-10',summary:"Asegurar la inclusión de las políticas de gestión de productos (replacements, proceso de asociación de historía de venta en sustitutos, proceso de asociación de historia de venta en base a atributos, etc.)",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-9',summary:"Definri modelo del segmento o modelos de los segmentos para el primer piloto y pautas generales que sirvan de base para el escalado",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-7',summary:"Segmentación de los SKUs (Socializar y alinear los segmentos con equipos comerciales)",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-4',summary:"Revisión del product lifecyle (identificar productos nuevos a discontinuar)",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-3',summary:"Revisión de expectativas de futuro para el equipo de comercial y el input que se requiere para el ajuste estadístico del forecast",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-2',summary:"Revisión de los resultados del forecast sistémico vs. Forecast ajustado; incluye principales indicadores (forecast bias, accuracy and value) y el analisis de top 5 over and under",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-1',summary:"Socializar con equipos comerciales los resultados de forecast sistémico vs forecast ajustado para generar conciencia del impacto que genera un ajuste erróneo",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-7': [
+    {key:'ECI-2',summary:"Kick-Off de la iniciativa",duedate:'2026-06-26',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-10': [
+    {key:'SLOBM-15',summary:"Promoción en piso Marcación",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBM-14',summary:"Exhibición / Zonas de Oportunidades",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBM-9',summary:"Combos",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBM-8',summary:"Pricing SLOB ( Todas las Agencias Col )",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'SLOBM-7',summary:"Selección de tiendas (Zonas liquidación, Tiendas outlet)",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'SLOBM-3',summary:"Definición SLOB",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBM-1',summary:"SLOB Muebles Colombia",duedate:'2026-06-30',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-11': [
+    {key:'PTMZR-9',summary:"Levantamiento espacios en cendis Galapa",duedate:'2026-06-25',assignee:"Sebastian Rivero",status:"En curso" },
+    {key:'PTMZR-10',summary:"Revisión portafolio con Categoría",duedate:'2026-06-30',assignee:"Sebastian Rivero",status:"En curso" },
+    {key:'PTMZR-11',summary:"Selección de SKUs piloto y Activacion Comercial",duedate:'2026-06-30',assignee:"Sebastian Rivero",status:"En curso" }
+  ],
+  'MO-28': [
+    {key:'IMPCSE-25',summary:"Reunión con el equipo de crédito",duedate:'2026-06-25',assignee:"Ervin Trujillo Rojas",status:"Tareas por hacer" },
+    {key:'IMPCSE-7',summary:"Go live piloto cobro segunda entrega piloto 1",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"Tareas por hacer" },
+    {key:'IMPCSE-2',summary:"Piloto con una tienda pequeña",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"En curso" }
+  ],
+  'MO-33': [
+    {key:'ZT5F-6',summary:"Revisión Legal y Compliance",duedate:'2026-06-27',assignee:"Juan Carlos Goez Zapata",status:"Tareas por hacer" }
+  ],
+  'MO-34': [
+    {key:'FCCDA-2',summary:"Palanca 1 - Diagnóstico y visibilidad del inventario",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"Tareas por hacer" },
+    {key:'FCCDA-5',summary:"Contratación de agentes de confirmación",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"En curso" },
+    {key:'FCCDA-6',summary:"Adquisición de Equipos",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"En curso" },
+    {key:'FCCDA-7',summary:"Diseño de modelo de gestión",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"En curso" },
+    {key:'FCCDA-8',summary:"Diseño de guión y protocolo de llamada",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"Tareas por hacer" },
+    {key:'FCCDA-9',summary:"Configuración de flujo de trabajos",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"En curso" },
+    {key:'FCCDA-10',summary:"Capacitación y Entrenamiento del personal",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"Tareas por hacer" },
+    {key:'FCCDA-11',summary:"Socialización con Proveedores",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"Tareas por hacer" }
+  ],
+  'MO-36': [
+    {key:'SDR-26',summary:"Revisar desde la data cruda como podemos validar el lote",duedate:'2026-06-30',assignee:"Juan Carlos Goez Zapata",status:"Tareas por hacer" }
+  ],
   'MO-41': [
-    {key:'OP-13',summary:"Diagnósticar el proceso de atención inbound",duedate:'2026-06-30',assignee:"Milena Rodríguez",status:"Por hacer" }
+    {key:'OP-13',summary:"Diagnosticar el proceso de atención inbound",duedate:'2026-06-30',assignee:"Milena Rodríguez",status:"Por hacer" }
   ],
   'MO-44': [
-    {key:'TLGDL-10',summary:"Ejecutar piloto rápido de \"mangos bajitos\" con 5 vendedores híbridos sobre listas existentes - (Hito Monetario)",duedate:'2026-06-26',assignee:"Carlos Mario Barrera Vega",status:"In Progress" }
+    {key:'TLGDL-10',summary:"Ejecutar piloto rápido de mangos bajitos con 5 vendedores híbridos",duedate:'2026-06-26',assignee:"Carlos Mario Barrera Vega",status:"En curso" }
   ],
   'MO-46': [
-    {key:'SF-58',summary:"Definir métricas de medición para el APF",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"In Progress" },
-    {key:'SF-57',summary:"Definir métricas de medición para alianzas / Tablero (Homologar tablero Colombia)",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"In Progress" },
-    {key:'SF-56',summary:"Modelo Operativo: Entender el marco legal y el funcionamiento de los medios de pago en Panamá.",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"To Do" },
-    {key:'SF-34',summary:"Diseñar un modelo para la Implementacón Scripts Comerciales y manejo de Objeciones Credito y de ventas.",duedate:'2026-06-30',assignee:"bsilva",status:"In Progress" },
-    {key:'SF-24',summary:"Diseñar Scripts Comerciales y manejo de Objeciones Credito.",duedate:'2026-07-03',assignee:"Stefany Barraza Barbosa",status:"In Progress" },
-    {key:'SF-23',summary:"Diseñar el proceso de formación en Nuevos productos de crédito para asesores de punto, equipo comercial y equipo de Adminitrativo \"Caja, Servicio al Cliente\".",duedate:'2026-07-03',assignee:"Stefany Barraza Barbosa",status:"To Do" }
+    {key:'SF-58',summary:"Definir métricas de medición para el APF",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"En curso" },
+    {key:'SF-57',summary:"Definir métricas de medición para alianzas Tablero Homologar tablero Colombia",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"En curso" },
+    {key:'SF-56',summary:"Modelo Operativo: Entender el marco legal y el funcionamiento de los medios de pago en Panamá.",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"Tareas por hacer" },
+    {key:'SF-34',summary:"Diseñar un modelo para la Implementacón Scripts Comerciales y manejo de Objeciones",duedate:'2026-06-30',assignee:"bsilva",status:"En curso" }
   ],
   'MO-47': [
-    {key:'EODV-41',summary:"Realizar el plan de Renovación del 30% de la planta de personal (7 posiciones)",duedate:'2026-06-30',assignee:"ERIKA GUTIERREZ",status:"In Progress" },
-    {key:'EODV-40',summary:"Redefinir Perfil Asesor de punto",duedate:'2026-06-30',assignee:"Dayra Lizbeth Aguilar",status:"In Progress" },
-    {key:'EODV-34',summary:"Definir estructura y Roles de la Operación de Crédito",duedate:'2026-06-30',assignee:"ERIKA GUTIERREZ",status:"In Progress" },
+    {key:'EODV-41',summary:"Realizar el plan de Renovación del 30% de la planta de personal (7 posiciones)",duedate:'2026-06-30',assignee:"ERIKA GUTIERREZ",status:"En curso" },
+    {key:'EODV-40',summary:"Redefinir Perfil Asesor de punto",duedate:'2026-06-30',assignee:"Dayra Lizbeth Aguilar",status:"En curso" },
+    {key:'EODV-34',summary:"Definir estructura y Roles de la Operación de Crédito",duedate:'2026-06-30',assignee:"ERIKA GUTIERREZ",status:"En curso" },
     {key:'EODV-1',summary:"Creación del cargo: Jefe de torre de control",duedate:'2026-06-30',assignee:"rgomez",status:"Definición" },
-    {key:'EODV-27',summary:"Traslado de AC a Panamá",duedate:'2026-07-01',assignee:"rgomez",status:"In Progress" }
+    {key:'EODV-27',summary:"Traslado de AC a Panamá",duedate:'2026-07-01',assignee:"rgomez",status:"En curso" }
   ],
   'MO-52': [
-    {key:'MDCB-1',summary:"Crear Mapa de impacto de impactos para la implementación",duedate:'2026-06-26',assignee:"Felix Diaz Miranda",status:"In Progress" },
-    {key:'MDCB-13',summary:"Creación de historias de usuario",duedate:'2026-06-30',assignee:"Sin asignar",status:"In Progress" }
+    {key:'MDCB-1',summary:"Crear Mapa de impacto de impactos para la implementación",duedate:'2026-06-26',assignee:"Felix Diaz Miranda",status:"En curso" }
   ],
   'MO-54': [
-    {key:'IEPRFEEFDC-16',summary:"construir pmv funnel accionable",duedate:'2026-06-27',assignee:"German Centanaro",status:"In Progress" },
-    {key:'IEPRFEEFDC-90',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes bajo  riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"To Do" },
-    {key:'IEPRFEEFDC-89',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes alto riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"To Do" },
-    {key:'IEPRFEEFDC-38',summary:"Diseñar mecanismos de recuperación de clientes fugados",duedate:'2026-06-30',assignee:"sandra ibañez",status:"In Progress" },
-    {key:'IEPRFEEFDC-37',summary:"Construir lógica de escalamiento y uso del playbook",duedate:'2026-06-30',assignee:"sandra ibañez",status:"To Do" },
-    {key:'IEPRFEEFDC-36',summary:"Definir playbooks por tipo de fuga",duedate:'2026-06-30',assignee:"sandra ibañez",status:"In Progress" },
-    {key:'IEPRFEEFDC-35',summary:"Construir catálogo de acciones correctivas: comerciales operativas experiencia producto pricing riesgo",duedate:'2026-06-30',assignee:"sandra ibañez",status:"In Progress" },
-    {key:'IEPRFEEFDC-34',summary:"Diseño de acciones de mejora por etapa del funnel",duedate:'2026-06-30',assignee:"sandra ibañez",status:"To Do" },
-    {key:'IEPRFEEFDC-32',summary:"Definir responsables y tiempos de ejecución",duedate:'2026-06-30',assignee:"sandra ibañez",status:"To Do" },
-    {key:'IEPRFEEFDC-27',summary:"Construir  matriz de oportunidades",duedate:'2026-06-30',assignee:"sandra ibañez",status:"In Progress" },
+    {key:'IEPRFEEFDC-31',summary:"Construir backlog de oportunidades",duedate:'2026-06-25',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-30',summary:"Priorizar quick wins vs iniciativas estructurales",duedate:'2026-06-25',assignee:"msarmiento",status:"En curso" },
+    {key:'IEPRFEEFDC-29',summary:"Estimar volumen marginal recuperable",duedate:'2026-06-25',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-28',summary:"Cuantificar impacto económico por fuga",duedate:'2026-06-25',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-26',summary:"Priorizar fugas por impacto",duedate:'2026-06-25',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-24',summary:"Clasificar causas: comerciales operativas tecnológicas riesgo experiencia cliente",duedate:'2026-06-25',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-16',summary:"construir pmv funnel accionable",duedate:'2026-06-27',assignee:"German Centanaro",status:"En curso" },
+    {key:'IEPRFEEFDC-90',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes bajo  riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-89',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes alto riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-38',summary:"Diseñar mecanismos de recuperación de clientes fugados",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-37',summary:"Construir lógica de escalamiento y uso del playbook",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-36',summary:"Definir playbooks por tipo de fuga",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-35',summary:"Construir catálogo de acciones correctivas: comerciales operativas experiencia producto pricing riesgo",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IEPRFEEFDC-34',summary:"Diseño de acciones de mejora por etapa del funnel",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-32',summary:"Definir responsables y tiempos de ejecución",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IEPRFEEFDC-27',summary:"Construir  matriz de oportunidades",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
     {key:'IEPRFEEFDC-20',summary:"Identificar y priorizar de oportunidades de fuga",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En ejecución" },
-    {key:'IEPRFEEFDC-40',summary:"Seleccionar tiendas piloto",duedate:'2026-07-01',assignee:"sandra ibañez",status:"To Do" }
+    {key:'IEPRFEEFDC-40',summary:"Seleccionar tiendas piloto",duedate:'2026-07-01',assignee:"sandra ibañez",status:"Tareas por hacer" }
   ],
   'MO-56': [
-    {key:'ICD-50',summary:"Grooming  con Equipo de Cumplimiento  para el entendimiento de Matriz",duedate:'2026-06-26',assignee:"Miguel Ramirez Donado",status:"To Do" },
-    {key:'ICD-43',summary:"Reunion tecnica con los equipos de custodia y TI",duedate:'2026-06-26',assignee:"Jenifer",status:"To Do" },
-    {key:'ICD-45',summary:"Cerrar Negociacion  con provedor de custodia",duedate:'2026-06-30',assignee:"msarmiento",status:"In Progress" },
-    {key:'ICD-41',summary:"Diseñar flujo de custodia del pagare",duedate:'2026-06-30',assignee:"Nataly de arco",status:"In Progress" },
-    {key:'ICD-33',summary:"Diagnostico de los procesos impactado",duedate:'2026-06-30',assignee:"Miguel Ramirez Donado",status:"To Do" },
-    {key:'ICD-32',summary:"Dibujar la Experiencia del Usuario",duedate:'2026-07-01',assignee:"Miguel Ramirez Donado",status:"To Do" },
+    {key:'ICD-50',summary:"Grooming  con Equipo de Cumplimiento  para el entendimiento de Matriz",duedate:'2026-06-26',assignee:"Miguel Ramirez Donado",status:"Tareas por hacer" },
+    {key:'ICD-43',summary:"Reunion tecnica con los equipos de custodia y TI",duedate:'2026-06-26',assignee:"Jenifer",status:"Tareas por hacer" },
+    {key:'ICD-45',summary:"Cerrar Negociacion  con provedor de custodia",duedate:'2026-06-30',assignee:"msarmiento",status:"En curso" },
+    {key:'ICD-41',summary:"Diseñar flujo de custodia del pagare",duedate:'2026-06-30',assignee:"Nataly de arco",status:"En curso" },
+    {key:'ICD-33',summary:"Diagnostico de los procesos impactado",duedate:'2026-06-30',assignee:"Miguel Ramirez Donado",status:"Tareas por hacer" },
+    {key:'ICD-32',summary:"Dibujar la Experiencia del Usuario",duedate:'2026-07-01',assignee:"Miguel Ramirez Donado",status:"Tareas por hacer" },
     {key:'ICD-31',summary:"Configurar las rutas de aprobación en Salesforce, para la asignación automatica segun el flujo definido  definido para cada ruta.",duedate:'2026-07-01',assignee:"Jenifer",status:"Dev En progreso" },
-    {key:'ICD-57',summary:"Reconfigurar las  politicas de autorizador minimizando requisitos",duedate:'2026-07-02',assignee:"Nataly de arco",status:"To Do" },
-    {key:'ICD-56',summary:"Implementar Rurta D2  incrementando la aprobacion desde punto de financiación",duedate:'2026-07-02',assignee:"Nataly de arco",status:"Refinamiento" }
+    {key:'ICD-57',summary:"Reconfigurar las  politicas de autorizador minimizando requisitos",duedate:'2026-07-02',assignee:"Nataly de arco",status:"Tareas por hacer" }
   ],
   'MO-58': [
-    {key:'IPDPCDAR-51',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez",status:"In Progress" },
+    {key:'IPDPCDAR-51',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
     {key:'IPDPCDAR-46',summary:"Piloto codeudores GAAD",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En ejecución" },
-    {key:'IPDPCDAR-38',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez",status:"In Progress" },
-    {key:'IPDPCDAR-26',summary:"definir y ejecutar acciones asociadas a los productos cliente alto riesgo para mejorar ebitda",duedate:'2026-06-30',assignee:"sandra ibañez",status:"In Progress" },
+    {key:'IPDPCDAR-38',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
+    {key:'IPDPCDAR-26',summary:"definir y ejecutar acciones asociadas a los productos cliente alto riesgo para mejorar ebitda",duedate:'2026-06-30',assignee:"sandra ibañez",status:"En curso" },
     {key:'IPDPCDAR-7',summary:"Optimizar  palancas actuales de curva de valor para cliente alto riesgo",duedate:'2026-07-01',assignee:"sandra ibañez",status:"En ejecución" }
   ],
   'MO-59': [
-    {key:'IPDPCDBR-68',summary:"ejecutar ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez",status:"To Do" },
-    {key:'IPDPCDBR-67',summary:"Diseñar  ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez",status:"To Do" },
-    {key:'IPDPCDBR-66',summary:"Definición de escalamiento de un piloto a producto",duedate:'2026-06-30',assignee:"Hernan Soto",status:"To Do" },
-    {key:'IPDPCDBR-50',summary:"Ajustar narrativa según resultados",duedate:'2026-06-30',assignee:"bsilva",status:"To Do" },
-    {key:'IPDPCDBR-49',summary:"Identificar mejores prácticas",duedate:'2026-06-30',assignee:"bsilva",status:"To Do" },
-    {key:'IPDPCDBR-48',summary:"Evaluar impacto en conversión",duedate:'2026-06-30',assignee:"sandra ibañez",status:"To Do" },
-    {key:'IPDPCDBR-46',summary:"Seguimiento de adopción",duedate:'2026-06-30',assignee:"sandra ibañez",status:"To Do" },
-    {key:'IPDPCDBR-11',summary:"Identificar productos con mayor potencial de cierre",duedate:'2026-06-30',assignee:"msarmiento",status:"In Progress" },
-    {key:'IPDPCDBR-9',summary:"Diagnósticar y definir el portafolio para clientes bajo riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"In Progress" }
+    {key:'IPDPCDBR-68',summary:"ejecutar ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-67',summary:"Diseñar  ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-66',summary:"Definición de escalamiento de un piloto a producto",duedate:'2026-06-30',assignee:"Hernan Soto",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-50',summary:"Ajustar narrativa según resultados",duedate:'2026-06-30',assignee:"bsilva",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-49',summary:"Identificar mejores prácticas",duedate:'2026-06-30',assignee:"bsilva",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-48',summary:"Evaluar impacto en conversión",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-46',summary:"Seguimiento de adopción",duedate:'2026-06-30',assignee:"sandra ibañez",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-11',summary:"Identificar productos con mayor potencial de cierre",duedate:'2026-06-30',assignee:"msarmiento",status:"En curso" },
+    {key:'IPDPCDBR-9',summary:"Diagnósticar y definir el portafolio para clientes bajo riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"En curso" }
+  ],
+  'MO-65': [
+    {key:'JCTR-31',summary:"Ecommerce",duedate:'2026-06-26',assignee:"Sin asignar",status:"Bloqueado" },
+    {key:'JCTR-6',summary:"Selección de tiendas (Zonas liquidación, Tiendas outlet)",duedate:'2026-06-26',assignee:"Sin asignar",status:"En curso" },
+    {key:'JCTR-5',summary:"Cubrir con fueras de surtido los espacios de la curva",duedate:'2026-06-26',assignee:"Sin asignar",status:"En curso" },
+    {key:'JCTR-4',summary:"Estrategias de evacuación (Promo , Ambiente )",duedate:'2026-06-26',assignee:"Sin asignar",status:"En curso" },
+    {key:'JCTR-57',summary:"Trasladar mercancia a megamall, americas  y los andes",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'JCTR-1',summary:"Definición SLOB",duedate:'2026-06-30',assignee:"Sin asignar",status:"En ejecución" }
+  ],
+  'MO-66': [
+    {key:'SLOBDECO-17',summary:"Campaña urgencia \"Ultimas unidades\"",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-16',summary:"Feria liquidación",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-13',summary:"Incentivo FV escalado - LR tardía",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-12',summary:"Redes sociales - SLOB semanal",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-11',summary:"Clearance day mensual",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-9',summary:"Zona Outlet en tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"En curso" },
+    {key:'SLOBDECO-3',summary:"Descuento 30% LR Temprana: POP y STOPPER de precio especial",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SLOBDECO-2',summary:"Exhibición Especial: Reubicar SLOB LR Temprana a zonas de alto tráfico — entrada y esquinas calientes de tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"Tareas por hacer" }
+  ],
+  'MO-76': [
+    {key:'OPR-20',summary:"Piloto ruteo con IA",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"Tareas por hacer" },
+    {key:'OPR-19',summary:"Pruebas planeación y ruteo actual con IA basado en nuevas zonas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"Tareas por hacer" },
+    {key:'OPR-15',summary:"Análisis de la data actual de planeación y rutas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"En curso" },
+    {key:'OPR-17',summary:"Validación rutas con IA",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"En curso" }
   ],
   'MO-89': [
-    {key:'RF1D-7',summary:"Definiciones legales del piloto",duedate:'2026-06-30',assignee:"Jhonnattan A Mercado A",status:"In Progress" }
+    {key:'RF1D-7',summary:"Definiciones legales del piloto",duedate:'2026-06-30',assignee:"Jhonnattan A Mercado A",status:"En curso" }
   ],
 };
 
 var NO_DATE_TASKS = {
-  // 2026-06-26 — 37 sin fecha
-  'MO-41': [
-    {key:'OP-49',summary:"Documentar HU casos de novedad en entrega",duedate:'',assignee:"Milena Rodríguez",status:"Por hacer" }
+  // 2026-06-25 — 100 sin fecha en 6 iniciativas
+  'MO-1': [
+    {key:'SOE-99',summary:"Transferencia formal del modelo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-98',summary:"Mecanismo de mejora continua",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-97',summary:"Definir foros y cadencia",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-96',summary:"Definir dueño permanente S&OE",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-95',summary:"Aprobación SteerCo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-94',summary:"Estimación de recursos",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-93',summary:"Priorización de nuevas categorías/Cendis",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-92',summary:"Plan de escalamiento por waves",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-91',summary:"Re-validación con SteerCo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-90',summary:"Actualización de documentación",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-89',summary:"Lista de ajustes priorizados",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-88',summary:"Sesión de retrospectiva",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-87',summary:"Reporte cualitativo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-86',summary:"Documentar cambios culturales",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-85',summary:"Entrevistas a champions",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-84',summary:"Encuesta de adopción",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-83',summary:"Reporte ejecutivo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-82',summary:"Análisis de causa raíz de desviaciones",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-81',summary:"Comparativo vs baseline",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-80',summary:"Medición semanal y mensual de KPIs",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-79',summary:"Sesiones de mejora continua",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-78',summary:"Tablero de riesgos",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-77',summary:"Escalamiento al SteerCo",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-76',summary:"Log de bloqueos",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-75',summary:"Sesiones de retroalimentación",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-74',summary:"Tracking de alertas y respuesta",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-73',summary:"Bitácora de decisiones",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-72',summary:"Ritual semanal recurrente",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-71',summary:"Soporte intensivo primeras semanas",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-70',summary:"Comunicación de arranque",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-69',summary:"Tableros operativos publicados",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'SOE-68',summary:"Primera sesión semanal S&OE",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" }
   ],
-  'MO-46': [
-    {key:'SF-20',summary:"Diseñar modelo de Caracterización comercial de los productos de crédito y herramientas (Imágenes para Whatsapp, el guión, contenido para Mobi, etc) que garantice el entendimiento y la adecuada comunicación de cada producto de la curva de valor.",duedate:'',assignee:"Stefany Barraza Barbosa",status:"To Do" }
+  'MO-4': [
+    {key:'MEJ-39',summary:"Interfaz para modificación del forecast",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-38',summary:"Modulación del código y repositorio",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-30',summary:"Analisis de Restricción de inventarios",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-29',summary:"Análisis de canibalización",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-26',summary:"Otros Hitos: Revisar encaje en la planificacion post-cambios bases en el forecast",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-18',summary:"Realizar análisis en paralelo (revisar fechas en base a capacidad de equipo y prioridad) (fechas a encajar con los hitos prioritarios para el lanzamiento de S&OP)",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-17',summary:"Diseñar y ejecutar la segmentación de los SKUs",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-16',summary:"Desgloce al nivel de tiendas",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-15',summary:"Modelamiento SKUs sin historia",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-14',summary:"Actualización Fecha a emisión de orden",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'MEJ-13',summary:"Ejecutar mejoras genericas en el modelo, en linea con el resto de los hitos",duedate:'',assignee:"Sin asignar",status:"Definición" }
   ],
-  'MO-47': [
-    {key:'EODV-48',summary:"Tarea prueba 2",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'EODV-47',summary:"Tarea prueba 1",duedate:'',assignee:"Sin asignar",status:"To Do" }
-  ],
-  'MO-50': [
-    {key:'CODCEYBM-13',summary:"Monitoreo y seguimiento del impacto del control",duedate:'',assignee:"Carlos Andres Velásquez Henao",status:"To Do" },
-    {key:'CODCEYBM-12',summary:"Desarrollo del control de huellas de consulta en APC",duedate:'',assignee:"Jenifer",status:"Refinamiento" },
-    {key:'CODCEYBM-11',summary:"Construcción REA teléfonos coincidentes.",duedate:'',assignee:"Carlos Andres Velásquez Henao",status:"To Do" },
-    {key:'CODCEYBM-10',summary:"Construcción REA direcciones coincidentes.",duedate:'',assignee:"Carlos Andres Velásquez Henao",status:"To Do" },
-    {key:'CODCEYBM-4',summary:"Disminuir la pérdida de NPD asociado a riesgos operacionales",duedate:'',assignee:"Alejandra Rincón",status:"Definición" },
-    {key:'CODCEYBM-3',summary:"Desarrollo de las reglas de estandarización de direcciones",duedate:'',assignee:"Carlos Andres Velásquez Henao",status:"To Do" },
-    {key:'CODCEYBM-2',summary:"Definiciones de estandarización de direcciones",duedate:'',assignee:"Carlos Andres Velásquez Henao",status:"To Do" },
-    {key:'CODCEYBM-1',summary:"Disminuir los fraudes por tramitadores en Panamá en un 50%",duedate:'',assignee:"Carlos Andres Velásquez Henao",status:"Definición" }
-  ],
-  'MO-52': [
-    {key:'MDCB-12',summary:"Creación de los minimos necesarios para realizar pruebas",duedate:'',assignee:"Jenifer",status:"To Do" },
-    {key:'MDCB-11',summary:"Creación de archivo para realizar pruebas",duedate:'',assignee:"Jenifer",status:"To Do" }
-  ],
-  'MO-55': [
-    {key:'ISMC-4',summary:"Actividad / Hito Data y analistica",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'ISMC-3',summary:"Acitivdad / Hito proceso",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'ISMC-2',summary:"Actividad / Hito tecnologico",duedate:'',assignee:"Sin asignar",status:"Refinamiento" }
+  'MO-5': [
+    {key:'PROVED-37',summary:"Escalamiento Panamá: base de mapeo disponible desde M1 (Ruby Torres). Activar gobierno, SLAs, tableros y dinámica para proveedores locales PAN.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-36',summary:"Roll-out Dormitorio COL: replicar modelo completo con Sebastián Rivero (mapeo, dinámica L-V, SLAs, scorecards, tableros, S&OE). Solo si Gate G3 positivo.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-35',summary:"Escalamiento: Dormitorio y Panama",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-34',summary:"Gobierno mensual: comité situación proveedores, decisiones, compromisos mejora, visión 6M S&OP actualizada para Gestión Intensiva.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-33',summary:"Gate G3 — evaluación semana 8: OTIF ≥ 75% con tendencia positiva semanas 5-8 → autorizar escalamiento Dormitorio y Panamá. Meta estado estable del modelo: OTIF ≥ 85%.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-32',summary:"Control SLAs y scorecards: cumplimiento compromisos, evolución proveedores, migración entre grupos si riesgo aumenta. Gobierno mensual activo.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-31',summary:"Entrada semanal S&OE: 1 página riesgos proveedor disponible cada jueves. Dinámica L-V sostenida. Riesgos escalados con trazabilidad de decisión y acción.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-30',summary:"Tableros situación proveedor: semáforo RAG semanal, OTIF, Fill Rate, brecha plan vs oferta, evolución restricciones, acciones abiertas/cerradas/vencidas, cumplimiento SLAs.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-29',summary:"Controlar tableros, gate e integración S&OE",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-28',summary:"PILOTO Social COL Semanas 5-8: medición formal tendencia OTIF y Fill Rate. Seguimiento semanal de acciones. 1 página S&OE activa cada jueves. Gate G3 evaluación semana 8.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-27',summary:"Integración Categorías: reunión jueves formalizada como insumo de decisión. Trazabilidad de ajustes y su impacto en disponibilidad y venta.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-26',summary:"Planes de acción y compromisos bilaterales: acciones correctivas y preventivas, fechas compromiso, responsables, seguimiento semanal.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-25',summary:"Scorecards: mensual (Gestión Intensiva) y trimestral (Seguimiento Activo). OTIF, Fill Rate, brecha plan vs oferta, cumplimiento acciones, lead time, restricciones recurrentes.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-24',summary:"SLAs por grupo operacional: Gestión Intensiva (SLA negociado + bilateral + compromisos mutuos) / Seguimiento Activo (SLA estándar + alerta por desempeño).",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-23',summary:"Mejorar/Integrar: SLAs, Scorecard y compromisos",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-22',summary:"Reunión jueves con directores Categoría (permanente desde M2): oferta conversada → decisiones ajuste, alternativas y riesgos → entrada formal S&OE.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-21',summary:"Dashboard KPIs Tableau-SAP: OTIF, Fill Rate, brecha plan vs oferta, acciones abiertas/cerradas/vencidas, semáforo RAG por proveedor, evolución semanal.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-20',summary:"Priorización proveedores en riesgo → preparación 1 página S&OE semanal. Restricciones recurrentes y dependencias críticas identificadas.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-19',summary:"Análisis brechas plan vs oferta real. Causas raíz de incumplimiento: capacidad, materia prima, confirmación tardía, lead time subestimado.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-18',summary:"Analisis de brechas, causas y riesgos",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-17',summary:"Dinámica L-V activada. Reunión jueves directores Categoría: oferta conversada, decisiones de ajuste, prioridades y riesgos. Entrada S&OE (1 pág.) cada jueves.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-16',summary:"Línea base OTIF y Fill Rate. 9 proveedores Social COL desde día 1. Validación plan vs oferta real. Revisión semanal: oferta, capacidad, restricciones, insumos críticos, novedades.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-15',summary:"Piloto Social: Carril 2",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-14',summary:"Agrupación 2 grupos operacionales: Gestión Intensiva (alto impacto, baja sustitución, visión S&OP 6M) / Seguimiento Activo (alternativas disponibles, revisión trimestral).",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-13',summary:"Mapeo locales Panamá — EN PARALELO desde M1. Ruby Torres (Dir. Logística PAN) lidera in situ. Misma ficha técnica estándar Colombia.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-12',summary:"Mapeo proveedores internacionales Brasil y China COL.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-11',summary:"Levantamiento insumos críticos, restricciones productivas, dolencias del proveedor, riesgos de cumplimiento, capacidad de reacción, dependencias y contacto responsable.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-10',summary:"Mapeo operativo proveedores nacionales COL: capacidad normal/máxima, banda de operación, lote óptimo diario, lead time real, días ocupados por plan Jamar, capacidad disponible.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-9',summary:"Medir mapeo operativo transversal: Carril 1",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-8',summary:"Protocolo S&OP: visión de demanda 6 meses para proveedores Gestión Intensiva. Señal anticipada para preparar capacidad, insumos y restricciones. No reemplaza la OC firme.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-7',summary:"Protocolo S&OE: 1 página semanal de riesgos proveedor (proveedor · SKU/cat. · plan requerido · oferta real · brecha · causa · impacto en disponibilidad/venta/cita · acción · responsable · fecha). Disponible cada jueves",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-6',summary:"Gobierno mínimo del piloto: roles, calendario L-V, reglas de operación, criterio Gate G3. Reglas OTIF: SKU único por entrega, entrega 90 obligatoria, MB51 fuente primaria, ME80AN alternativa, VL06I compromiso.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-5',summary:"Definir problema, objetivo, alcance y enfoque dos carriles: Carril 1 (mapeo transversal) + Carril 2 (piloto Social COL — 9 proveedores, 8 semanas). Charter aprobado.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-4',summary:"Definir problema, objetivo y Gobierno",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-3',summary:"Socialización externa: presentar Modelo de Trabajo con Proveedores a los 9 proveedores Social COL. Propósito colaborativo (no auditoría), roles, calendario, dinámica de trabajo y compromiso de participación.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-2',summary:"Socialización interna: alinear equipo Jamar (Leandro, Yamit, Sebastián, Categorías, Logística, Data, Calidad). Definir roles, dinámica L-V, protocolo S&OE, formato piloto y mensaje único.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'PROVED-1',summary:"Socializar y alinear",duedate:'',assignee:"Sin asignar",status:"Definición" }
   ],
   'MO-58': [
-    {key:'IPDPCDAR-84',summary:"Escalamiento del piloto TAFI",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'IPDPCDAR-83',summary:"Escalamiento del piloto Crediviva",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'IPDPCDAR-82',summary:"Escalamiento del piloto CrediYa",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'IPDPCDAR-81',summary:"Seguimiento del piloto TaFI",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'IPDPCDAR-80',summary:"Seguimiento del piloto crediviva",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'IPDPCDAR-79',summary:"Seguimiento del piloto CrediYa",duedate:'',assignee:"Sin asignar",status:"In Progress" },
-    {key:'IPDPCDAR-78',summary:"Implementación piloto TAFI",duedate:'',assignee:"Sin asignar",status:"In Progress" },
-    {key:'IPDPCDAR-76',summary:"Implementación piloto Crediviva",duedate:'',assignee:"Sin asignar",status:"In Progress" },
-    {key:'IPDPCDAR-75',summary:"Formalización del convenio con TAFI",duedate:'',assignee:"Sin asignar",status:"In Progress" },
-    {key:'IPDPCDAR-72',summary:"Escalamiento de las alternativas",duedate:'',assignee:"VIRGILIO DE LA HOZ",status:"To Do" },
-    {key:'IPDPCDAR-71',summary:"Seguimiento de las alternativas implementadas",duedate:'',assignee:"VIRGILIO DE LA HOZ",status:"In Progress" },
-    {key:'IPDPCDAR-70',summary:"Implementación y pilotaje de las alternativas creadas",duedate:'',assignee:"VIRGILIO DE LA HOZ",status:"In Progress" },
-    {key:'IPDPCDAR-66',summary:"Permitir que el vendedor identifique desde antes de generar la op que se encuentra atendiendo a un cliente de alto riesgo",duedate:'',assignee:"Jenifer",status:"To Do" },
-    {key:'IPDPCDAR-40',summary:"Construcción del modelo económico para escalamiento del piloto (hito monetario)",duedate:'',assignee:"sandra ibañez",status:"To Do" }
+    {key:'IPDPCDAR-84',summary:"Escalamiento del piloto TAFI",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-83',summary:"Escalamiento del piloto Crediviva",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-82',summary:"Escalamiento del piloto CrediYa",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-81',summary:"Seguimiento del piloto TaFI",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-80',summary:"Seguimiento del piloto crediviva",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-79',summary:"Seguimiento del piloto CrediYa",duedate:'',assignee:"Sin asignar",status:"En curso" },
+    {key:'IPDPCDAR-78',summary:"Implementación piloto TAFI",duedate:'',assignee:"Sin asignar",status:"En curso" },
+    {key:'IPDPCDAR-76',summary:"Implementación piloto Crediviva",duedate:'',assignee:"Sin asignar",status:"En curso" },
+    {key:'IPDPCDAR-75',summary:"Formalización del convenio con TAFI",duedate:'',assignee:"Sin asignar",status:"En curso" },
+    {key:'IPDPCDAR-72',summary:"Escalamiento de las alternativas",duedate:'',assignee:"VIRGILIO DE LA HOZ",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-71',summary:"Seguimiento de las alternativas implementadas",duedate:'',assignee:"VIRGILIO DE LA HOZ",status:"En curso" },
+    {key:'IPDPCDAR-70',summary:"Implementación y pilotaje de las alternativas creadas",duedate:'',assignee:"VIRGILIO DE LA HOZ",status:"En curso" },
+    {key:'IPDPCDAR-66',summary:"Permitir que el vendedor identifique desde antes de generar la op que se encuentra atendiendo a un cliente de alto riesgo",duedate:'',assignee:"Jenifer",status:"Tareas por hacer" },
+    {key:'IPDPCDAR-40',summary:"Construcción del modelo económico para escalamiento del piloto (hito monetario)",duedate:'',assignee:"sandra ibañez",status:"Tareas por hacer" }
   ],
   'MO-59': [
-    {key:'IPDPCDBR-80',summary:"permitir que el vendedor pueda identificar antes de generar la orden de pedido que atiende a un cliente bajo riesgo",duedate:'',assignee:"Jenifer",status:"To Do" },
-    {key:'IPDPCDBR-79',summary:"Marca de identificación del perfil del cliente bajo riesgo desde visor",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'IPDPCDBR-78',summary:"automatización de variable días de vida para flujo tasa preferencia",duedate:'',assignee:"Jenifer",status:"To Do" },
-    {key:'IPDPCDBR-77',summary:"Recuperación cliente bajo riesgo.",duedate:'',assignee:"Sin asignar",status:"To Do" }
+    {key:'IPDPCDBR-80',summary:"permitir que el vendedor pueda identificar antes de generar la orden de pedido que atiende a un cliente bajo riesgo",duedate:'',assignee:"Jenifer",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-79',summary:"Marca de identificación del perfil del cliente bajo riesgo desde visor",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-78',summary:"automatización de variable días de vida para flujo tasa preferencia",duedate:'',assignee:"Jenifer",status:"Tareas por hacer" },
+    {key:'IPDPCDBR-77',summary:"Recuperación cliente bajo riesgo.",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" }
   ],
   'MO-88': [
-    {key:'PROP-21',summary:"Te igualo la cuota con el mercado",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROP-21',summary:"Te igualo la cuota con el mercado",duedate:'',assignee:"Sin asignar",status:"Tareas por hacer" },
     {key:'PROP-3',summary:"Cliente conocido con saldo",duedate:'',assignee:"msarmiento",status:"En ejecución" }
   ],
 };
@@ -2023,11 +2163,10 @@ function setSyncStatus(msg, color) {
 }
 
 function manualRefresh() {
-  if(isSyncing) return;
-  var email = localStorage.getItem('dash_jira_email');
-  var token = localStorage.getItem('dash_jira_token');
-  if(!email || !token) { openJiraConfig(); return; }
-  doSync();
+  var btn = document.getElementById('btn-refresh-bar');
+  if(btn){ btn.disabled=true; btn.textContent='⟳ Cargando...'; }
+  setSyncStatus('🔄 Recargando datos...','#FFA726');
+  setTimeout(function(){ location.reload(); }, 500);
 }
 
 function openJiraConfig() {
@@ -2211,22 +2350,10 @@ document.getElementById('upd-date').textContent = new Date().toLocaleDateString(
 // Start countdown tick
 setInterval(updateSyncBar, 1000);
 
-// Load saved credentials
-var savedEmail = localStorage.getItem('dash_jira_email');
-var savedToken = localStorage.getItem('dash_jira_token');
-
-// Render with embedded data first (instant)
+// Render con datos embebidos (actualización automática via GitHub Actions cada 15 min)
 render();
-
-// If credentials available, sync immediately
-if(savedEmail && savedToken) {
-  setTimeout(doSync, 1000);
-} else {
-  // Show config prompt in sync bar — clicking the button opens the modal
-  setSyncStatus('⚙ Haz clic en "Credenciales Jira" para activar la sincronización', '#FFA726');
-  var cfgBtn = document.getElementById('btn-jira-config');
-  if(cfgBtn) { cfgBtn.style.background='#FFA726'; cfgBtn.style.color='#fff'; cfgBtn.style.borderColor='#FFA726'; }
-}
+setSyncStatus('✅ Datos actualizados automáticamente cada 15 min','#4EB9A7');
+setTimeout(function(){ setSyncStatus('',''); }, 4000);
 </script>
 </body>
 </html>
