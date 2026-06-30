@@ -2002,39 +2002,9 @@ function setSyncStatus(msg, color) {
 
 function manualRefresh() {
   var btn = document.getElementById('btn-refresh-bar');
-  if(btn){ btn.disabled=true; btn.textContent='⟳ Actualizando...'; }
-  setSyncStatus('🔄 Disparando actualización automática...','#FFA726');
-
-  // Disparar GitHub Actions workflow
-  fetch('https://api.github.com/repos/Joha-22/dashboard-mckinsey-jamar/actions/workflows/update.yml/dispatches', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'token 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',
-      'Accept': 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ref:'main'})
-  }).then(function(r){
-    if(r.status === 204 || r.ok){
-      setSyncStatus('✅ Actualización iniciada — recarga en ~30 segundos','#4EB9A7');
-      if(btn){ btn.textContent='⟳ Actualizar ahora'; }
-      // Recargar la página automáticamente después de 30 segundos
-      setTimeout(function(){ location.reload(); }, 30000);
-      // Mostrar cuenta regresiva
-      var secs = 30;
-      var interval = setInterval(function(){
-        secs--;
-        if(secs <= 0){ clearInterval(interval); return; }
-        setSyncStatus('✅ Recargando en ' + secs + 's...','#4EB9A7');
-      }, 1000);
-    } else {
-      setSyncStatus('⚠ Error al disparar actualización','#EF5350');
-      if(btn){ btn.disabled=false; btn.textContent='⟳ Actualizar ahora'; }
-    }
-  }).catch(function(){
-    setSyncStatus('⚠ Error de conexión','#EF5350');
-    if(btn){ btn.disabled=false; btn.textContent='⟳ Actualizar ahora'; }
-  });
+  if(btn){ btn.disabled=true; btn.textContent='⟳ Cargando...'; }
+  setSyncStatus('🔄 Recargando datos...','#FFA726');
+  setTimeout(function(){ location.reload(); }, 500);
 }
 
 function openJiraConfig() {
