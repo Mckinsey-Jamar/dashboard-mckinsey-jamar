@@ -104,28 +104,20 @@ for i in mo_issues:
     MO_STATUS[i["key"]] = {"status": st, "owner": ow, "pais": pa}
 print("MO: " + str(len(MO_STATUS)))
 
-# ── 2. Conteos por sub-proyecto (3 queries batch en vez de 33 individuales) ────
-print("Consultando conteos (batch)...")
+# ── 2. Conteos por sub-proyecto (query individual por proyecto) ────────────────
+print("Consultando conteos por proyecto...")
 sw_counts = {sw: [0,0,0,0,0] for sw in SW_TO_MO}  # [total,done,prog,todo,late]
 
-# Batch por grupos para no superar 200 resultados
-SW_LIST = list(SW_TO_MO.keys())
-BATCH_SIZE = 10
-
-for i in range(0, len(SW_LIST), BATCH_SIZE):
-    batch = SW_LIST[i:i+BATCH_SIZE]
-    batch_str = ",".join(batch)
+for sw in SW_TO_MO:
     issues = jira_search(
-        "project in (" + batch_str + ") ORDER BY project ASC",
-        ["status","project"], 200)
+        "project = " + sw + " ORDER BY status ASC",
+        ["status"], 200)
     for issue in issues:
-        proj = issue["fields"]["project"]["key"]
-        cat  = issue["fields"]["status"]["statusCategory"]["key"]
-        if proj not in sw_counts: continue
-        sw_counts[proj][0] += 1  # total
-        if cat == "done":          sw_counts[proj][1] += 1
-        elif cat == "indeterminate": sw_counts[proj][2] += 1
-        elif cat == "new":           sw_counts[proj][3] += 1
+        cat = issue["fields"]["status"]["statusCategory"]["key"]
+        sw_counts[sw][0] += 1
+        if cat == "done":            sw_counts[sw][1] += 1
+        elif cat == "indeterminate": sw_counts[sw][2] += 1
+        elif cat == "new":           sw_counts[sw][3] += 1
 
 total_tasks = sum(v[0] for v in sw_counts.values())
 total_done  = sum(v[1] for v in sw_counts.values())
