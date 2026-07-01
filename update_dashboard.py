@@ -121,21 +121,31 @@ for i in mo_issues:
 print("  MO: "+str(len(MO_STATUS)))
 
 # ── 2. Conteos por proyecto: query ALL issues por lotes pequeños ───────────────
-print("Conteos por proyecto (lotes de 5)...")
-done_by=defaultdict(int); prog_by=defaultdict(int)
+print("Conteos por proyecto (no-Done por lotes)...")
+# Estrategia: buscar issues NO-Done (funciona con statusCategory != Done)
+# y calcular done = total - no_done
+not_done_by=defaultdict(int)
+prog_by=defaultdict(int)
 sw_list=list(KNOWN_TOTALS.keys())
 
 for i in range(0, len(sw_list), 5):
     batch=",".join(sw_list[i:i+5])
-    issues=jira_post("project in ("+batch+") ORDER BY project ASC",None,200)
+    # Querie de no-Done (sabemos que funciona statusCategory != Done)
+    issues=jira_post(
+        "project in ("+batch+") AND statusCategory != Done ORDER BY project ASC",
+        ["status","project"], 200)
     for iss in issues:
-        f2=iss["fields"]
-        proj=f2.get("project",{}).get("key","")
-        if not proj: continue
-        status_obj=f2.get("status") or {}
-        cat=status_obj.get("statusCategory",{}).get("key","")
-        if cat=="done":          done_by[proj]+=1
-        elif cat=="indeterminate": prog_by[proj]+=1
+        proj=iss["fields"]["project"]["key"]
+        cat=iss["fields"]["status"].get("statusCategory",{}).get("key","")
+        not_done_by[proj]+=1
+        if cat=="indeterminate":
+            prog_by[proj]+=1
+
+# done = total - not_done
+done_by=defaultdict(int)
+for sw,total in KNOWN_TOTALS.items():
+    nd=not_done_by.get(sw,0)
+    done_by[sw]=max(0, total-nd)
 
 print("  Done="+str(sum(done_by.values()))+" Prog="+str(sum(prog_by.values())))
 
