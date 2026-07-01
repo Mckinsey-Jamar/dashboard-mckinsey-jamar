@@ -127,10 +127,13 @@ sw_list=list(KNOWN_TOTALS.keys())
 
 for i in range(0, len(sw_list), 5):
     batch=",".join(sw_list[i:i+5])
-    issues=jira_post("project in ("+batch+") ORDER BY project ASC",["status","project"],200)
+    issues=jira_post("project in ("+batch+") ORDER BY project ASC",None,200)
     for iss in issues:
-        proj=iss["fields"]["project"]["key"]
-        cat=iss["fields"]["status"].get("statusCategory",{}).get("key","")
+        f2=iss["fields"]
+        proj=f2.get("project",{}).get("key","")
+        if not proj: continue
+        status_obj=f2.get("status") or {}
+        cat=status_obj.get("statusCategory",{}).get("key","")
         if cat=="done":          done_by[proj]+=1
         elif cat=="indeterminate": prog_by[proj]+=1
 
