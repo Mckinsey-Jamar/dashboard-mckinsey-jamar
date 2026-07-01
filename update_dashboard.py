@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-update_dashboard.py - Actualización automática Dashboard McKinsey-Jamar
-"""
+"""update_dashboard.py — Actualización automática Dashboard McKinsey-Jamar"""
 import os, re, json, base64, urllib.request, urllib.error
 from collections import defaultdict
 from datetime import date, datetime, timedelta
@@ -12,9 +10,8 @@ JIRA_TOKEN = os.environ["JIRA_TOKEN"]
 GH_PAT     = os.environ["GH_PAT"]
 GH_REPO    = "Joha-22/dashboard-mckinsey-jamar"
 GH_BRANCH  = "main"
-
-TODAY    = date.today().isoformat()
-WEEK_END = (date.today() + timedelta(days=7)).isoformat()
+TODAY      = date.today().isoformat()
+WEEK_END   = (date.today() + timedelta(days=7)).isoformat()
 
 def jira_auth():
     cred = base64.b64encode((JIRA_EMAIL + ":" + JIRA_TOKEN).encode()).decode()
@@ -22,55 +19,46 @@ def jira_auth():
             "Accept": "application/json",
             "Content-Type": "application/json"}
 
-def jira_search(jql, fields, max_results=200):
-    # POST al nuevo endpoint /rest/api/3/search/jql (sin startAt)
+def jira_search(jql, fields=None, max_results=200):
     url = JIRA_BASE + "/rest/api/3/search/jql"
-    body = {
-        "jql": jql,
-        "maxResults": max_results,
-        "fields": fields if isinstance(fields, list) else [fields]
-    }
+    body = {"jql": jql, "maxResults": max_results}
+    if fields:
+        body["fields"] = fields if isinstance(fields, list) else [fields]
     payload = json.dumps(body).encode("utf-8")
     req = urllib.request.Request(url, data=payload, headers=jira_auth(), method="POST")
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=30) as r:
             data = json.loads(r.read())
             return data.get("issues", data.get("values", []))
     except urllib.error.HTTPError as e:
-        body = e.read().decode()
-        print("  ERROR Jira " + str(e.code) + " | JQL: " + jql[:60])
-        print("  Respuesta: " + body[:300])
-        # Intentar con GET como fallback
-        try:
-            import urllib.parse
-            params = urllib.parse.urlencode({"jql": jql, "maxResults": max_results})
-            url2 = JIRA_BASE + "/rest/api/3/search/jql?" + params
-            req2 = urllib.request.Request(url2, headers=jira_auth(), method="GET")
-            with urllib.request.urlopen(req2) as r2:
-                data2 = json.loads(r2.read())
-                return data2.get("issues", data2.get("values", []))
-        except Exception as e2:
-            print("  Fallback GET tambien fallo: " + str(e2))
-            return []
+        err = e.read().decode()
+        print("  ERROR " + str(e.code) + " | " + jql[:60])
+        print("  " + err[:200])
+        return []
+    except Exception as ex:
+        print("  EXCEPCION: " + str(ex)[:100])
+        return []
 
 def gh_headers():
     return {"Authorization": "token " + GH_PAT,
             "Accept": "application/vnd.github.v3+json",
             "Content-Type": "application/json"}
 
-def gh_get_file(path):
-    url = "https://api.github.com/repos/" + GH_REPO + "/contents/" + path
-    req = urllib.request.Request(url, headers=gh_headers())
+def gh_get(path):
+    req = urllib.request.Request(
+        "https://api.github.com/repos/" + GH_REPO + "/contents/" + path,
+        headers=gh_headers())
     with urllib.request.urlopen(req) as r:
         d = json.loads(r.read())
     return base64.b64decode(d["content"]).decode("utf-8"), d["sha"]
 
-def gh_put_file(path, content, sha, message):
-    url  = "https://api.github.com/repos/" + GH_REPO + "/contents/" + path
+def gh_put(path, content, sha, message):
     data = json.dumps({"message": message,
                        "content": base64.b64encode(content.encode()).decode(),
                        "sha": sha, "branch": GH_BRANCH}).encode()
-    req  = urllib.request.Request(url, data=data, headers=gh_headers(), method="PUT")
+    req = urllib.request.Request(
+        "https://api.github.com/repos/" + GH_REPO + "/contents/" + path,
+        data=data, headers=gh_headers(), method="PUT")
     with urllib.request.urlopen(req) as r:
         return json.loads(r.read())
 
@@ -96,15 +84,14 @@ SW_TO_MO = {
     "IPDPCDAR":"MO-58","IPDPCDBR":"MO-59","PTMZR":"MO-11",
     "RF1D":"MO-89","PROP":"MO-88","MDCB":"MO-52",
 }
-MO_TO_SW = {v:k for k,v in SW_TO_MO.items()}
-ALL_SW   = ",".join(SW_TO_MO.keys())
+MO_TO_SW = {v: k for k, v in SW_TO_MO.items()}
+ALL_SW = ",".join(SW_TO_MO.keys())
 
-print("Iniciando actualizacion — " + TODAY)
-domain = JIRA_EMAIL.split("@")[1] if "@" in JIRA_EMAIL else "???"
-print("  JIRA_EMAIL: ***@" + domain)
+print("Actualizacion — " + TODAY)
+print("Email: ***@" + (JIRA_EMAIL.split("@")[1] if "@" in JIRA_EMAIL else "?"))
 
-# ── 1. MO statuses ────────────────────────────────────────────────────────────
-print("  Consultando MO...")
+# ── 1. MO statuses ─────────────────────────────────────────────────────────────
+print("Consultando MO...")
 mo_issues = jira_search("project = MO ORDER BY key ASC",
     ["summary","status","customfield_11057","customfield_11197"])
 MO_STATUS = {}
@@ -115,24 +102,37 @@ for i in mo_issues:
     ow = ow_list[0].get("value","Sin asignar") if ow_list else "Sin asignar"
     pa = get_pais(f.get("customfield_11197"))
     MO_STATUS[i["key"]] = {"status": st, "owner": ow, "pais": pa}
-print("  MO: " + str(len(MO_STATUS)) + " iniciativas")
+print("MO: " + str(len(MO_STATUS)))
 
-# ── 2. Conteos sub-proyectos ──────────────────────────────────────────────────
-print("  Consultando sub-proyectos...")
-sw_counts = {}
-for sw in SW_TO_MO:
-    try:
-        issues = jira_search("project = " + sw + " ORDER BY status ASC", ["status"], 200)
-        done  = sum(1 for x in issues if x["fields"]["status"]["statusCategory"]["key"] == "done")
-        prog  = sum(1 for x in issues if x["fields"]["status"]["statusCategory"]["key"] == "indeterminate")
-        todo  = sum(1 for x in issues if x["fields"]["status"]["statusCategory"]["key"] == "new")
-        sw_counts[sw] = (len(issues), done, prog, todo, 0)
-    except Exception:
-        sw_counts[sw] = (0, 0, 0, 0, 0)
-print("  Sub-proyectos: " + str(len(sw_counts)) + " procesados")
+# ── 2. Conteos por sub-proyecto (3 queries batch en vez de 33 individuales) ────
+print("Consultando conteos (batch)...")
+sw_counts = {sw: [0,0,0,0,0] for sw in SW_TO_MO}  # [total,done,prog,todo,late]
 
-# ── 3. Tardías ────────────────────────────────────────────────────────────────
-print("  Consultando tardias...")
+# Batch por grupos para no superar 200 resultados
+SW_LIST = list(SW_TO_MO.keys())
+BATCH_SIZE = 10
+
+for i in range(0, len(SW_LIST), BATCH_SIZE):
+    batch = SW_LIST[i:i+BATCH_SIZE]
+    batch_str = ",".join(batch)
+    issues = jira_search(
+        "project in (" + batch_str + ") ORDER BY project ASC",
+        ["status","project"], 200)
+    for issue in issues:
+        proj = issue["fields"]["project"]["key"]
+        cat  = issue["fields"]["status"]["statusCategory"]["key"]
+        if proj not in sw_counts: continue
+        sw_counts[proj][0] += 1  # total
+        if cat == "done":          sw_counts[proj][1] += 1
+        elif cat == "indeterminate": sw_counts[proj][2] += 1
+        elif cat == "new":           sw_counts[proj][3] += 1
+
+total_tasks = sum(v[0] for v in sw_counts.values())
+total_done  = sum(v[1] for v in sw_counts.values())
+print("Tareas: " + str(total_tasks) + " total, " + str(total_done) + " done")
+
+# ── 3. Tardias ────────────────────────────────────────────────────────────────
+print("Consultando tardias...")
 late_issues = jira_search(
     "project in (" + ALL_SW + ") AND due < '" + TODAY + "'"
     " AND statusCategory != Done ORDER BY project ASC, due ASC",
@@ -142,18 +142,17 @@ for i in late_issues:
     proj = i["fields"]["project"]["key"]
     f    = i["fields"]
     late_by_sw[proj].append({
-        "key":     i["key"],
-        "summary": clean(f["summary"]),
-        "due":     f.get("duedate") or "",
+        "key":      i["key"],
+        "summary":  clean(f["summary"]),
+        "due":      f.get("duedate") or "",
         "assignee": clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
     })
 for sw in SW_TO_MO:
-    t,d,p,td,_ = sw_counts[sw]
-    sw_counts[sw] = (t, d, p, td, len(late_by_sw.get(sw,[])))
-print("  Tardias: " + str(sum(len(v) for v in late_by_sw.values())))
+    sw_counts[sw][4] = len(late_by_sw.get(sw, []))
+print("Tardias: " + str(sum(sw_counts[sw][4] for sw in SW_TO_MO)))
 
 # ── 4. Esta semana ────────────────────────────────────────────────────────────
-print("  Consultando semana...")
+print("Consultando semana...")
 week_issues = jira_search(
     "project in (" + ALL_SW + ") AND due >= '" + TODAY + "'"
     " AND due <= '" + WEEK_END + "' AND statusCategory != Done"
@@ -171,10 +170,10 @@ for i in week_issues:
         "assignee": clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
         "status":   f["status"]["name"],
     })
-print("  Semana: " + str(sum(len(v) for v in week_by_mo.values())))
+print("Semana: " + str(sum(len(v) for v in week_by_mo.values())))
 
 # ── 5. Sin fecha ──────────────────────────────────────────────────────────────
-print("  Consultando sin fecha...")
+print("Consultando sin fecha...")
 nodt_issues = jira_search(
     "project in (" + ALL_SW + ") AND due is EMPTY"
     " AND statusCategory != Done ORDER BY project ASC",
@@ -191,18 +190,13 @@ for i in nodt_issues:
         "assignee": clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
         "status":   f["status"]["name"],
     })
-print("  Sin fecha: " + str(sum(len(v) for v in nodt_by_mo.values())))
+print("Sin fecha: " + str(sum(len(v) for v in nodt_by_mo.values())))
 
-# ── Construir JS ──────────────────────────────────────────────────────────────
+# ── Construir JS ───────────────────────────────────────────────────────────────
 def fmt_task(t):
-    key      = t["key"]
-    summary  = t["summary"]
-    due      = t.get("due") or ""
-    assignee = t["assignee"]
-    status   = t.get("status") or ""
-    return ("    {key:'" + key + "',summary:\"" + summary + "\","
-            "duedate:'" + due + "',assignee:\"" + assignee + "\","
-            "status:\"" + status + "\" }")
+    return ("    {key:'" + t["key"] + "',summary:\"" + t["summary"] + "\","
+            "duedate:'" + t.get("due","") + "',assignee:\"" + t["assignee"] + "\","
+            "status:\"" + t.get("status","") + "\" }")
 
 def build_var(name, by_mo, comment):
     lines = ["var " + name + " = {", "  // " + TODAY + " — " + comment]
@@ -211,36 +205,33 @@ def build_var(name, by_mo, comment):
         if not tasks: continue
         lines.append("  '" + mo + "': [")
         for j, t in enumerate(tasks):
-            sep = "," if j < len(tasks)-1 else ""
-            lines.append(fmt_task(t) + sep)
+            lines.append(fmt_task(t) + ("," if j < len(tasks)-1 else ""))
         lines.append("  ],")
     lines.append("};")
     return "\n".join(lines)
 
 def build_late(by_sw):
     total = sum(len(v) for v in by_sw.values())
-    lines = ["var LATE_TASKS = {",
-             "  // " + TODAY + " — " + str(total) + " tardias"]
+    lines = ["var LATE_TASKS = {", "  // " + TODAY + " — " + str(total) + " tardias"]
     for sw, mo in sorted(SW_TO_MO.items(), key=lambda x: int(x[1].split("-")[1])):
         tasks = by_sw.get(sw, [])
         if not tasks: continue
         lines.append("  '" + mo + "': [")
         for j, t in enumerate(tasks):
-            sep = "," if j < len(tasks)-1 else ""
-            lines.append(fmt_task(t) + sep)
+            lines.append(fmt_task(t) + ("," if j < len(tasks)-1 else ""))
         lines.append("  ],")
     lines.append("};")
     return "\n".join(lines)
 
 LATE_JS = build_late(late_by_sw)
 WEEK_JS = build_var("WEEK_TASKS", week_by_mo,
-          str(sum(len(v) for v in week_by_mo.values())) + " esta semana")
+    str(sum(len(v) for v in week_by_mo.values())) + " esta semana")
 NODT_JS = build_var("NO_DATE_TASKS", nodt_by_mo,
-          str(sum(len(v) for v in nodt_by_mo.values())) + " sin fecha")
+    str(sum(len(v) for v in nodt_by_mo.values())) + " sin fecha")
 
 # ── Descargar y actualizar HTML ───────────────────────────────────────────────
 print("Descargando index.html...")
-html, sha = gh_get_file("index.html")
+html, sha = gh_get("index.html")
 
 # MO statuses en DATA
 for mo_key, vals in MO_STATUS.items():
@@ -264,18 +255,18 @@ def sw_repl(m):
     sw = m.group("sw")
     if sw not in sw_counts: return m.group(0)
     t,d,p,td,l = sw_counts[sw]
-    new_tasks = "tasks:{total:" + str(t) + ",done:" + str(d) + ",prog:" + str(p) + ",todo:" + str(td) + ",late:" + str(l) + "}"
-    return re.sub(r"tasks\s*:\s*(?:\{[^}]+\}|null)", new_tasks, m.group(0))
+    new_t = "tasks:{total:" + str(t) + ",done:" + str(d) + ",prog:" + str(p) + ",todo:" + str(td) + ",late:" + str(l) + "}"
+    return re.sub(r"tasks\s*:\s*(?:\{[^}]+\}|null)", new_t, m.group(0))
 html = sw_pat.sub(sw_repl, html)
 
 # DATA tasks
 for mo, sw in MO_TO_SW.items():
     if sw not in sw_counts: continue
     t,d,p,td,l = sw_counts[sw]
-    new_tasks = "{total:" + str(t) + ",done:" + str(d) + ",prog:" + str(p) + ",todo:" + str(td) + ",late:" + str(l) + "}"
+    new_t = "{total:" + str(t) + ",done:" + str(d) + ",prog:" + str(p) + ",todo:" + str(td) + ",late:" + str(l) + "}"
     html = re.sub(
         r"(key:'" + re.escape(mo) + r"'[^}]*?,tasks:)(\{[^}]+\}|null)",
-        r"\g<1>" + new_tasks, html, count=1)
+        r"\g<1>" + new_t, html, count=1)
 
 # LATE_TASKS
 s = html.find("var LATE_TASKS = {")
@@ -297,10 +288,10 @@ if s != -1:
     if nend:
         html = html[:s] + NODT_JS + "\n" + html[s + nend.end():]
 
-# ── Subir HTML ────────────────────────────────────────────────────────────────
+# Subir
 print("Subiendo index.html...")
 now_str = datetime.now().strftime("%H:%M")
-result = gh_put_file("index.html", html, sha,
+result  = gh_put("index.html", html, sha,
     "auto: actualizacion Jira — " + TODAY + " " + now_str + " COT")
 print("Commit: " + result["commit"]["sha"][:7])
-print("Dashboard: https://joha-22.github.io/dashboard-mckinsey-jamar/")
+print("Tasks: " + str(total_tasks) + " total | " + str(total_done) + " done | Tardias: " + str(sum(sw_counts[sw][4] for sw in SW_TO_MO)))
