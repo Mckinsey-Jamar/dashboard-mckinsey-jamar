@@ -23,15 +23,15 @@ def jira_auth():
             "Content-Type": "application/json"}
 
 def jira_search(jql, fields, max_results=200):
-    # Nuevo endpoint Jira: GET con query params
-    import urllib.parse
-    params = urllib.parse.urlencode({
+    # POST al nuevo endpoint /rest/api/3/search/jql (sin startAt)
+    url = JIRA_BASE + "/rest/api/3/search/jql"
+    body = {
         "jql": jql,
         "maxResults": max_results,
-        "fields": ",".join(fields) if isinstance(fields, list) else fields,
-    })
-    url = JIRA_BASE + "/rest/api/3/search/jql?" + params
-    req = urllib.request.Request(url, headers=jira_auth(), method="GET")
+        "fields": fields if isinstance(fields, list) else [fields]
+    }
+    payload = json.dumps(body).encode("utf-8")
+    req = urllib.request.Request(url, data=payload, headers=jira_auth(), method="POST")
     try:
         with urllib.request.urlopen(req) as r:
             data = json.loads(r.read())
@@ -40,7 +40,18 @@ def jira_search(jql, fields, max_results=200):
         body = e.read().decode()
         print("  ERROR Jira " + str(e.code) + " | JQL: " + jql[:60])
         print("  Respuesta: " + body[:300])
-        raise
+        # Intentar con GET como fallback
+        try:
+            import urllib.parse
+            params = urllib.parse.urlencode({"jql": jql, "maxResults": max_results})
+            url2 = JIRA_BASE + "/rest/api/3/search/jql?" + params
+            req2 = urllib.request.Request(url2, headers=jira_auth(), method="GET")
+            with urllib.request.urlopen(req2) as r2:
+                data2 = json.loads(r2.read())
+                return data2.get("issues", data2.get("values", []))
+        except Exception as e2:
+            print("  Fallback GET tambien fallo: " + str(e2))
+            return []
 
 def gh_headers():
     return {"Authorization": "token " + GH_PAT,
