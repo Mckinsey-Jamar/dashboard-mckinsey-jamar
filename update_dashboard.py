@@ -11,7 +11,7 @@ JIRA_BASE  = "https://hubdigitaljamar.atlassian.net"
 JIRA_EMAIL = os.environ["JIRA_EMAIL"]
 JIRA_TOKEN = os.environ["JIRA_TOKEN"]
 GH_PAT     = os.environ["GH_PAT"]
-GH_REPO    = "Joha-22/dashboard-mckinsey-jamar"
+GH_REPO    = "mckinsey-jamar/dashboard-mckinsey-jamar"
 TODAY      = date.today().isoformat()
 WEEK_END   = (date.today() + timedelta(days=7)).isoformat()
 
