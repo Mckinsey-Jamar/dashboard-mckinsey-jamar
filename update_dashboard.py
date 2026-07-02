@@ -59,6 +59,28 @@ def jira_post(jql, fields=None, max_results=100):
         print("  JIRA ERR: "+str(ex)[:80]+" | "+jql[:50])
         return []
 
+def jira_all(jql, fields=None, per_page=100, max_pages=8):
+    """Obtiene TODOS los issues con paginación via nextPageToken."""
+    all_issues = []; next_token = None
+    for page in range(max_pages):
+        body = {"jql":jql,"maxResults":per_page}
+        if fields: body["fields"] = fields if isinstance(fields,list) else [fields]
+        if next_token: body["nextPageToken"] = next_token
+        req = urllib.request.Request(
+            JIRA_BASE+"/rest/api/3/search/jql",
+            data=json.dumps(body).encode(), headers=jira_auth(), method="POST")
+        try:
+            with urllib.request.urlopen(req, timeout=25) as r:
+                data = json.loads(r.read())
+        except Exception as ex:
+            print("  JIRA PAGE ERR p"+str(page)+": "+str(ex)[:60]); break
+        issues = data.get("issues",[])
+        all_issues.extend(issues)
+        if data.get("isLast",True) or not issues: break
+        next_token = data.get("nextPageToken")
+        if not next_token: break
+    return all_issues
+
 def count_by_proj(issues):
     """Cuenta issues por proyecto y statusCategory."""
     done=defaultdict(int); prog=defaultdict(int); total=defaultdict(int)
@@ -135,31 +157,24 @@ for i in mo_issues:
 print("  MO: "+str(len(MO_STATUS)))
 
 # ── 2. Conteos: done = total - no_done_con_fecha - no_done_sin_fecha ───────────
-print("Conteos (Opcion B: due-filter)...")
+print("Conteos (Opcion B con paginacion)...")
 
-# Query A: No-done CON fecha (usa filtro 'due' que funciona en Actions)
-nd_fecha=jira_post(
+# Query A: No-done CON fecha — paginado para capturar todos los proyectos
+nd_fecha = jira_all(
     "project in ("+ALL_SW+") AND due >= '2020-01-01' AND statusCategory != Done "
     "ORDER BY project ASC",
-    ["status","project"],100)
-nd_fecha2=jira_post(
-    "project in ("+ALL_SW+") AND due >= '2020-01-01' AND statusCategory != Done "
-    "AND due <= '2030-12-31' ORDER BY project ASC",
-    ["status","project"],100)
+    ["status","project"], 100, 8)
 
-# Query B: No-done SIN fecha (funciona: es el NO_DATE_TASKS query)
-nd_nodate=jira_post(
+# Query B: No-done SIN fecha — paginado
+nd_nodate = jira_all(
     "project in ("+ALL_SW+") AND due is EMPTY AND statusCategory != Done "
     "ORDER BY project ASC",
-    ["status","project"],100)
+    ["status","project"], 100, 5)
 
-# Combinar resultados
-all_nd_fecha = nd_fecha + [i for i in nd_fecha2 if i.get("key") not in {x.get("key") for x in nd_fecha}]
-tot_A, prog_A = count_by_proj(all_nd_fecha)
+tot_A, prog_A = count_by_proj(nd_fecha)
 tot_B, prog_B = count_by_proj(nd_nodate)
 
-print("  No-done-con-fecha: "+str(len(all_nd_fecha)))
-print("  No-done-sin-fecha: "+str(len(nd_nodate)))
+print("  No-done-con-fecha: "+str(len(nd_fecha))+" | No-done-sin-fecha: "+str(len(nd_nodate)))
 
 # Calcular done, prog, todo por proyecto
 sw_counts={}
