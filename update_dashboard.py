@@ -17,6 +17,7 @@ JIRA_TOKEN = os.environ["JIRA_TOKEN"]
 GH_PAT     = os.environ["GH_PAT"]
 GH_REPO    = "Joha-22/dashboard-mckinsey-jamar"
 TODAY      = date.today().isoformat()
+WEEK_END   = (date.today() + timedelta(days=7)).isoformat()
 
 KNOWN_TOTALS = {
     "SOE":99,"DEP":139,"MSOP":29,"MEJ":37,"PROVED":37,"ECI":28,"DEIT":111,
@@ -216,7 +217,44 @@ for sw in KNOWN_TOTALS:
 print("  Sample conteos:")
 for sw in ["SOE","DEP","ECI","SLOBM"]:
     t,d,p,td,l = sw_counts[sw]
-    print(f"    {sw}: total={t} done={d} prog={p} todo={td} late={l}")
+    print("    "+sw+": total="+str(t)+" done="+str(d)+" prog="+str(p)+" late="+str(l))
+
+# ── 4. WEEK_TASKS (due entre hoy y hoy+7, no-Done) ───────────────────────────
+print("Esta semana...")
+week_issues=jira_all(
+    "project in ("+ALL_SW+") AND due >= '"+TODAY+"' AND due <= '"+WEEK_END+"'"
+    " AND statusCategory != Done ORDER BY project ASC, due ASC",
+    ["summary","status","duedate","assignee","project"],100,3)
+week_by_mo=defaultdict(list)
+for i in week_issues:
+    if "fields" not in i: continue
+    if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
+    mo=SW_TO_MO.get(i["fields"]["project"]["key"]); f=i["fields"]
+    if mo:
+        week_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
+            "due":f.get("duedate",""),
+            "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
+            "status":f["status"]["name"]})
+total_week=sum(len(v) for v in week_by_mo.values())
+print("  Esta semana: "+str(total_week))
+
+# ── 5. NO_DATE_TASKS (sin fecha, no-Done) ────────────────────────────────────
+print("Sin fecha...")
+nodt_issues=jira_all(
+    "project in ("+ALL_SW+") AND due is EMPTY AND statusCategory != Done "
+    "ORDER BY project ASC",
+    ["summary","status","assignee","project"],100,5)
+nodt_by_mo=defaultdict(list)
+for i in nodt_issues:
+    if "fields" not in i: continue
+    if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
+    mo=SW_TO_MO.get(i["fields"]["project"]["key"]); f=i["fields"]
+    if mo:
+        nodt_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
+            "due":"","assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
+            "status":f["status"]["name"]})
+total_nodt=sum(len(v) for v in nodt_by_mo.values())
+print("  Sin fecha: "+str(total_nodt))
 
 # ── 4. Descargar y actualizar HTML ─────────────────────────────────────────────
 print("HTML...")
@@ -254,9 +292,36 @@ for sw,mo in sorted(SW_TO_MO.items(),key=lambda x:int(x[1].split("-")[1])):
 lt.append("};")
 html=replace_var(html,"LATE_TASKS","\n".join(lt))
 
+# WEEK_TASKS
+def fmt_week(t):
+    return ("    {key:'"+t["key"]+"',summary:\""+t["summary"]+"\"," +
+            "duedate:'"+t.get("due","")+"',assignee:\""+t["assignee"]+"\"," +
+            "status:\""+t.get("status","")+"" }")
+wt_lines=["var WEEK_TASKS = {","  // "+TODAY+" — "+str(total_week)+" esta semana"]
+for sw,mo in sorted(SW_TO_MO.items(),key=lambda x:int(x[1].split("-")[1])):
+    tasks=week_by_mo.get(mo,[])
+    if not tasks: continue
+    wt_lines.append("  '"+mo+"': [")
+    wt_lines+=[fmt_week(t)+("," if j<len(tasks)-1 else "") for j,t in enumerate(tasks)]
+    wt_lines.append("  ],")
+wt_lines.append("};")
+html=replace_var(html,"WEEK_TASKS","
+".join(wt_lines))
+
+# NO_DATE_TASKS
+nd_lines=["var NO_DATE_TASKS = {","  // "+TODAY+" — "+str(total_nodt)+" sin fecha"]
+for sw,mo in sorted(SW_TO_MO.items(),key=lambda x:int(x[1].split("-")[1])):
+    tasks=nodt_by_mo.get(mo,[])
+    if not tasks: continue
+    nd_lines.append("  '"+mo+"': [")
+    nd_lines+=[fmt_week(t)+("," if j<len(tasks)-1 else "") for j,t in enumerate(tasks)]
+    nd_lines.append("  ],")
+nd_lines.append("};")
+html=replace_var(html,"NO_DATE_TASKS","
+".join(nd_lines))
+
 now_str=datetime.now().strftime("%H:%M")
-result=gh_put("index.html",html,sha,"auto: Opcion B — "+TODAY+" "+now_str+" COT")
+result=gh_put("index.html",html,sha,"auto: Opcion B completa — "+TODAY+" "+now_str+" COT")
 print("✅ Commit: "+result["commit"]["sha"][:7])
 total_done=sum(v[1] for v in sw_counts.values())
-total_prog=sum(v[2] for v in sw_counts.values())
-print("   Done="+str(total_done)+" Prog="+str(total_prog)+" Late="+str(total_late))
+print("   Done="+str(total_done)+" Late="+str(total_late)+" Semana="+str(total_week)+" SinFecha="+str(total_nodt))
