@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-update_dashboard.py — Dashboard McKinsey-Jamar
+update_dashboard.py — Dashboard McKinsey-Jamar (Opción B)
 Actualiza automáticamente:
   1. Status/owner/pais de las 70+ iniciativas MO
-  2. Tareas atrasadas (LATE_TASKS) — con filtro doble no-Done
-Los conteos done/prog/todo se actualizan en sesiones manuales con Claude.
+  2. LATE_TASKS — tareas vencidas no-Done
+  3. Conteos done/prog/todo usando queries con filtro 'due' (que funcionan en GitHub Actions)
+     done = total - no_done_con_fecha - no_done_sin_fecha
 """
 import os, re, json, base64, urllib.request, urllib.error
 from collections import defaultdict
@@ -17,6 +18,14 @@ GH_PAT     = os.environ["GH_PAT"]
 GH_REPO    = "Joha-22/dashboard-mckinsey-jamar"
 TODAY      = date.today().isoformat()
 
+KNOWN_TOTALS = {
+    "SOE":99,"DEP":139,"MSOP":29,"MEJ":37,"PROVED":37,"ECI":28,"DEIT":67,
+    "SLOBM":14,"JCTR":58,"SLOBDECO":20,"SLOBDECPA":6,"RCD3":43,"IMPCSE":24,
+    "MIOT":1,"OPR":20,"ZT5F":13,"FCCDA":34,"WF5":28,"SDR":24,"PDSP":96,
+    "IM":21,"OP":48,"TLGDL":12,"EEMOC":10,"SF":47,"EODV":42,"ISMC":3,
+    "IEPRFEEFDC":70,"ICD":34,"CODCEYBM":9,"IPDPCDAR":50,"IPDPCDBR":54,
+    "PTMZR":12,"RF1D":9,"PROP":22,"MDCB":9,
+}
 SW_TO_MO = {
     "SOE":"MO-1","DEP":"MO-2","MSOP":"MO-3","MEJ":"MO-4","PROVED":"MO-5",
     "ECI":"MO-7","DEIT":"MO-8","SLOBM":"MO-10","JCTR":"MO-65",
@@ -28,11 +37,13 @@ SW_TO_MO = {
     "IPDPCDAR":"MO-58","IPDPCDBR":"MO-59","PTMZR":"MO-11",
     "RF1D":"MO-89","PROP":"MO-88","MDCB":"MO-52",
 }
-ALL_SW = ",".join(SW_TO_MO.keys())
+MO_TO_SW = {v:k for k,v in SW_TO_MO.items()}
+ALL_SW   = ",".join(SW_TO_MO.keys())
 
 def jira_auth():
     cred = base64.b64encode((JIRA_EMAIL+":"+JIRA_TOKEN).encode()).decode()
-    return {"Authorization":"Basic "+cred,"Accept":"application/json","Content-Type":"application/json"}
+    return {"Authorization":"Basic "+cred,
+            "Accept":"application/json","Content-Type":"application/json"}
 
 def jira_post(jql, fields=None, max_results=100):
     body = {"jql":jql,"maxResults":max_results}
@@ -45,8 +56,20 @@ def jira_post(jql, fields=None, max_results=100):
         with urllib.request.urlopen(req, timeout=25) as r:
             return json.loads(r.read()).get("issues",[])
     except Exception as ex:
-        print("  JIRA ERR: "+str(ex)[:80])
+        print("  JIRA ERR: "+str(ex)[:80]+" | "+jql[:50])
         return []
+
+def count_by_proj(issues):
+    """Cuenta issues por proyecto y statusCategory."""
+    done=defaultdict(int); prog=defaultdict(int); total=defaultdict(int)
+    for iss in issues:
+        if "fields" not in iss: continue
+        proj = iss["fields"].get("project",{}).get("key","")
+        if not proj: continue
+        cat = iss["fields"].get("status",{}).get("statusCategory",{}).get("key","")
+        total[proj]+=1
+        if cat=="indeterminate": prog[proj]+=1
+    return total, prog
 
 def gh_headers():
     return {"Authorization":"token "+GH_PAT,
@@ -54,7 +77,8 @@ def gh_headers():
 
 def gh_get(path):
     req = urllib.request.Request(
-        "https://api.github.com/repos/"+GH_REPO+"/contents/"+path,headers=gh_headers())
+        "https://api.github.com/repos/"+GH_REPO+"/contents/"+path,
+        headers=gh_headers())
     with urllib.request.urlopen(req) as r:
         d=json.loads(r.read())
     return base64.b64decode(d["content"]).decode("utf-8"),d["sha"]
@@ -96,9 +120,9 @@ def fmt_task(t):
     return ("    {key:'"+t["key"]+"',summary:\""+t["summary"]+"\","
             "duedate:'"+t.get("due","")+"',assignee:\""+t["assignee"]+"\" }")
 
-print("Actualizacion — "+TODAY)
+print("Actualizacion Opcion B — "+TODAY)
 
-# 1. MO statuses/owner/pais
+# ── 1. MO statuses ─────────────────────────────────────────────────────────────
 print("MO statuses...")
 mo_issues=jira_post("project = MO ORDER BY key ASC",
     ["summary","status","customfield_11057","customfield_11197"])
@@ -110,7 +134,45 @@ for i in mo_issues:
     MO_STATUS[i["key"]]={"status":st,"owner":ow,"pais":get_pais(f.get("customfield_11197"))}
 print("  MO: "+str(len(MO_STATUS)))
 
-# 2. Tardias (filtro doble no-Done + due < hoy)
+# ── 2. Conteos: done = total - no_done_con_fecha - no_done_sin_fecha ───────────
+print("Conteos (Opcion B: due-filter)...")
+
+# Query A: No-done CON fecha (usa filtro 'due' que funciona en Actions)
+nd_fecha=jira_post(
+    "project in ("+ALL_SW+") AND due >= '2020-01-01' AND statusCategory != Done "
+    "ORDER BY project ASC",
+    ["status","project"],100)
+nd_fecha2=jira_post(
+    "project in ("+ALL_SW+") AND due >= '2020-01-01' AND statusCategory != Done "
+    "AND due <= '2030-12-31' ORDER BY project ASC",
+    ["status","project"],100)
+
+# Query B: No-done SIN fecha (funciona: es el NO_DATE_TASKS query)
+nd_nodate=jira_post(
+    "project in ("+ALL_SW+") AND due is EMPTY AND statusCategory != Done "
+    "ORDER BY project ASC",
+    ["status","project"],100)
+
+# Combinar resultados
+all_nd_fecha = nd_fecha + [i for i in nd_fecha2 if i.get("key") not in {x.get("key") for x in nd_fecha}]
+tot_A, prog_A = count_by_proj(all_nd_fecha)
+tot_B, prog_B = count_by_proj(nd_nodate)
+
+print("  No-done-con-fecha: "+str(len(all_nd_fecha)))
+print("  No-done-sin-fecha: "+str(len(nd_nodate)))
+
+# Calcular done, prog, todo por proyecto
+sw_counts={}
+for sw,total in KNOWN_TOTALS.items():
+    nd_f = tot_A.get(sw,0)   # no-done con fecha
+    nd_n = tot_B.get(sw,0)   # no-done sin fecha
+    not_done = nd_f + nd_n
+    done  = max(0, total - not_done)
+    prog  = prog_A.get(sw,0) + prog_B.get(sw,0)
+    todo  = max(0, not_done - prog)
+    sw_counts[sw] = (total,done,prog,todo,0)  # late se llena después
+
+# ── 3. Tardías ─────────────────────────────────────────────────────────────────
 print("Tardias...")
 late_issues=jira_post(
     "project in ("+ALL_SW+") AND due < '"+TODAY+"' AND statusCategory != Done "
@@ -118,6 +180,7 @@ late_issues=jira_post(
     ["summary","status","duedate","assignee","project"],100)
 late_by_sw=defaultdict(list)
 for i in late_issues:
+    if "fields" not in i: continue
     if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
     proj=i["fields"]["project"]["key"]; f=i["fields"]
     late_by_sw[proj].append({"key":i["key"],"summary":clean(f["summary"]),
@@ -126,7 +189,17 @@ for i in late_issues:
 total_late=sum(len(v) for v in late_by_sw.values())
 print("  Tardias: "+str(total_late))
 
-# 3. Actualizar HTML
+# Actualizar late en sw_counts
+for sw in KNOWN_TOTALS:
+    t,d,p,td,_ = sw_counts[sw]
+    sw_counts[sw] = (t,d,p,td,len(late_by_sw.get(sw,[])))
+
+print("  Sample conteos:")
+for sw in ["SOE","DEP","ECI","SLOBM"]:
+    t,d,p,td,l = sw_counts[sw]
+    print(f"    {sw}: total={t} done={d} prog={p} todo={td} late={l}")
+
+# ── 4. Descargar y actualizar HTML ─────────────────────────────────────────────
 print("HTML...")
 html,sha=gh_get("index.html")
 
@@ -141,8 +214,18 @@ for mk,vals in MO_STATUS.items():
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?pais:')[^']+'",
                     r"\g<1>"+np+"'",html,count=1)
 
-# LATE_TASKS (balance de llaves)
-lt=["var LATE_TASKS = {","  // "+TODAY+" — "+str(total_late)+" tardias (no-Done, verificado)"]
+# SW_PROJECTS y DATA tasks
+for sw,(t,d,p,td,l) in sw_counts.items():
+    nt="tasks:{total:"+str(t)+",done:"+str(d)+",prog:"+str(p)+",todo:"+str(td)+",late:"+str(l)+"}"
+    html=re.sub(r"('"+re.escape(sw)+r"'\s*:\s*\{[^}]*?)tasks\s*:\s*(?:\{[^}]+\}|null)",
+                r"\g<1>"+nt,html,count=1)
+    mo=SW_TO_MO.get(sw)
+    if mo:
+        html=re.sub(r"(key:'"+re.escape(mo)+r"'[^}]*?,tasks:)(\{[^}]+\}|null)",
+                    r"\g<1>"+nt.replace("tasks:",""),html,count=1)
+
+# LATE_TASKS
+lt=["var LATE_TASKS = {","  // "+TODAY+" — "+str(total_late)+" tardias (no-Done)"]
 for sw,mo in sorted(SW_TO_MO.items(),key=lambda x:int(x[1].split("-")[1])):
     tasks=late_by_sw.get(sw,[])
     if not tasks: continue
@@ -153,6 +236,8 @@ lt.append("};")
 html=replace_var(html,"LATE_TASKS","\n".join(lt))
 
 now_str=datetime.now().strftime("%H:%M")
-result=gh_put("index.html",html,sha,"auto: actualizacion Jira — "+TODAY+" "+now_str+" COT")
-print("Commit: "+result["commit"]["sha"][:7])
-print("OK — MO="+str(len(MO_STATUS))+" Tardias="+str(total_late))
+result=gh_put("index.html",html,sha,"auto: Opcion B — "+TODAY+" "+now_str+" COT")
+print("✅ Commit: "+result["commit"]["sha"][:7])
+total_done=sum(v[1] for v in sw_counts.values())
+total_prog=sum(v[2] for v in sw_counts.values())
+print("   Done="+str(total_done)+" Prog="+str(total_prog)+" Late="+str(total_late))
