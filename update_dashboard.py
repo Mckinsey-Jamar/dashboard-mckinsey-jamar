@@ -19,7 +19,7 @@ GH_REPO    = "Joha-22/dashboard-mckinsey-jamar"
 TODAY      = date.today().isoformat()
 
 KNOWN_TOTALS = {
-    "SOE":99,"DEP":139,"MSOP":29,"MEJ":37,"PROVED":37,"ECI":28,"DEIT":67,
+    "SOE":99,"DEP":139,"MSOP":29,"MEJ":37,"PROVED":37,"ECI":28,"DEIT":111,
     "SLOBM":14,"JCTR":58,"SLOBDECO":20,"SLOBDECPA":6,"RCD3":43,"IMPCSE":24,
     "MIOT":1,"OPR":20,"ZT5F":13,"FCCDA":34,"WF5":28,"SDR":24,"PDSP":96,
     "IM":21,"OP":48,"TLGDL":12,"EEMOC":10,"SF":47,"EODV":42,"ISMC":3,
@@ -182,6 +182,10 @@ for sw,total in KNOWN_TOTALS.items():
     nd_f = tot_A.get(sw,0)   # no-done con fecha
     nd_n = tot_B.get(sw,0)   # no-done sin fecha
     not_done = nd_f + nd_n
+    # Proteccion: si not_done > known_total, el proyecto creció — usar not_done como base
+    if not_done > total:
+        print("  WARN: "+sw+" creció — not_done="+str(not_done)+" > known="+str(total))
+        total = not_done  # Ajustar total al mínimo conocido
     done  = max(0, total - not_done)
     prog  = prog_A.get(sw,0) + prog_B.get(sw,0)
     todo  = max(0, not_done - prog)
