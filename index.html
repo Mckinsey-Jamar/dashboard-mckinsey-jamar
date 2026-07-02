@@ -1125,146 +1125,219 @@ const SW_PROJECTS = {
 
 /* ── LATE TASKS — tareas vencidas por iniciativa (actualizado 2026-06-16) ── */
 var LATE_TASKS = {
-  // 2026-07-02 — 96 tardias (no-Done)
+  // 2026-07-02 â 96 tardias (no-Done)
   'MO-2': [
-    {key:'DEP-99',summary:"Establecer baseline pre-despliegue por SKU × tienda",duedate:'2026-06-29',assignee:"Sin asignar" },
-    {key:'DEP-96',summary:"Calcular inventario semilla por SKU × tienda (60 días)",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-94',summary:"Construir plan de despliegue por tienda",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-93',summary:"Validar disponibilidad de espacio físico por tienda",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-92',summary:"Revisar 14 SKUs FS de I4 (100% con inv) — confirmar catalogación",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-91',summary:"Filtrar los 272 SKUs Pareto asignados a I4",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-88',summary:"Ejecutar cambios de precio / costo / descuento en SAP",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-87',summary:"Decidir por SKU: subir precio, renegociar costo o eliminar descuento",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-62',summary:"Filtrar los ~318 SKUs en Ola 1 con BZ>0",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-59',summary:"Aprobación masiva en comité de surtido",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-58',summary:"Validar con Postventa que ninguno tiene garantías activas o reposiciones pendientes",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-57',summary:"Filtrar los 1.429 SKUs en Ola 1 con BZ=0 desde Portafolio",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-52',summary:"Aprobar lista de 48 SKUs a descontinuar en comité",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-50',summary:"Clasificar: (A) descontinuar 48 más negativos / (B) ajustar 112 a margen 0%",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-49',summary:"Filtrar los 160 SKUs con margen negativo asignados a I3",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-30',summary:"Aprobación masiva en comité de surtido",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'DEP-29',summary:"Validar con Postventa que ninguno tiene garantías activas o reposiciones pendientes",duedate:'2026-06-30',assignee:"Sin asignar" }
+    {key:'DEP-99',summary:"Establecer baseline pre-despliegue por SKU × tienda",duedate:'2026-06-29',assignee:"Sin asignar",status:"" },
+    {key:'DEP-96',summary:"Calcular inventario semilla por SKU × tienda (60 días)",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-94',summary:"Construir plan de despliegue por tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-93',summary:"Validar disponibilidad de espacio físico por tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-92',summary:"Revisar 14 SKUs FS de I4 (100% con inv) — confirmar catalogación",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-91',summary:"Filtrar los 272 SKUs Pareto asignados a I4",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-88',summary:"Ejecutar cambios de precio / costo / descuento en SAP",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-87',summary:"Decidir por SKU: subir precio, renegociar costo o eliminar descuento",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-62',summary:"Filtrar los ~318 SKUs en Ola 1 con BZ>0",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-59',summary:"Aprobación masiva en comité de surtido",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-58',summary:"Validar con Postventa que ninguno tiene garantías activas o reposiciones pendientes",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-57',summary:"Filtrar los 1.429 SKUs en Ola 1 con BZ=0 desde Portafolio",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-52',summary:"Aprobar lista de 48 SKUs a descontinuar en comité",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-50',summary:"Clasificar: (A) descontinuar 48 más negativos / (B) ajustar 112 a margen 0%",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-49',summary:"Filtrar los 160 SKUs con margen negativo asignados a I3",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-30',summary:"Aprobación masiva en comité de surtido",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'DEP-29',summary:"Validar con Postventa que ninguno tiene garantías activas o reposiciones pendientes",duedate:'2026-06-30',assignee:"Sin asignar",status:"" }
   ],
   'MO-4': [
-    {key:'MEJ-34',summary:"Alinear con los requerimientos para el lanzamiento del ciclo de S&OP supervisado para las reuniones de Demand Review",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-33',summary:"Alinear con los requerimientos para el lanzamiento del ciclo de S&OP supervisado para las reuniones de PMR",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-21',summary:"Trabajo previo de preparación al lanzamiento del lanzamiento de S&OP",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-20',summary:"Establecer con el equipo comercial las reglas de juego para los ajustes de forecast siempre respaldados con datos",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-10',summary:"Asegurar la inclusión de las políticas de gestión de productos (replacements, proceso de asociación de historía de venta en sustitutos, proceso de asociación de historia de venta en base a atributos, etc.)",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-9',summary:"Definri modelo del segmento o modelos de los segmentos para el primer piloto y pautas generales que sirvan de base para el escalado",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-7',summary:"Segmentación de los SKUs (Socializar y alinear los segmentos con equipos comerciales)",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-4',summary:"Revisión del product lifecyle (identificar productos nuevos a discontinuar)",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-3',summary:"Revisión de expectativas de futuro para el equipo de comercial y el input que se requiere para el ajuste estadístico del forecast",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-2',summary:"Revisión de los resultados del forecast sistémico vs. Forecast ajustado; incluye principales indicadores (forecast bias, accuracy and value) y el analisis de top 5 over and under",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'MEJ-1',summary:"Socializar con equipos comerciales los resultados de forecast sistémico vs forecast ajustado para generar conciencia del impacto que genera un ajuste erróneo",duedate:'2026-06-30',assignee:"Sin asignar" }
+    {key:'MEJ-34',summary:"Alinear con los requerimientos para el lanzamiento del ciclo de S&OP supervisado para las reuniones de Demand Review",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-33',summary:"Alinear con los requerimientos para el lanzamiento del ciclo de S&OP supervisado para las reuniones de PMR",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-21',summary:"Trabajo previo de preparación al lanzamiento del lanzamiento de S&OP",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-20',summary:"Establecer con el equipo comercial las reglas de juego para los ajustes de forecast siempre respaldados con datos",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-10',summary:"Asegurar la inclusión de las políticas de gestión de productos (replacements, proceso de asociación de historía de venta en sustitutos, proceso de asociación de historia de venta en base a atributos, etc.)",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-9',summary:"Definri modelo del segmento o modelos de los segmentos para el primer piloto y pautas generales que sirvan de base para el escalado",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-7',summary:"Segmentación de los SKUs (Socializar y alinear los segmentos con equipos comerciales)",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-4',summary:"Revisión del product lifecyle (identificar productos nuevos a discontinuar)",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-3',summary:"Revisión de expectativas de futuro para el equipo de comercial y el input que se requiere para el ajuste estadístico del forecast",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-2',summary:"Revisión de los resultados del forecast sistémico vs. Forecast ajustado; incluye principales indicadores (forecast bias, accuracy and value) y el analisis de top 5 over and under",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'MEJ-1',summary:"Socializar con equipos comerciales los resultados de forecast sistémico vs forecast ajustado para generar conciencia del impacto que genera un ajuste erróneo",duedate:'2026-06-30',assignee:"Sin asignar",status:"" }
   ],
   'MO-28': [
-    {key:'IMPCSE-25',summary:"Reunión con el equipo de crédito",duedate:'2026-06-25',assignee:"Ervin Trujillo Rojas" },
-    {key:'IMPCSE-7',summary:"Go live piloto cobro segunda entrega piloto 1",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas" },
-    {key:'IMPCSE-2',summary:"Piloto con una tienda pequeña",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas" }
+    {key:'IMPCSE-25',summary:"Reunión con el equipo de crédito",duedate:'2026-06-25',assignee:"Ervin Trujillo Rojas",status:"" },
+    {key:'IMPCSE-7',summary:"Go live piloto cobro segunda entrega piloto 1",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"" },
+    {key:'IMPCSE-2',summary:"Piloto con una tienda pequeña",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"" }
   ],
   'MO-34': [
-    {key:'FCCDA-9',summary:"Configuración de flujo de trabajos",duedate:'2026-06-30',assignee:"Yasenis Jiménez" },
-    {key:'FCCDA-8',summary:"Diseño de guión y protocolo de llamada",duedate:'2026-06-30',assignee:"Yasenis Jiménez" },
-    {key:'FCCDA-2',summary:"Palanca 1 - Diagnóstico y visibilidad del inventario",duedate:'2026-06-30',assignee:"Yasenis Jiménez" }
+    {key:'FCCDA-9',summary:"Configuración de flujo de trabajos",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"" },
+    {key:'FCCDA-8',summary:"Diseño de guión y protocolo de llamada",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"" },
+    {key:'FCCDA-2',summary:"Palanca 1 - Diagnóstico y visibilidad del inventario",duedate:'2026-06-30',assignee:"Yasenis Jiménez",status:"" }
   ],
   'MO-36': [
-    {key:'SDR-26',summary:"Revisar desde la data cruda como podemos validar el lote",duedate:'2026-06-30',assignee:"Juan Carlos Goez Zapata" }
+    {key:'SDR-26',summary:"Revisar desde la data cruda como podemos validar el lote",duedate:'2026-06-30',assignee:"Juan Carlos Goez Zapata",status:"" }
   ],
   'MO-37': [
-    {key:'PDSP-22',summary:"Seguimiento y auditoria solucion casa  comedores",duedate:'2026-06-20',assignee:"Juan Carlos Goez Zapata" },
-    {key:'PDSP-92',summary:"Revisar alternativas de automatización del proceso de transformación",duedate:'2026-06-23',assignee:"Jorge Cesar Mejia Beyeh" },
-    {key:'PDSP-77',summary:"Salida en vivo Atlantico",duedate:'2026-07-01',assignee:"Juan Carlos Goez Zapata" },
-    {key:'PDSP-45',summary:"Alistamiento operativo para servicio tecnico",duedate:'2026-07-01',assignee:"Juan Carlos Goez Zapata" }
+    {key:'PDSP-22',summary:"Seguimiento y auditoria solucion casa  comedores",duedate:'2026-06-20',assignee:"Juan Carlos Goez Zapata",status:"" },
+    {key:'PDSP-92',summary:"Revisar alternativas de automatización del proceso de transformación",duedate:'2026-06-23',assignee:"Jorge Cesar Mejia Beyeh",status:"" },
+    {key:'PDSP-77',summary:"Salida en vivo Atlantico",duedate:'2026-07-01',assignee:"Juan Carlos Goez Zapata",status:"" },
+    {key:'PDSP-45',summary:"Alistamiento operativo para servicio tecnico",duedate:'2026-07-01',assignee:"Juan Carlos Goez Zapata",status:"" }
   ],
   'MO-41': [
-    {key:'OP-14',summary:"Diagnosticar la gestión de postventa",duedate:'2026-06-24',assignee:"Milena Rodríguez" },
-    {key:'OP-13',summary:"Diagnósticar el proceso de atención inbound",duedate:'2026-06-30',assignee:"Milena Rodríguez" }
+    {key:'OP-14',summary:"Diagnosticar la gestión de postventa",duedate:'2026-06-24',assignee:"Milena Rodríguez",status:"" },
+    {key:'OP-13',summary:"Diagnósticar el proceso de atención inbound",duedate:'2026-06-30',assignee:"Milena Rodríguez",status:"" }
   ],
   'MO-44': [
-    {key:'TLGDL-11',summary:"Diagnosticar brechas funcionales entre Salesforce, Citrix y App de ventas",duedate:'2026-06-22',assignee:"Carlos Mario Barrera Vega" },
-    {key:'TLGDL-10',summary:"Ejecutar piloto rápido de \"mangos bajitos\" con 5 vendedores híbridos sobre listas existentes - (Hito Monetario)",duedate:'2026-06-26',assignee:"Carlos Mario Barrera Vega" }
+    {key:'TLGDL-11',summary:"Diagnosticar brechas funcionales entre Salesforce, Citrix y App de ventas",duedate:'2026-06-22',assignee:"Carlos Mario Barrera Vega",status:"" },
+    {key:'TLGDL-10',summary:"Ejecutar piloto rápido de \"mangos bajitos\" con 5 vendedores híbridos sobre listas existentes - (Hito Monetario)",duedate:'2026-06-26',assignee:"Carlos Mario Barrera Vega",status:"" }
   ],
   'MO-46': [
-    {key:'SF-57',summary:"Definir métricas de medición para alianzas / Tablero (Homologar tablero Colombia)",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ" },
-    {key:'SF-56',summary:"Modelo Operativo: Entender el marco legal y el funcionamiento de los medios de pago en Panamá.",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ" },
-    {key:'SF-34',summary:"Diseñar un modelo para la Implementacón Scripts Comerciales y manejo de Objeciones Credito y de ventas.",duedate:'2026-06-30',assignee:"bsilva" }
+    {key:'SF-57',summary:"Definir métricas de medición para alianzas / Tablero (Homologar tablero Colombia)",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"" },
+    {key:'SF-56',summary:"Modelo Operativo: Entender el marco legal y el funcionamiento de los medios de pago en Panamá.",duedate:'2026-06-30',assignee:"VIRGILIO DE LA HOZ",status:"" },
+    {key:'SF-34',summary:"Diseñar un modelo para la Implementacón Scripts Comerciales y manejo de Objeciones Credito y de ventas.",duedate:'2026-06-30',assignee:"bsilva",status:"" }
   ],
   'MO-47': [
-    {key:'EODV-25',summary:"Estructurar plan de cultura Jamar Panamá: Traslado, beneficios, garantizar comisiones, cobertura de seguridad social, etc",duedate:'2026-06-06',assignee:"rgomez" },
-    {key:'EODV-26',summary:"Proceso de socialización de adaptación de AC en Panamá: Acogida de los locales, razones del traslado, monitoreo de la productividad de las tiendas, antes y después de la llegada de cada AC",duedate:'2026-06-13',assignee:"rgomez" },
-    {key:'EODV-40',summary:"Redefinir Perfil Asesor de punto",duedate:'2026-06-30',assignee:"Dayra Lizbeth Aguilar" },
-    {key:'EODV-34',summary:"Definir estructura y Roles de la Operación de Crédito",duedate:'2026-06-30',assignee:"ERIKA GUTIERREZ" },
-    {key:'EODV-27',summary:"Traslado de AC a Panamá",duedate:'2026-07-01',assignee:"rgomez" }
+    {key:'EODV-25',summary:"Estructurar plan de cultura Jamar Panamá: Traslado, beneficios, garantizar comisiones, cobertura de seguridad social, etc",duedate:'2026-06-06',assignee:"rgomez",status:"" },
+    {key:'EODV-26',summary:"Proceso de socialización de adaptación de AC en Panamá: Acogida de los locales, razones del traslado, monitoreo de la productividad de las tiendas, antes y después de la llegada de cada AC",duedate:'2026-06-13',assignee:"rgomez",status:"" },
+    {key:'EODV-40',summary:"Redefinir Perfil Asesor de punto",duedate:'2026-06-30',assignee:"Dayra Lizbeth Aguilar",status:"" },
+    {key:'EODV-34',summary:"Definir estructura y Roles de la Operación de Crédito",duedate:'2026-06-30',assignee:"ERIKA GUTIERREZ",status:"" },
+    {key:'EODV-27',summary:"Traslado de AC a Panamá",duedate:'2026-07-01',assignee:"rgomez",status:"" }
   ],
   'MO-52': [
-    {key:'MDCB-13',summary:"Creación de historias de usuario",duedate:'2026-06-30',assignee:"Sin asignar" }
+    {key:'MDCB-13',summary:"Creación de historias de usuario",duedate:'2026-06-30',assignee:"Sin asignar",status:"" }
   ],
   'MO-54': [
-    {key:'IEPRFEEFDC-29',summary:"Estimar volumen marginal recuperable",duedate:'2026-06-25',assignee:"sandra ibañez" },
-    {key:'IEPRFEEFDC-28',summary:"Cuantificar impacto económico por fuga",duedate:'2026-06-25',assignee:"sandra ibañez" },
-    {key:'IEPRFEEFDC-90',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes bajo  riesgo",duedate:'2026-06-30',assignee:"msarmiento" },
-    {key:'IEPRFEEFDC-89',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes alto riesgo",duedate:'2026-06-30',assignee:"msarmiento" },
-    {key:'IEPRFEEFDC-34',summary:"Diseño de acciones de mejora por etapa del funnel",duedate:'2026-06-30',assignee:"sandra ibañez" },
-    {key:'IEPRFEEFDC-27',summary:"Construir  matriz de oportunidades",duedate:'2026-06-30',assignee:"sandra ibañez" },
-    {key:'IEPRFEEFDC-20',summary:"Identificar y priorizar de oportunidades de fuga",duedate:'2026-06-30',assignee:"sandra ibañez" },
-    {key:'IEPRFEEFDC-40',summary:"Seleccionar tiendas piloto",duedate:'2026-07-01',assignee:"sandra ibañez" }
+    {key:'IEPRFEEFDC-29',summary:"Estimar volumen marginal recuperable",duedate:'2026-06-25',assignee:"sandra ibañez",status:"" },
+    {key:'IEPRFEEFDC-28',summary:"Cuantificar impacto económico por fuga",duedate:'2026-06-25',assignee:"sandra ibañez",status:"" },
+    {key:'IEPRFEEFDC-90',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes bajo  riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"" },
+    {key:'IEPRFEEFDC-89',summary:"Realizar estudio diagnostico con mercadeo  no completacion clientes alto riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"" },
+    {key:'IEPRFEEFDC-34',summary:"Diseño de acciones de mejora por etapa del funnel",duedate:'2026-06-30',assignee:"sandra ibañez",status:"" },
+    {key:'IEPRFEEFDC-27',summary:"Construir  matriz de oportunidades",duedate:'2026-06-30',assignee:"sandra ibañez",status:"" },
+    {key:'IEPRFEEFDC-20',summary:"Identificar y priorizar de oportunidades de fuga",duedate:'2026-06-30',assignee:"sandra ibañez",status:"" },
+    {key:'IEPRFEEFDC-40',summary:"Seleccionar tiendas piloto",duedate:'2026-07-01',assignee:"sandra ibañez",status:"" }
   ],
   'MO-56': [
-    {key:'ICD-50',summary:"Grooming  con Equipo de Cumplimiento  para el entendimiento de Matriz",duedate:'2026-06-26',assignee:"Miguel Ramirez Donado" },
-    {key:'ICD-43',summary:"Reunion tecnica con los equipos de custodia y TI",duedate:'2026-06-26',assignee:"Jenifer" },
-    {key:'ICD-45',summary:"Cerrar Negociacion  con provedor de custodia",duedate:'2026-06-30',assignee:"msarmiento" },
-    {key:'ICD-41',summary:"Diseñar flujo de custodia del pagare",duedate:'2026-06-30',assignee:"Nataly de arco" },
-    {key:'ICD-33',summary:"Diagnostico de los procesos impactado",duedate:'2026-06-30',assignee:"Miguel Ramirez Donado" },
-    {key:'ICD-32',summary:"Dibujar la Experiencia del Usuario",duedate:'2026-07-01',assignee:"Miguel Ramirez Donado" },
-    {key:'ICD-31',summary:"Configurar las rutas de aprobación en Salesforce, para la asignación automatica segun el flujo definido  definido para cada ruta.",duedate:'2026-07-01',assignee:"Jenifer" }
+    {key:'ICD-50',summary:"Grooming  con Equipo de Cumplimiento  para el entendimiento de Matriz",duedate:'2026-06-26',assignee:"Miguel Ramirez Donado",status:"" },
+    {key:'ICD-43',summary:"Reunion tecnica con los equipos de custodia y TI",duedate:'2026-06-26',assignee:"Jenifer",status:"" },
+    {key:'ICD-45',summary:"Cerrar Negociacion  con provedor de custodia",duedate:'2026-06-30',assignee:"msarmiento",status:"" },
+    {key:'ICD-41',summary:"Diseñar flujo de custodia del pagare",duedate:'2026-06-30',assignee:"Nataly de arco",status:"" },
+    {key:'ICD-33',summary:"Diagnostico de los procesos impactado",duedate:'2026-06-30',assignee:"Miguel Ramirez Donado",status:"" },
+    {key:'ICD-32',summary:"Dibujar la Experiencia del Usuario",duedate:'2026-07-01',assignee:"Miguel Ramirez Donado",status:"" },
+    {key:'ICD-31',summary:"Configurar las rutas de aprobación en Salesforce, para la asignación automatica segun el flujo definido  definido para cada ruta.",duedate:'2026-07-01',assignee:"Jenifer",status:"" }
   ],
   'MO-58': [
-    {key:'IPDPCDAR-51',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez" },
-    {key:'IPDPCDAR-46',summary:"Piloto codeudores GAAD",duedate:'2026-06-30',assignee:"sandra ibañez" },
-    {key:'IPDPCDAR-38',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez" },
-    {key:'IPDPCDAR-26',summary:"definir y ejecutar acciones asociadas a los productos cliente alto riesgo para mejorar ebitda",duedate:'2026-06-30',assignee:"sandra ibañez" },
-    {key:'IPDPCDAR-7',summary:"Optimizar  palancas actuales de curva de valor para cliente alto riesgo",duedate:'2026-07-01',assignee:"sandra ibañez" }
+    {key:'IPDPCDAR-51',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez",status:"" },
+    {key:'IPDPCDAR-46',summary:"Piloto codeudores GAAD",duedate:'2026-06-30',assignee:"sandra ibañez",status:"" },
+    {key:'IPDPCDAR-38',summary:"Seguimiento del piloto",duedate:'2026-06-30',assignee:"sandra ibañez",status:"" },
+    {key:'IPDPCDAR-26',summary:"definir y ejecutar acciones asociadas a los productos cliente alto riesgo para mejorar ebitda",duedate:'2026-06-30',assignee:"sandra ibañez",status:"" },
+    {key:'IPDPCDAR-7',summary:"Optimizar  palancas actuales de curva de valor para cliente alto riesgo",duedate:'2026-07-01',assignee:"sandra ibañez",status:"" }
   ],
   'MO-59': [
-    {key:'IPDPCDBR-68',summary:"ejecutar ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez" },
-    {key:'IPDPCDBR-67',summary:"Diseñar  ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez" },
-    {key:'IPDPCDBR-11',summary:"Identificar productos con mayor potencial de cierre",duedate:'2026-06-30',assignee:"msarmiento" },
-    {key:'IPDPCDBR-9',summary:"Diagnósticar y definir el portafolio para clientes bajo riesgo",duedate:'2026-06-30',assignee:"msarmiento" }
+    {key:'IPDPCDBR-68',summary:"ejecutar ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez",status:"" },
+    {key:'IPDPCDBR-67',summary:"Diseñar  ruta de formalización",duedate:'2026-06-30',assignee:"sandra ibañez",status:"" },
+    {key:'IPDPCDBR-11',summary:"Identificar productos con mayor potencial de cierre",duedate:'2026-06-30',assignee:"msarmiento",status:"" },
+    {key:'IPDPCDBR-9',summary:"Diagnósticar y definir el portafolio para clientes bajo riesgo",duedate:'2026-06-30',assignee:"msarmiento",status:"" }
   ],
   'MO-65': [
-    {key:'JCTR-31',summary:"Ecommerce",duedate:'2026-06-26',assignee:"Sin asignar" },
-    {key:'JCTR-6',summary:"Selección de tiendas (Zonas liquidación, Tiendas outlet)",duedate:'2026-06-26',assignee:"Sin asignar" },
-    {key:'JCTR-5',summary:"Cubrir con fueras de surtido los espacios de la curva",duedate:'2026-06-26',assignee:"Sin asignar" },
-    {key:'JCTR-4',summary:"Estrategias de evacuación (Promo , Ambiente )",duedate:'2026-06-26',assignee:"Sin asignar" },
-    {key:'JCTR-57',summary:"Trasladar mercancia a megamall, americas  y los andes",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'JCTR-1',summary:"Definición SLOB",duedate:'2026-06-30',assignee:"Sin asignar" }
+    {key:'JCTR-31',summary:"Ecommerce",duedate:'2026-06-26',assignee:"Sin asignar",status:"" },
+    {key:'JCTR-6',summary:"Selección de tiendas (Zonas liquidación, Tiendas outlet)",duedate:'2026-06-26',assignee:"Sin asignar",status:"" },
+    {key:'JCTR-5',summary:"Cubrir con fueras de surtido los espacios de la curva",duedate:'2026-06-26',assignee:"Sin asignar",status:"" },
+    {key:'JCTR-4',summary:"Estrategias de evacuación (Promo , Ambiente )",duedate:'2026-06-26',assignee:"Sin asignar",status:"" },
+    {key:'JCTR-57',summary:"Trasladar mercancia a megamall, americas  y los andes",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'JCTR-1',summary:"Definición SLOB",duedate:'2026-06-30',assignee:"Sin asignar",status:"" }
   ],
   'MO-66': [
-    {key:'SLOBDECO-17',summary:"Campaña urgencia \"Ultimas unidades\"",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'SLOBDECO-16',summary:"Feria liquidación",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'SLOBDECO-13',summary:"Incentivo FV escalado - LR tardía",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'SLOBDECO-12',summary:"Redes sociales - SLOB semanal",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'SLOBDECO-11',summary:"Clearance day mensual",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'SLOBDECO-9',summary:"Zona Outlet en tienda",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'SLOBDECO-7',summary:"Atacar LR Tardia + escalar obsoleto a outlet",duedate:'2026-06-30',assignee:"Maria Camila Betancourt" },
-    {key:'SLOBDECO-3',summary:"Descuento 30% LR Temprana: POP y STOPPER de precio especial",duedate:'2026-06-30',assignee:"Sin asignar" },
-    {key:'SLOBDECO-2',summary:"Exhibición Especial: Reubicar SLOB LR Temprana a zonas de alto tráfico — entrada y esquinas calientes de tienda",duedate:'2026-06-30',assignee:"Sin asignar" }
+    {key:'SLOBDECO-17',summary:"Campaña urgencia \"Ultimas unidades\"",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'SLOBDECO-16',summary:"Feria liquidación",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'SLOBDECO-13',summary:"Incentivo FV escalado - LR tardía",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'SLOBDECO-12',summary:"Redes sociales - SLOB semanal",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'SLOBDECO-11',summary:"Clearance day mensual",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'SLOBDECO-9',summary:"Zona Outlet en tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'SLOBDECO-7',summary:"Atacar LR Tardia + escalar obsoleto a outlet",duedate:'2026-06-30',assignee:"Maria Camila Betancourt",status:"" },
+    {key:'SLOBDECO-3',summary:"Descuento 30% LR Temprana: POP y STOPPER de precio especial",duedate:'2026-06-30',assignee:"Sin asignar",status:"" },
+    {key:'SLOBDECO-2',summary:"Exhibición Especial: Reubicar SLOB LR Temprana a zonas de alto tráfico — entrada y esquinas calientes de tienda",duedate:'2026-06-30',assignee:"Sin asignar",status:"" }
   ],
   'MO-76': [
-    {key:'OPR-20',summary:"Piloto ruteo con IA",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas" },
-    {key:'OPR-19',summary:"Pruebas planeación y ruteo actual con IA basado en nuevas zonas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas" },
-    {key:'OPR-15',summary:"Análisis de la data actual de planeación y rutas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas" },
-    {key:'OPR-17',summary:"Validación rutas con IA",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas" }
+    {key:'OPR-20',summary:"Piloto ruteo con IA",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"" },
+    {key:'OPR-19',summary:"Pruebas planeación y ruteo actual con IA basado en nuevas zonas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"" },
+    {key:'OPR-15',summary:"Análisis de la data actual de planeación y rutas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"" },
+    {key:'OPR-17',summary:"Validación rutas con IA",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"" }
   ],
   'MO-89': [
-    {key:'RF1D-9',summary:"Definición de historias de usuarios",duedate:'2026-06-19',assignee:"msarmiento" }
+    {key:'RF1D-9',summary:"Definición de historias de usuarios",duedate:'2026-06-19',assignee:"msarmiento",status:"" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 var WEEK_TASKS = {
-  // 2026-07-01 — 20 esta semana
+  // 2026-07-02 â 68 esta semana
+  'MO-2': [
+    {key:'DEP-63',summary:"Calcular costo unitario y proponer rango de descuento (20-40%)",duedate:'2026-07-07',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-60',summary:"Ejecutar baja administrativa en SAP en lote",duedate:'2026-07-07',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-24',summary:"Primer Comité de Surtido",duedate:'2026-07-08',assignee:"Sin asignar",status:"In Progress" }
+  ],
+  'MO-3': [
+    {key:'MSOP-9',summary:"Diseño de trableros para cada una de las sesiones",duedate:'2026-07-03',assignee:"Sin asignar",status:"In Progress" },
+    {key:'MSOP-8',summary:"Definición de KPIs del proceso con semáforos y umbrales",duedate:'2026-07-03',assignee:"Sin asignar",status:"In Progress" },
+    {key:'MSOP-7',summary:"Definición de RACI: roles y responsabilidades por reunión",duedate:'2026-07-03',assignee:"Sin asignar",status:"In Progress" },
+    {key:'MSOP-15',summary:"Pre-S&OP — balance demanda-oferta, impacto financiero y agenda ejecutiva",duedate:'2026-07-06',assignee:"Leandro Candama",status:"In Progress" },
+    {key:'MSOP-14',summary:"Supply Review — inventario, órdenes en tránsito, gaps de cobertura (DOI)",duedate:'2026-07-06',assignee:"Leandro Candama",status:"In Progress" }
+  ],
+  'MO-4': [
+    {key:'MEJ-6',summary:"Acordar la linea base para medición de la mejora",duedate:'2026-07-04',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-5',summary:"Definir una línea base para medición de la mejora",duedate:'2026-07-04',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-32',summary:"Diseñar la visualizado de alertas en el tablero y formar a las personas involucradas",duedate:'2026-07-06',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-31',summary:"Definir los valores",duedate:'2026-07-06',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-19',summary:"Establecer alertas de valores atípicos",duedate:'2026-07-06',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-12',summary:"Ejecución de los cambios requeridos en el modelo de la categoría / definir categorías a pilotear",duedate:'2026-07-06',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-11',summary:"Configuración de los modelos estadisticos de acuerdo al segmento",duedate:'2026-07-06',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-8',summary:"Definir modelo de acuerdo al segmento",duedate:'2026-07-09',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-7': [
+    {key:'ECI-30',summary:"Construcción del Prototipo de TCI",duedate:'2026-07-03',assignee:"Sin asignar",status:"In Progress" },
+    {key:'ECI-9',summary:"Definición de las métricas requeridas para sustentar las politicas y su matematicas",duedate:'2026-07-03',assignee:"Sin asignar",status:"In Progress" },
+    {key:'ECI-8',summary:"Asegurar dashboard de métricas (Alineación Iniciativa Metrica de Inventario)",duedate:'2026-07-03',assignee:"Sin asignar",status:"En ejecución" },
+    {key:'ECI-3',summary:"sesión de trabajo en políticas de inventario (segmentación, criterios por categoría)",duedate:'2026-07-03',assignee:"Sin asignar",status:"In Progress" }
+  ],
+  'MO-11': [
+    {key:'PTMZR-12',summary:"Diseño flujos AS-IS y TO-BE",duedate:'2026-07-06',assignee:"Sebastian Rivero",status:"To Do" },
+    {key:'PTMZR-11',summary:"Selección de SKUs piloto y Activacion Comercial",duedate:'2026-07-07',assignee:"Sebastian Rivero",status:"In Progress" },
+    {key:'PTMZR-10',summary:"Revisión portafolio con Categoría",duedate:'2026-07-07',assignee:"Sebastian Rivero",status:"In Progress" },
+    {key:'PTMZR-7',summary:"Definición de SLAs con Zabra",duedate:'2026-07-07',assignee:"Sebastian Rivero",status:"In Progress" },
+    {key:'PTMZR-6',summary:"Revisión contractual con Industrias Zabra S.A.",duedate:'2026-07-07',assignee:"Sebastian Rivero",status:"In Progress" }
+  ],
+  'MO-24': [
+    {key:'RCD3-13',summary:"Contratacion del agente",duedate:'2026-07-07',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-12',summary:"Compra y entrega del equipo",duedate:'2026-07-07',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-11',summary:"Definicion del modelo operativo",duedate:'2026-07-07',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-10',summary:"Selección del agente",duedate:'2026-07-07',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-8',summary:"Contratacion agente contact",duedate:'2026-07-07',assignee:"Marla Lambertino Perez",status:"In Progress" }
+  ],
+  'MO-33': [
+    {key:'ZT5F-4',summary:"Benchmarking políticas de postventa con referentes",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"To Do" }
+  ],
+  'MO-34': [
+    {key:'FCCDA-11',summary:"Socialización con Proveedores",duedate:'2026-07-03',assignee:"Yasenis Jiménez",status:"To Do" },
+    {key:'FCCDA-46',summary:"Desarrollos tecnicos",duedate:'2026-07-04',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-45',summary:"Creación de HU",duedate:'2026-07-04',assignee:"Ervin Trujillo Rojas",status:"To Do" }
+  ],
+  'MO-35': [
+    {key:'WF5-1',summary:"Levantamiento y Diagnóstico Operativo",duedate:'2026-07-03',assignee:"Juan Carlos Goez Zapata",status:"Definición" },
+    {key:'WF5-27',summary:"Alineación de KPIs de Calidad",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"To Do" },
+    {key:'WF5-26',summary:"Estandarización de Métricas de Calidad",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"To Do" }
+  ],
+  'MO-36': [
+    {key:'SDR-35',summary:"Onboarding - handling e inspección en Cendis",duedate:'2026-07-08',assignee:"Sin asignar",status:"To Do" }
+  ],
+  'MO-37': [
+    {key:'PDSP-96',summary:"Abrir conversaciones para formalizar la estructura del area",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"To Do" },
+    {key:'PDSP-95',summary:"Definir modelo de S&OP de partes",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"To Do" },
+    {key:'PDSP-69',summary:"Definición de plan de escalamiento",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"To Do" },
+    {key:'PDSP-68',summary:"Modelado de solucion",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"To Do" },
+    {key:'PDSP-66',summary:"Validar el funcionamiento del modelo de colchones panama",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"To Do" },
+    {key:'PDSP-57',summary:"Diseñar modelo de recuperación",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"In Progress" },
+    {key:'PDSP-54',summary:"Implementar herramientas de IA en proceso de codificación partes",duedate:'2026-07-07',assignee:"Juan Carlos Goez Zapata",status:"In Progress" },
+    {key:'PDSP-55',summary:"Estructurar modelo de gobierno",duedate:'2026-07-08',assignee:"Juan Carlos Goez Zapata",status:"To Do" }
+  ],
+  'MO-40': [
+    {key:'IM-24',summary:"Diagramar Modelo AS IS del estado actual",duedate:'2026-07-03',assignee:"Yasenis Jiménez",status:"In Progress" },
+    {key:'IM-23',summary:"Identificación de Actores Proceso Actual del proceso de LI",duedate:'2026-07-03',assignee:"Yasenis Jiménez",status:"In Progress" },
+    {key:'IM-10',summary:"Modelo To Be: Diseño del flujo estándar de recepción y clasificación",duedate:'2026-07-03',assignee:"Yasenis Jiménez",status:"To Do" }
+  ],
   'MO-41': [
     {key:'OP-7',summary:"Diagnóstico, alcance y priorización operativa",duedate:'2026-07-07',assignee:"Milena Rodríguez",status:"En curso" }
   ],
@@ -1277,14 +1350,12 @@ var WEEK_TASKS = {
     {key:'SF-21',summary:"Definir los perfiles: habilidades, competencias roles",duedate:'2026-07-07',assignee:"Stefany Barraza Barbosa",status:"In Progress" }
   ],
   'MO-47': [
-    {key:'EODV-27',summary:"Traslado de AC a Panamá",duedate:'2026-07-01',assignee:"rgomez",status:"In Progress" },
     {key:'EODV-28',summary:"Definir el status de uso visor, venta crédito versus resultados por visita de AC de COL a PAN.",duedate:'2026-07-07',assignee:"rgomez",status:"To Do" }
   ],
   'MO-52': [
     {key:'MDCB-2',summary:"Disponibilzar informacion en ORACLE de behavior",duedate:'2026-07-08',assignee:"Ronald González",status:"In Progress" }
   ],
   'MO-54': [
-    {key:'IEPRFEEFDC-40',summary:"Seleccionar tiendas piloto",duedate:'2026-07-01',assignee:"sandra ibañez",status:"To Do" },
     {key:'IEPRFEEFDC-2',summary:"Definir y estandarizar  funnel de crédito",duedate:'2026-07-05',assignee:"msarmiento",status:"In Progress" },
     {key:'IEPRFEEFDC-16',summary:"construir pmv funnel accionable",duedate:'2026-07-06',assignee:"German Centanaro",status:"In Progress" },
     {key:'IEPRFEEFDC-91',summary:"Validar  calidad y consistencia de los datos",duedate:'2026-07-07',assignee:"sandra ibañez",status:"In Progress" },
@@ -1292,19 +1363,315 @@ var WEEK_TASKS = {
     {key:'IEPRFEEFDC-1',summary:"Construir el modelo integral de monitoreo del funnel",duedate:'2026-07-08',assignee:"sandra ibañez",status:"En ejecución" }
   ],
   'MO-56': [
-    {key:'ICD-32',summary:"Dibujar la Experiencia del Usuario",duedate:'2026-07-01',assignee:"Miguel Ramirez Donado",status:"To Do" },
-    {key:'ICD-31',summary:"Configurar las rutas de aprobación en Salesforce, para la asignación automatica segun el flujo definido  definido para cada ruta.",duedate:'2026-07-01',assignee:"Jenifer",status:"Dev En progreso" },
     {key:'ICD-57',summary:"Reconfigurar las  politicas de autorizador minimizando requisitos",duedate:'2026-07-02',assignee:"Nataly de arco",status:"In Progress" }
   ],
   'MO-58': [
-    {key:'IPDPCDAR-7',summary:"Optimizar  palancas actuales de curva de valor para cliente alto riesgo",duedate:'2026-07-01',assignee:"sandra ibañez",status:"En ejecución" },
     {key:'IPDPCDAR-39',summary:"Evaluación de viabilidad del piloto",duedate:'2026-07-08',assignee:"sandra ibañez",status:"To Do" },
-    {key:'IPDPCDAR-32',summary:"Descuento directo",duedate:'2026-07-08',assignee:"sandra ibañez",status:"En ejecución" }
+    {key:'IPDPCDAR-32',summary:"Descuento directo",duedate:'2026-07-08',assignee:"sandra ibañez",status:"En ejecución" },
+    {key:'IPDPCDAR-45',summary:"Seguimiento del piloto",duedate:'2026-07-09',assignee:"sandra ibañez",status:"In Progress" },
+    {key:'IPDPCDAR-33',summary:"Modelo de evacuación fuera de surtido",duedate:'2026-07-09',assignee:"sandra ibañez",status:"En ejecución" }
   ],
-};
+  'MO-65': [
+    {key:'JCTR-7',summary:"Pricing SLOB ( Todas las Agencias Pan )",duedate:'2026-07-03',assignee:"Sin asignar",status:"In Progress" },
+    {key:'JCTR-32',summary:"Comunicación",duedate:'2026-07-04',assignee:"Sin asignar",status:"En ejecución" }
+  ],
+};;
 
 var NO_DATE_TASKS = {
-  // 2026-07-01 — 25 sin fecha
+  // 2026-07-02 â 350 sin fecha
+  'MO-1': [
+    {key:'SOE-99',summary:"Transferencia formal del modelo",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-98',summary:"Mecanismo de mejora continua",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-97',summary:"Definir foros y cadencia",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-96',summary:"Definir dueño permanente S&OE",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-95',summary:"Aprobación SteerCo",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-94',summary:"Estimación de recursos",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-93',summary:"Priorización de nuevas categorías/Cendis",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-92',summary:"Plan de escalamiento por waves",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-91',summary:"Re-validación con SteerCo",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-90',summary:"Actualización de documentación",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-89',summary:"Lista de ajustes priorizados",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-88',summary:"Sesión de retrospectiva",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-87',summary:"Reporte cualitativo",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-86',summary:"Documentar cambios culturales",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-85',summary:"Entrevistas a champions",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-84',summary:"Encuesta de adopción",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-83',summary:"Reporte ejecutivo",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-82',summary:"Análisis de causa raíz de desviaciones",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-81',summary:"Comparativo vs baseline",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-80',summary:"Medición semanal y mensual de KPIs",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-79',summary:"Sesiones de mejora continua",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-78',summary:"Tablero de riesgos",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-77',summary:"Escalamiento al SteerCo",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-76',summary:"Log de bloqueos",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-75',summary:"Sesiones de retroalimentación",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-74',summary:"Tracking de alertas y respuesta",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-73',summary:"Bitácora de decisiones",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-72',summary:"Ritual semanal recurrente",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-71',summary:"Soporte intensivo primeras semanas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-70',summary:"Comunicación de arranque",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-69',summary:"Tableros operativos publicados",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-68',summary:"Primera sesión semanal S&OE",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-67',summary:"Q&A y manejo de dudas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-66',summary:"Material de inducción S&OE",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-65',summary:"Capacitación práctica en tableros",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-64',summary:"Sesiones de socialización por área",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-59',summary:"Plan de accesos y permisos",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-58',summary:"Definir desarrollos TI",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-57',summary:"Validar calidad de data",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-56',summary:"Inventario de fuentes de data",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-55',summary:"Acuerdo firmado por áreas",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-54',summary:"Manejo de alertas y desviaciones",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-53',summary:"Reglas de escalamiento",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-52',summary:"Definir SLAs entre áreas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-48',summary:"Matriz impacto-esfuerzo",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-47',summary:"Validar carga de trabajo",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-45',summary:"Construir RACI detallado",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SOE-42',summary:"Definir inputs/outputs de cada sesión",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-41',summary:"Definir decisiones del comité S&OE",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-40',summary:"Diseño del ritual semanal",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-39',summary:"Priorización de brechas críticas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-38',summary:"Análisis gap por dimensión",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-37',summary:"Benchmark con modelo S&OE de referencia",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-27',summary:"H8.1 Preparación del plan de escalamiento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-25',summary:"H6.2 Evaluación cualitativa de adopción",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-24',summary:"H6.1 Medición de KPIs del piloto vs. baseline",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SOE-9',summary:"F9. Gobierno",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'SOE-8',summary:"F8. Escalamiento",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'SOE-7',summary:"F7. Ajustes",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'SOE-6',summary:"F6. Medición",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'SOE-5',summary:"F5. Piloto",duedate:'',assignee:"Sin asignar",status:"En ejecución" }
+  ],
+  'MO-2': [
+    {key:'DEP-148',summary:"Definir portafolio segundo semestre (Jul -Dic) 2026",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-145',summary:"Proceso de optimización del portafolio",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-144',summary:"Medir Δ margen consolidado y validar +0,14 pp",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-143',summary:"Baja administrativa de SKUs evacuados y descatalogación de familias",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-142',summary:"Cierre",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-141',summary:"Liquidación con descuento para SKUs con stock alto al mes 6",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-140',summary:"Monitorear evacuación natural de stock T2-T3",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-139',summary:"Suspender reposición de inventario para SKUs de las 69 familias",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-138',summary:"Ejecución gradual",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-137',summary:"Comunicar a equipo comercial decisión y plan",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-136',summary:"Aprobar lista en comité de surtido",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-135',summary:"Comunicación y aprobaciones",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-134',summary:"Validar caso por caso: declive natural vs potencial de relanzamiento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-133',summary:"Filtrar 69 familias asignadas a I7",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-132',summary:"Identificación de familias",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-131',summary:"Implementar pricing diferencial en olas y medir impacto",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-130',summary:"Validar con TI capacidad de cambiar precio por tienda en POS",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-129',summary:"Construir reglas de pricing diferenciado por SKU × tienda × canal",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-128',summary:"Fase 3 — Pricing diferencial escalado",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-127',summary:"Analizar resultados: identificar SKUs que aceptan premium",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-126',summary:"Ejecutar pilotos y monitorear venta semanalmente",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-125',summary:"Diseñar experimento controlado: +3-5% precio en 3-5 tiendas / 8 semanas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-124',summary:"Seleccionar 30-50 SKUs Pareto con baja sensibilidad teórica",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-123',summary:"Fase 2 — Pilotos de pricing",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-122',summary:"Actualizar costo en SAP y medir margen efectivo",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-121',summary:"Ejecutar negociación con proveedores (lógica idéntica a I2)",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-120',summary:"Filtrar los 579 SKUs con margen 40-50% asignados a I6",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-119',summary:"Fase 1 — Renegociación ampliada",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-118',summary:"Medir mensualmente % meses con quiebre por SKU",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-117',summary:"Revisar y ajustar frecuencia de despachos CD → tienda",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-116',summary:"Asegurar abastecimiento continuo CD → tienda",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-115',summary:"Configurar alertas tempranas (semáforos) de cobertura CD",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-114',summary:"Definir ritmo mensual de S&OP",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-113',summary:"Implementar S&OP mensual con alertas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-112',summary:"Ajustar parámetros de reposición en SAP",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-111',summary:"Calcular safety stock óptimo por SKU según CV y lead time",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-110',summary:"Definir nivel de inventario de seguridad",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-109',summary:"Revisar 105 SKUs FS de I5 (10,5% con inv) — depurar scope",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-108',summary:"Filtrar los 322 SKUs asignados a I5",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-107',summary:"Identificación de SKUs en quiebre crítico",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-102',summary:"Modelo de Surtido",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-98',summary:"Medición de uplift",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-95',summary:"Logística y abastecimiento de inventario semilla",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-90',summary:"Selección de SKUs y matriz tienda-SKU",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-86',summary:"Ajuste de 112 SKUs a margen 0%",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-76',summary:"Actualización de sistema y seguimiento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-72',summary:"Negociación con proveedores",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-69',summary:"Identificación y priorización de SKUs",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-67',summary:"Cierre y reporte",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-61',summary:"Identificar zombies con inventario para evacuar",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-56',summary:"Identificar zombies sin inventario (baja directa)",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-51',summary:"Descontinuación de 48 SKUs",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-48',summary:"Diagnóstico SKU por SKU",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-45',summary:"Actualización de sistema y seguimiento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-41',summary:"Negociación con proveedores",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-38',summary:"Identificación y priorización de SKUs",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-27',summary:"Cierre y reporte",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-26',summary:"Identificar zombies con inventario para evacuar",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-25',summary:"Identificar zombies sin inventario (baja directa)",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-16',summary:"Definir # máximo de SKUs x  punto de precio para evitar canibalización (politica Arquit)",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-14',summary:"Definir tamaño mínimo y máximo de SKUs por familia (mínimo 2, máximo 8 SKUs)",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-13',summary:"Establecer # máximo de familias por sublínea",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEP-11',summary:"Definir tamaño y politicas del portafolio",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'DEP-8',summary:"Familias declive margen <40%",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEP-7',summary:"Modelo de Pricing",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEP-6',summary:"Eliminar quiebres estrella/vaca",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEP-5',summary:"Surtido y Cobertura Pareto en Tiendas",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEP-4',summary:"Eliminar SKUs margen negativo",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEP-3',summary:"Renegociación 20-40%",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEP-2',summary:"Baja Administrativa Zombis",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEP-1',summary:"Marco del portafolio",duedate:'',assignee:"Sin asignar",status:"En ejecución" }
+  ],
+  'MO-4': [
+    {key:'MEJ-39',summary:"Interfaz para modificación del forecast",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-38',summary:"Modulación del código y repositorio",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-30',summary:"Analisis de Restricción de inventarios",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-29',summary:"Análisis de canibalización",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-26',summary:"Otros Hitos: Revisar encaje en la planificacion post-cambios bases en el forecast",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-18',summary:"Realizar análisis en paralelo (revisar fechas en base a capacidad de equipo y prioridad) (fechas a encajar con los hitos prioritarios para el lanzamiento de S&OP)",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'MEJ-17',summary:"Diseñar y ejecutar la segmentación de los SKUs",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-16',summary:"Desgloce al nivel de tiendas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-15',summary:"Modelamiento SKUs sin historia",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-14',summary:"Actualización Fecha a emisión de orden",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'MEJ-13',summary:"Ejecutar mejoras genericas en el modelo, en linea con el resto de los hitos",duedate:'',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-5': [
+    {key:'PROVED-37',summary:"Escalamiento Panamá: base de mapeo disponible desde M1 (Ruby Torres). Activar gobierno, SLAs, tableros y dinámica para proveedores locales PAN.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-36',summary:"Roll-out Dormitorio COL: replicar modelo completo con Sebastián Rivero (mapeo, dinámica L-V, SLAs, scorecards, tableros, S&OE). Solo si Gate G3 positivo.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-35',summary:"Escalamiento: Dormitorio y Panama",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-34',summary:"Gobierno mensual: comité situación proveedores, decisiones, compromisos mejora, visión 6M S&OP actualizada para Gestión Intensiva.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-33',summary:"Gate G3 — evaluación semana 8: OTIF ≥ 75% con tendencia positiva semanas 5-8 → autorizar escalamiento Dormitorio y Panamá. Meta estado estable del modelo: OTIF ≥ 85%.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-32',summary:"Control SLAs y scorecards: cumplimiento compromisos, evolución proveedores, migración entre grupos si riesgo aumenta. Gobierno mensual activo.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-31',summary:"Entrada semanal S&OE: 1 página riesgos proveedor disponible cada jueves. Dinámica L-V sostenida. Riesgos escalados con trazabilidad de decisión y acción.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-30',summary:"Tableros situación proveedor: semáforo RAG semanal, OTIF, Fill Rate, brecha plan vs oferta, evolución restricciones, acciones abiertas/cerradas/vencidas, cumplimiento SLAs.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-29',summary:"Controlar tableros, gate e integración S&OE",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-28',summary:"PILOTO Social COL Semanas 5-8: medición formal tendencia OTIF y Fill Rate. Seguimiento semanal de acciones. 1 página S&OE activa cada jueves. Gate G3 evaluación semana 8.",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'PROVED-27',summary:"Integración Categorías: reunión jueves formalizada como insumo de decisión. Trazabilidad de ajustes y su impacto en disponibilidad y venta.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-26',summary:"Planes de acción y compromisos bilaterales: acciones correctivas y preventivas, fechas compromiso, responsables, seguimiento semanal.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-25',summary:"Scorecards: mensual (Gestión Intensiva) y trimestral (Seguimiento Activo). OTIF, Fill Rate, brecha plan vs oferta, cumplimiento acciones, lead time, restricciones recurrentes.",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'PROVED-24',summary:"SLAs por grupo operacional: Gestión Intensiva (SLA negociado + bilateral + compromisos mutuos) / Seguimiento Activo (SLA estándar + alerta por desempeño).",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-23',summary:"Mejorar/Integrar: SLAs, Scorecard y compromisos",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-22',summary:"Reunión jueves con directores Categoría (permanente desde M2): oferta conversada → decisiones ajuste, alternativas y riesgos → entrada formal S&OE.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-21',summary:"Dashboard KPIs Tableau-SAP: OTIF, Fill Rate, brecha plan vs oferta, acciones abiertas/cerradas/vencidas, semáforo RAG por proveedor, evolución semanal.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-20',summary:"Priorización proveedores en riesgo → preparación 1 página S&OE semanal. Restricciones recurrentes y dependencias críticas identificadas.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-19',summary:"Análisis brechas plan vs oferta real. Causas raíz de incumplimiento: capacidad, materia prima, confirmación tardía, lead time subestimado.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-18',summary:"Analisis de brechas, causas y riesgos",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-17',summary:"Dinámica L-V activada. Reunión jueves directores Categoría: oferta conversada, decisiones de ajuste, prioridades y riesgos. Entrada S&OE (1 pág.) cada jueves.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-16',summary:"Línea base OTIF y Fill Rate. 9 proveedores Social COL desde día 1. Validación plan vs oferta real. Revisión semanal: oferta, capacidad, restricciones, insumos críticos, novedades.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-15',summary:"Piloto Social: Carril 2",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-14',summary:"Agrupación 2 grupos operacionales: Gestión Intensiva (alto impacto, baja sustitución, visión S&OP 6M) / Seguimiento Activo (alternativas disponibles, revisión trimestral).",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-13',summary:"Mapeo locales Panamá — EN PARALELO desde M1. Ruby Torres (Dir. Logística PAN) lidera in situ. Misma ficha técnica estándar Colombia.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-12',summary:"Mapeo proveedores internacionales Brasil y China COL.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-11',summary:"Levantamiento insumos críticos, restricciones productivas, dolencias del proveedor, riesgos de cumplimiento, capacidad de reacción, dependencias y contacto responsable.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-10',summary:"Mapeo operativo proveedores nacionales COL: capacidad normal/máxima, banda de operación, lote óptimo diario, lead time real, días ocupados por plan Jamar, capacidad disponible.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-9',summary:"Medir mapeo operativo transversal: Carril 1",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-8',summary:"Protocolo S&OP: visión de demanda 6 meses para proveedores Gestión Intensiva. Señal anticipada para preparar capacidad, insumos y restricciones. No reemplaza la OC firme.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-7',summary:"Protocolo S&OE: 1 página semanal de riesgos proveedor (proveedor · SKU/cat. · plan requerido · oferta real · brecha · causa · impacto en disponibilidad/venta/cita · acción · responsable · fecha). Disponible cada jueves",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-6',summary:"Gobierno mínimo del piloto: roles, calendario L-V, reglas de operación, criterio Gate G3. Reglas OTIF: SKU único por entrega, entrega 90 obligatoria, MB51 fuente primaria, ME80AN alternativa, VL06I compromiso.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-5',summary:"Definir problema, objetivo, alcance y enfoque dos carriles: Carril 1 (mapeo transversal) + Carril 2 (piloto Social COL — 9 proveedores, 8 semanas). Charter aprobado.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-4',summary:"Definir problema, objetivo y Gobierno",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PROVED-3',summary:"Socialización externa: presentar Modelo de Trabajo con Proveedores a los 9 proveedores Social COL. Propósito colaborativo (no auditoría), roles, calendario, dinámica de trabajo y compromiso de participación.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-2',summary:"Socialización interna: alinear equipo Jamar (Leandro, Yamit, Sebastián, Categorías, Logística, Data, Calidad). Definir roles, dinámica L-V, protocolo S&OE, formato piloto y mensaje único.",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'PROVED-1',summary:"Socializar y alinear",duedate:'',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-7': [
+    {key:'ECI-31',summary:"Alineación y entrega de lineamientos para el Dashboard de Torre de Control",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-28',summary:"Revisar lead times de proveedores",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-27',summary:"Analizar prácticas actuales de abastecimiento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-26',summary:"Recopilar datos históricos de demanda",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-25',summary:"Asignar roles y responsabilidades dentro del equipo",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-24',summary:"Presentar objetivos y alcance de la iniciativa",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-23',summary:"Organizar reunión de lanzamiento del equipo",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-22',summary:"Establecer canales de comunicación y herramientas de colaboración",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-21',summary:"Calibración continua",duedate:'',assignee:"Leandro Candama",status:"In Progress" },
+    {key:'ECI-20',summary:"Ejecución de planes de accion",duedate:'',assignee:"Leandro Candama",status:"In Progress" },
+    {key:'ECI-19',summary:"Lanzamiento de las sesiones semanales",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-18',summary:"Comite de torre de control",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-14',summary:"Lanzar Torre de Control",duedate:'',assignee:"Leandro Candama",status:"En ejecución" },
+    {key:'ECI-13',summary:"Despliegue en producción",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-12',summary:"Pruebas de aceptación (UAT)",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-11',summary:"Desarrollo y construcción visual",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'ECI-10',summary:"Identificación y extracción de datos",duedate:'',assignee:"Sin asignar",status:"To Do" }
+  ],
+  'MO-8': [
+    {key:'DEIT-147',summary:"Panamá",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEIT-146',summary:"Región caribe",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEIT-145',summary:"Medellín",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEIT-144',summary:"Bogotá",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEIT-143',summary:"Cartagena",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEIT-142',summary:"Santa Marta",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEIT-141',summary:"Barranquilla",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEIT-84',summary:"Definición del plan de entrenamiento del nuevo estándar",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEIT-83',summary:"5S",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'DEIT-16',summary:"ESTANDARIZACIÓN DE PROCESOS Y MEJORA CONTINUA",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEIT-15',summary:"PLAN DE ESCALAMIENTO",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEIT-14',summary:"ESTANDARIZACIÓN DE PROCESOS EN TRASTIENDAS",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEIT-13',summary:"MVP (PRODUCTO MÍNIMO VARIABLE) Y PILOTO",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'DEIT-12',summary:"PLANEACIÓN ESTRATÉGICA DE OPERACIÓN EN TIENDA - VISIÓN FUTURA",duedate:'',assignee:"Sin asignar",status:"Definición" }
+  ],
+  'MO-11': [
+    {key:'PTMZR-5',summary:"Estabilización y escalamiento",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PTMZR-4',summary:"F4. Piloto (Ramp-up 4 meses)",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PTMZR-3',summary:"Sistemas y Modelo de Gobierno",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'PTMZR-2',summary:"F2. Diagnostico y diseño operativo",duedate:'',assignee:"Sin asignar",status:"En ejecución" }
+  ],
+  'MO-24': [
+    {key:'RCD3-52',summary:"Cierre formal del proyecto y entrega de resultados",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-51',summary:"Documentación de lecciones aprendidas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-50',summary:"Ajustes correctivos según resultados",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-49',summary:"Medición de KPIs post-implementación",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-48',summary:"Pruebas piloto del nuevo proceso",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-47',summary:"Capacitación a transportadores y áreas de soporte",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-46',summary:"Desarrollo/ajuste de la app (TI)",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-45',summary:"Corrección masiva de datos de cubicaje",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-44',summary:"Validación con áreas involucradas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-43',summary:"Rediseño del flujo de gestión de entregas fallidas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-42',summary:"Diseño de controles en app del transportador",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-41',summary:"Definición de solución para corrección de cubicajes",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'RCD3-40',summary:"Seguimiento y cierre",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-39',summary:"Implementación",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-38',summary:"Diseño de soluciones",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-37',summary:"Cuantificación del impacto por cliente y área",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-36',summary:"Análisis de casos de entregas fallidas mal registradas",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-35',summary:"Auditoría de cubicajes en el sistema",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-34',summary:"Mapeo del proceso actual de planificación y cargue",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
+    {key:'RCD3-33',summary:"Diagnostico y analisis",duedate:'',assignee:"Marla Lambertino Perez",status:"In Progress" },
+    {key:'RCD3-32',summary:"Aumentar el índice de satisfacción del cliente en el proceso de entrega",duedate:'',assignee:"Marla Lambertino Perez",status:"Definición" }
+  ],
+  'MO-34': [
+    {key:'FCCDA-35',summary:"Configuración y activación del panel de control (dashboard)",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-34',summary:"Actualización de Herramienta Unificada",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-33',summary:"Análisis del modelo de remuneración",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-32',summary:"Proceso de atención y resolución de garantías atribuibles al armado",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-31',summary:"Mejoramiento del proceso de asignación de cargas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-30',summary:"SLAs contractuales con proveedores",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-29',summary:"Marcación de producto Armable",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-28',summary:"Estandarización de registro fotográfico obligatorio",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-27',summary:"Definición del modelo de KPIs",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-26',summary:"Diseño de protocolo de atención del armador al cliente",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-25',summary:"Definición de momento de asignación de cita de armado",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-24',summary:"Modelación del proceso ideal de armado",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-23',summary:"Análisis de estacionalidad de demanda y capacidad por proveedor",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-22',summary:"Análisis de Causa Raíz  de fallos de armado",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-21',summary:"Diagnóstico de sistemas SEUS, ATOM, Extreme",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-20',summary:"Mapeo del proceso AS-IS",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'FCCDA-19',summary:"Palanca 8 - Implementación del Modelo de Armado Optimo",duedate:'',assignee:"Yasenis Jiménez",status:"To Do" },
+    {key:'FCCDA-18',summary:"Palanca 7 - Dimensionamiento",duedate:'',assignee:"Yasenis Jiménez",status:"To Do" },
+    {key:'FCCDA-17',summary:"Palanca 6 - Mejoramiento del Sistema y Flujo de Operación",duedate:'',assignee:"Yasenis Jiménez",status:"To Do" },
+    {key:'FCCDA-16',summary:"Palanca 5 - Estandarización del Proceso de Armado",duedate:'',assignee:"Yasenis Jiménez",status:"To Do" },
+    {key:'FCCDA-15',summary:"Palanca 4 - Diagnóstico Operativo",duedate:'',assignee:"Yasenis Jiménez",status:"To Do" }
+  ],
+  'MO-36': [
+    {key:'SDR-37',summary:"Refinar bussiness case para los retornos de la inciatica",duedate:'',assignee:"Andres Velasco Borrero",status:"To Do" },
+    {key:'SDR-33',summary:"Plan de choque calidad internacional",duedate:'',assignee:"Angie Melissa Torres Marino",status:"Definición" },
+    {key:'SDR-32',summary:"Modelo de seleccion, evaluación y monitoreo de proveeduria internacional",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'SDR-25',summary:"Enviar la solicitud a compras para la formalización de contratos con Sigma",duedate:'',assignee:"Sin asignar",status:"To Do" }
+  ],
+  'MO-37': [
+    {key:'PDSP-93',summary:"Habilitar el movimiento de entrada a WMS cuando se califica satisfactoriamente la recogida de un cambio parcial",duedate:'',assignee:"Sin asignar",status:"Refinamiento" },
+    {key:'PDSP-39',summary:"Implementación servicio tecnico",duedate:'',assignee:"Juan Carlos Goez Zapata",status:"To Do" },
+    {key:'PDSP-38',summary:"Expansión regional salas",duedate:'',assignee:"Juan Carlos Goez Zapata",status:"To Do" }
+  ],
+  'MO-40': [
+    {key:'IM-31',summary:"Inicio de Actividad de Clasificación",duedate:'',assignee:"Yasenis Jiménez",status:"Bloqueado" },
+    {key:'IM-30',summary:"Alineación con Auditoría y Financiera",duedate:'',assignee:"Yasenis Jiménez",status:"Bloqueado" },
+    {key:'IM-29',summary:"Censar físicamente cada unidad de LI sin clasificar",duedate:'',assignee:"Yasenis Jiménez",status:"Bloqueado" },
+    {key:'IM-28',summary:"Habilitar ubicación transitoria y Recurso Triple A",duedate:'',assignee:"Yasenis Jiménez",status:"Bloqueado" },
+    {key:'IM-27',summary:"Limpieza del Inventario LI Represado",duedate:'',assignee:"Yasenis Jiménez",status:"Definición" }
+  ],
   'MO-41': [
     {key:'OP-49',summary:"Documentar HU casos de novedad en entrega",duedate:'',assignee:"Milena Rodríguez",status:"Por hacer" }
   ],
@@ -1342,7 +1709,69 @@ var NO_DATE_TASKS = {
     {key:'IPDPCDBR-78',summary:"crear variable en nova para que se puedan incluir en el beneficio de cuota preferencial la ordenes de pedido  de acuerdo al numero de días de vida que tengan",duedate:'',assignee:"Jenifer",status:"To Do" },
     {key:'IPDPCDBR-77',summary:"Recuperación cliente bajo riesgo.",duedate:'',assignee:"Sin asignar",status:"To Do" }
   ],
-};
+  'MO-65': [
+    {key:'JCTR-50',summary:"Auditoría inventario SLOB semanal (Mueble & Decora)",duedate:'',assignee:"Sin asignar",status:"In Progress" }
+  ],
+  'MO-66': [
+    {key:'SLOBDECO-60',summary:"Top 5 Sublineas/Top 5 Ref (Marcación, Comunicación, Exhibición)",duedate:'',assignee:"Maria Camila Betancourt",status:"To Do" },
+    {key:'SLOBDECO-59',summary:"Top 5 Sublineas - Foco marcación, exhibición y comunicación",duedate:'',assignee:"Sin asignar",status:"In Progress" },
+    {key:'SLOBDECO-58',summary:"Marketing + SLOB (PTP 3Q)",duedate:'',assignee:"Maria Camila Betancourt",status:"Definición" },
+    {key:'SLOBDECO-56',summary:"Inventario General SLOB Las Americas",duedate:'',assignee:"Maria Camila Betancourt",status:"In Progress" },
+    {key:'SLOBDECO-54',summary:"Seguimiento semanal evacuación",duedate:'',assignee:"Maria Camila Betancourt",status:"Definición" },
+    {key:'SLOBDECO-53',summary:"Control de inventario durante y al cierre del evento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-52',summary:"Registrar cada transacción por empleado",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-51',summary:"Asignar el personal que atiende el evento los 2 días",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-50',summary:"Ejecución de los 2 días del evento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-49',summary:"Confirmar la asistencia y gestionar el flujo de personas",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-48',summary:"Diseñar la comunicación interna del evento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-47',summary:"Difundir la comunicación a todos los empleados Colombia",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-46',summary:"Comunicación interna a todos los empleados",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-45',summary:"Definir qué pasa con el inventario no vendido después del evento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-44',summary:"Montar la exhibición en el comedor de Hiper",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-43',summary:"Coordinar el traslado físico de mercancía Principal → Hiper",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-42',summary:"Reservar el área del comedor de Hiper para la actividad",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-41',summary:"Seleccionar el inventario SLOB de Principal que va al evento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-40',summary:"Logística del espacio y traslado de mercancía",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-39',summary:"Involucrar a Auditoría — proceso de control de la venta",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-38',summary:"Definir elegibilidad y límites de compra por empleado",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-37',summary:"Definir la modalidad de pago — ¿descuento de nómina o pago inmediato?",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-36',summary:"Definir el % de descuento adicional para empleados",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-35',summary:"Definir el modelo de venta",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-34',summary:"Venta Interna Empleados - Hiper/Principal",duedate:'',assignee:"Maria Camila Betancourt",status:"Definición" },
+    {key:'SLOBDECO-33',summary:"Señalética dentro de la tienda el día del evento",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-32',summary:"Comunicación con marketing relacional a clientes de la zona",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-31',summary:"Comunicación en redes sociales y digital",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-30',summary:"Diseñar volante físico",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECO-29',summary:"Comunicación de la actividad",duedate:'',assignee:"Maria Camila Betancourt",status:"To Do" },
+    {key:'SLOBDECO-28',summary:"Aterrizar la logística de traslado de mercancía al parqueadero",duedate:'',assignee:"Maria Camila Betancourt",status:"To Do" },
+    {key:'SLOBDECO-27',summary:"Definir el tipo de exhibición en el parqueadero",duedate:'',assignee:"Maria Camila Betancourt",status:"To Do" },
+    {key:'SLOBDECO-26',summary:"Definir personal para la actividad",duedate:'',assignee:"Maria Camila Betancourt",status:"To Do" },
+    {key:'SLOBDECO-25',summary:"Definir modelo operativo de la actividad (POS tablet, solo datafono..)",duedate:'',assignee:"Maria Camila Betancourt",status:"To Do" },
+    {key:'SLOBDECO-24',summary:"Definir fechas y duración de la actividad",duedate:'',assignee:"Maria Camila Betancourt",status:"To Do" },
+    {key:'SLOBDECO-23',summary:"Permisos y coordinación centro comercial",duedate:'',assignee:"Maria Camila Betancourt",status:"To Do" },
+    {key:'SLOBDECO-22',summary:"Venta de Garaje Inventario SLOB - Parqueadero Carrera 30",duedate:'',assignee:"Maria Camila Betancourt",status:"Definición" },
+    {key:'SLOBDECO-10',summary:"Traslado Obsoleto-Espacio Outlet",duedate:'',assignee:"Sin asignar",status:"Bloqueado" },
+    {key:'SLOBDECO-5',summary:"Incentivo FV — Comisión SLOB: Comisión adicional por cada unidad SLOB vendida",duedate:'',assignee:"Sin asignar",status:"To Do" }
+  ],
+  'MO-67': [
+    {key:'SLOBDECPA-31',summary:"Definir objetivo de evacuación por tienda",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-30',summary:"Mensualizacion BC",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-29',summary:"Definir descuentos SLOB",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-28',summary:"Asignar PVPs",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-22',summary:"Quick Win Aprobado",duedate:'',assignee:"Sin asignar",status:"Definición" },
+    {key:'SLOBDECPA-12',summary:"Donación/Destrucción controlada",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-11',summary:"Campaña urgencia \"Ultimas unidades\"",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-10',summary:"Feria de liquidación",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-9',summary:"Descuento 70% todo el SLOB",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-7',summary:"Incentivo FV escalado - LR tardía",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-6',summary:"Redes sociales - SLOB semanal",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-5',summary:"Clearance day mensual",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-4',summary:"Traslado Obsoleto - Espacio Outlet",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-3',summary:"Zona outlet en tienda",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-2',summary:"Descuento 60% LR tardia",duedate:'',assignee:"Sin asignar",status:"To Do" },
+    {key:'SLOBDECPA-1',summary:"Objetivo: atacar LR Tardía + escalar Obsoleto al outlet",duedate:'',assignee:"Maria Camila Betancourt",status:"Definición" }
+  ],
+};;
 var NODATE_TASKS = {
   // 2026-06-25 - 200 actividades sin fecha
   'MO-1': [
