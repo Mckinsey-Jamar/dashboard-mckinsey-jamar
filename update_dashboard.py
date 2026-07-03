@@ -300,6 +300,11 @@ for mk,vals in MO_STATUS.items():
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?sw:')[^']*'",
                     r"\g<1>"+sw_detected+"'",html,count=1)
 
+# Actualizar campo sw desde SW_TO_MO para todas las iniciativas mapeadas
+for sw, mo in SW_TO_MO.items():
+    html=re.sub(r"(key:'"+re.escape(mo)+r"'[^}]*?sw:')[^']*'",
+                r"\g<1>"+sw+"'",html,count=1)
+
 # SW_PROJECTS y DATA tasks
 for sw,(t,d,p,td,l) in sw_counts.items():
     nt="tasks:{total:"+str(t)+",done:"+str(d)+",prog:"+str(p)+",todo:"+str(td)+",late:"+str(l)+"}"
