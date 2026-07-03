@@ -261,12 +261,13 @@ for i in week_issues:
 total_week=sum(len(v) for v in week_by_mo.values())
 print("  Esta semana: "+str(total_week))
 
-# 5. NO_DATE_TASKS
-print("Sin fecha...")
+# 5. UPCOMING_TASKS: sin fecha + proximas (due > hoy+7, no-Done)
+# Captura todas las tareas que no aparecen en LATE ni en WEEK
+print("Proximas y sin fecha...")
 nodt_issues=jira_all(
-    "project in ("+ALL_SW_DYN+") AND due is EMPTY AND statusCategory != Done "
-    "ORDER BY project ASC",
-    ["summary","status","assignee","project"],100,5)
+    "project in ("+ALL_SW_DYN+") AND (due is EMPTY OR due > '"+WEEK_END+"') "
+    "AND statusCategory != Done ORDER BY project ASC",
+    ["summary","status","duedate","assignee","project"],100,8)
 nodt_by_mo=defaultdict(list)
 for i in nodt_issues:
     if "fields" not in i: continue
