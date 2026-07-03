@@ -267,7 +267,7 @@ print("Proximas y sin fecha...")
 nodt_issues=jira_all(
     "project in ("+ALL_SW_DYN+") AND (due is EMPTY OR due > '"+WEEK_END+"') "
     "AND statusCategory != Done ORDER BY project ASC",
-    ["summary","status","duedate","assignee","project"],100,8)
+    ["summary","status","duedate","assignee","project"],100,15)
 nodt_by_mo=defaultdict(list)
 for i in nodt_issues:
     if "fields" not in i: continue
