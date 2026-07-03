@@ -18,10 +18,12 @@ WEEK_END   = (date.today() + timedelta(days=7)).isoformat()
 KNOWN_TOTALS = {
     "SOE":99,"DEP":139,"MSOP":29,"MEJ":37,"PROVED":37,"ECI":28,"DEIT":111,
     "SLOBM":14,"JCTR":58,"SLOBDECO":55,"SLOBDECPA":22,"RCD3":43,"IMPCSE":24,
-    "MIOT":1,"OPR":20,"ZT5F":13,"FCCDA":38,"WF5":28,"SDR":29,"PDSP":96,"LEANW":14,
+    "MIOT":1,"OPR":20,"ZT5F":13,"FCCDA":38,"WF5":28,"SDR":29,"PDSP":96,
     "IM":28,"OP":48,"TLGDL":12,"EEMOC":10,"SF":47,"EODV":42,"ISMC":3,
     "IEPRFEEFDC":70,"ICD":34,"CODCEYBM":9,"IPDPCDAR":50,"IPDPCDBR":54,
-    "PTMZR":12,"RF1D":9,"PROP":22,"MDCB":11,
+    "PTMZR":12,"RF1D":9,"PROP":22,"MDCB":9,
+    # Nuevos proyectos (2026-07-03)
+    "LEANW":0,"LEANWPA":0,"MXAT":0,"MDOOMC":0,"EDP":0,
 }
 SW_TO_MO = {
     "SOE":"MO-1","DEP":"MO-2","MSOP":"MO-3","MEJ":"MO-4","PROVED":"MO-5",
@@ -32,7 +34,10 @@ SW_TO_MO = {
     "EEMOC":"MO-45","SF":"MO-46","EODV":"MO-47","ISMC":"MO-55",
     "IEPRFEEFDC":"MO-54","ICD":"MO-56","CODCEYBM":"MO-50",
     "IPDPCDAR":"MO-58","IPDPCDBR":"MO-59","PTMZR":"MO-11",
-    "RF1D":"MO-89","PROP":"MO-88","MDCB":"MO-52","LEANW":"MO-30",
+    "RF1D":"MO-89","PROP":"MO-88","MDCB":"MO-52",
+    # Nuevos proyectos detectados desde Jira (2026-07-03)
+    "LEANW":"MO-30","LEANWPA":"MO-69","MXAT":"MO-77",
+    "MDOOMC":"MO-49","EDP":"MO-53",
 }
 MO_TO_SW = {v:k for k,v in SW_TO_MO.items()}
 ALL_SW   = ",".join(SW_TO_MO.keys())
