@@ -18,7 +18,7 @@ WEEK_END   = (date.today() + timedelta(days=7)).isoformat()
 KNOWN_TOTALS = {
     "SOE":99,"DEP":139,"MSOP":29,"MEJ":37,"PROVED":37,"ECI":28,"DEIT":111,
     "SLOBM":14,"JCTR":58,"SLOBDECO":55,"SLOBDECPA":22,"RCD3":43,"IMPCSE":24,
-    "MIOT":1,"OPR":20,"ZT5F":13,"FCCDA":38,"WF5":28,"SDR":29,"PDSP":96,
+    "MIOT":1,"OPR":20,"ZT5F":13,"FCCDA":38,"WF5":28,"SDR":29,"PDSP":96,"LEANW":14,
     "IM":28,"OP":48,"TLGDL":12,"EEMOC":10,"SF":47,"EODV":42,"ISMC":3,
     "IEPRFEEFDC":70,"ICD":34,"CODCEYBM":9,"IPDPCDAR":50,"IPDPCDBR":54,
     "PTMZR":12,"RF1D":9,"PROP":22,"MDCB":11,
@@ -32,7 +32,7 @@ SW_TO_MO = {
     "EEMOC":"MO-45","SF":"MO-46","EODV":"MO-47","ISMC":"MO-55",
     "IEPRFEEFDC":"MO-54","ICD":"MO-56","CODCEYBM":"MO-50",
     "IPDPCDAR":"MO-58","IPDPCDBR":"MO-59","PTMZR":"MO-11",
-    "RF1D":"MO-89","PROP":"MO-88","MDCB":"MO-52",
+    "RF1D":"MO-89","PROP":"MO-88","MDCB":"MO-52","LEANW":"MO-30",
 }
 MO_TO_SW = {v:k for k,v in SW_TO_MO.items()}
 ALL_SW   = ",".join(SW_TO_MO.keys())
@@ -157,13 +157,22 @@ print("Actualizacion Opcion B — "+TODAY)
 # 1. MO statuses
 print("MO statuses...")
 mo_issues=jira_post("project = MO ORDER BY key ASC",
-    ["summary","status","customfield_11057","customfield_11197"])
+    ["summary","status","customfield_11057","customfield_11197","issuelinks"])
 MO_STATUS={}
 for i in mo_issues:
     f=i["fields"]; st=f["status"]["name"].split(":")[0].strip()
     ow_list=f.get("customfield_11057") or []
     ow=ow_list[0].get("value","Sin asignar") if ow_list else "Sin asignar"
-    MO_STATUS[i["key"]]={"status":st,"owner":ow,"pais":get_pais(f.get("customfield_11197"))}
+    # Extraer proyecto SW de issuelinks (Polaris work item link)
+    sw_from_link = ""
+    for lnk in f.get("issuelinks",[]):
+        linked = lnk.get("inwardIssue") or lnk.get("outwardIssue") or {}
+        lkey = linked.get("key","")
+        if lkey and lnk.get("type",{}).get("name","") == "Polaris work item link":
+            sw_from_link = lkey.split("-")[0]
+            break
+    MO_STATUS[i["key"]]={"status":st,"owner":ow,
+        "pais":get_pais(f.get("customfield_11197")),"sw":sw_from_link}
 print("  MO: "+str(len(MO_STATUS)))
 
 # 2. Conteos done/prog/todo (Opcion B)
@@ -262,6 +271,11 @@ for mk,vals in MO_STATUS.items():
     if np:
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?pais:')[^']+'",
                     r"\g<1>"+np+"'",html,count=1)
+    # Actualizar campo sw si se detectó desde issuelinks y está vacío
+    sw_detected = vals.get("sw","")
+    if sw_detected:
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?sw:')[^']*'",
+                    r"\g<1>"+sw_detected+"'",html,count=1)
 
 # SW_PROJECTS y DATA tasks
 for sw,(t,d,p,td,l) in sw_counts.items():
