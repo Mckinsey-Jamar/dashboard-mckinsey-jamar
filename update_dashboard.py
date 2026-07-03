@@ -175,17 +175,35 @@ for i in mo_issues:
         "pais":get_pais(f.get("customfield_11197")),"sw":sw_from_link}
 print("  MO: "+str(len(MO_STATUS)))
 
+# Construir set dinámico de SW detectados desde issuelinks
+SW_FROM_JIRA = set(vals["sw"] for vals in MO_STATUS.values() if vals.get("sw"))
+SW_EXTRA = SW_FROM_JIRA - set(KNOWN_TOTALS.keys())  # SW nuevos no mapeados
+if SW_EXTRA:
+    print("  SW detectados (no en KNOWN_TOTALS): "+str(SW_EXTRA))
+    for sw in SW_EXTRA:
+        KNOWN_TOTALS[sw] = 0  # Se actualizará con el conteo real
+# ALL_SW_DYN incluye los hardcoded + los detectados desde Jira
+ALL_SW_DYN = ",".join(set(list(KNOWN_TOTALS.keys()) + list(SW_FROM_JIRA)))
+
 # 2. Conteos done/prog/todo (Opcion B)
 print("Conteos...")
 nd_fecha=jira_all(
-    "project in ("+ALL_SW+") AND due >= '2020-01-01' AND statusCategory != Done "
+    "project in ("+ALL_SW_DYN+") AND due >= '2020-01-01' AND statusCategory != Done "
     "ORDER BY project ASC",["status","project"],100,8)
 nd_nodate=jira_all(
-    "project in ("+ALL_SW+") AND due is EMPTY AND statusCategory != Done "
+    "project in ("+ALL_SW_DYN+") AND due is EMPTY AND statusCategory != Done "
     "ORDER BY project ASC",["status","project"],100,5)
 tot_A,prog_A=count_by_proj(nd_fecha)
 tot_B,prog_B=count_by_proj(nd_nodate)
 print("  no-done-con-fecha: "+str(len(nd_fecha))+" | no-done-sin-fecha: "+str(len(nd_nodate)))
+
+# Agregar SW detectados a SW_TO_MO dinámicamente
+for mk,vals in MO_STATUS.items():
+    sw_d = vals.get("sw","")
+    if sw_d and sw_d not in SW_TO_MO:
+        SW_TO_MO[sw_d] = mk
+        MO_TO_SW[mk] = sw_d
+        print("  Mapeado: "+sw_d+" → "+mk)
 
 sw_counts={}
 for sw,total in KNOWN_TOTALS.items():
@@ -200,7 +218,7 @@ for sw,total in KNOWN_TOTALS.items():
 # 3. LATE_TASKS
 print("Tardias...")
 late_issues=jira_post(
-    "project in ("+ALL_SW+") AND due < '"+TODAY+"' AND statusCategory != Done "
+    "project in ("+ALL_SW_DYN+") AND due < '"+TODAY+"' AND statusCategory != Done "
     "ORDER BY project ASC, due ASC",
     ["summary","status","duedate","assignee","project"],100)
 late_by_mo=defaultdict(list)
@@ -222,7 +240,7 @@ print("  Tardias: "+str(total_late))
 # 4. WEEK_TASKS
 print("Esta semana...")
 week_issues=jira_all(
-    "project in ("+ALL_SW+") AND due >= '"+TODAY+"' AND due <= '"+WEEK_END+"' "
+    "project in ("+ALL_SW_DYN+") AND due >= '"+TODAY+"' AND due <= '"+WEEK_END+"' "
     "AND statusCategory != Done ORDER BY project ASC, due ASC",
     ["summary","status","duedate","assignee","project"],100,3)
 week_by_mo=defaultdict(list)
@@ -241,7 +259,7 @@ print("  Esta semana: "+str(total_week))
 # 5. NO_DATE_TASKS
 print("Sin fecha...")
 nodt_issues=jira_all(
-    "project in ("+ALL_SW+") AND due is EMPTY AND statusCategory != Done "
+    "project in ("+ALL_SW_DYN+") AND due is EMPTY AND statusCategory != Done "
     "ORDER BY project ASC",
     ["summary","status","assignee","project"],100,5)
 nodt_by_mo=defaultdict(list)
