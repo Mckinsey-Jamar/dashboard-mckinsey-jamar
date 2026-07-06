@@ -429,6 +429,10 @@ def main():
     html=replace_var(html,"LATE_TASKS",  build_var("LATE_TASKS", late_by_mo,  str(total_late)+" tardias"))
     html=replace_var(html,"WEEK_TASKS",  build_var("WEEK_TASKS", week_by_mo,  str(total_week)+" esta semana"))
     html=replace_var(html,"NO_DATE_TASKS",build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" sin fecha"))
+    # Post-filtro: eliminar tareas que llegaron con assignee real
+    for _mo in list(noown_by_mo.keys()):
+        noown_by_mo[_mo]=[t for t in noown_by_mo[_mo]
+            if not t.get('assignee') or t.get('assignee')=='Sin asignar']
     html=replace_var(html,"NO_OWNER_TASKS",build_var("NO_OWNER_TASKS",noown_by_mo,str(total_noown)+" sin responsable"))
     
     now_str=datetime.now().strftime("%H:%M")
