@@ -338,22 +338,22 @@ for mk,vals in jira_data.items():
                     r"\g<1>"+vals["subfrente"]+"'",html,count=1)
     if vals["summary"]:
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^,\n]*?,frente:'[^']*',subfrente:'[^']*',summary:')[^']*'",
-                    r"\g<1>"+vals["summary"]+"'",html,count=1)
+                    lambda m,v=vals["summary"]: m.group(1)+v+"'",html,count=1)
     # status
     html=re.sub(r"(key:'"+re.escape(mk)+r"'[^,\n]*?,frente:[^,\n]*?,subfrente:[^,\n]*?,summary:[^,\n]*?,status:')[^']+'",
-                r"\g<1>"+vals["status"]+"'",html,count=1)
+                lambda m,v=vals["status"]: m.group(1)+v+"'",html,count=1)
     # owner
     html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?owner:')[^']*'",
-                r"\g<1>"+vals["owner"]+"'",html,count=1)
+                lambda m,v=vals["owner"]: m.group(1)+v+"'",html,count=1)
     # pais
     if vals["pais"]:
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?pais:')[^']*'",
-                    r"\g<1>"+vals["pais"]+"'",html,count=1)
+                    lambda m,v=vals["pais"]: m.group(1)+v+"'",html,count=1)
     # sw (desde SW_TO_MO reversa + issuelinks)
     sw_val = vals["sw"] or MO_TO_SW.get(mk,"")
     if sw_val:
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?sw:')[^']*'",
-                    r"\g<1>"+sw_val+"'",html,count=1)
+                    lambda m,v=sw_val: m.group(1)+v+"'",html,count=1)
     changed+=1
 
 print("  Iniciativas sincronizadas: "+str(changed))
@@ -363,11 +363,11 @@ for sw,(t,d,p,td,l) in sw_counts.items():
     nt="tasks:{total:"+str(t)+",done:"+str(d)+",prog:"+str(p)+",todo:"+str(td)+",late:"+str(l)+"}"
     nt2="{total:"+str(t)+",done:"+str(d)+",prog:"+str(p)+",todo:"+str(td)+",late:"+str(l)+"}"
     html=re.sub(r"('"+re.escape(sw)+r"'\s*:\s*\{[^}]*?)tasks\s*:\s*(?:\{[^}]+\}|null)",
-                r"\g<1>"+nt,html,count=1)
+                lambda m,v=nt: m.group(1)+v,html,count=1)
     mo=SW_TO_MO.get(sw)
     if mo:
         html=re.sub(r"(key:'"+re.escape(mo)+r"'[^}]*?,tasks:)(\{[^}]+\}|null)",
-                    r"\g<1>"+nt2,html,count=1)
+                    lambda m,v=nt2: m.group(1)+v,html,count=1)
 
 # 3. Listas
 html=replace_var(html,"LATE_TASKS",  build_var("LATE_TASKS", late_by_mo,  str(total_late)+" tardias"))
