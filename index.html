@@ -368,6 +368,7 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
 .noowner-badge.open{background:#D1C4E9;}
 .noowner-detail-row{display:none;}
 .noowner-detail-row td{padding:0;}
+.noowner-panel-title{font-size:10px;font-weight:700;color:#4527A0;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #D1C4E9;}
 .noowner-panel{background:#F9F7FD;border-top:1px solid #EDE7F6;padding:8px 12px;}
 .noowner-tbl{width:100%;border-collapse:collapse;font-size:11px;}
 .noowner-tbl th{text-align:left;color:#888;font-weight:600;padding:3px 6px;border-bottom:1px solid #EDE7F6;font-size:10px;}
@@ -2395,6 +2396,24 @@ function renderTable(data) {
             +'<table class="late-tbl"><thead><tr>'
             +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:130px">Estado</th><th style="width:160px">Responsable</th>'
             +'</tr></thead><tbody>'+ndRows+'</tbody></table>'
+            +'</div></td></tr>';
+
+        // ── Fila detalle Sin responsable ──────────────────────────────────────
+        if(noownerCount > 0) {
+          var noownRows = noownerArr.map(function(task){
+            return '<tr><td class="tk-key">'+task.key+'</td>'
+              +'<td>'+task.summary+'</td>'
+              +'<td style="color:#888;">'+(task.due ? task.due : 'Sin fecha')+'</td>'
+              +'<td style="color:#888;">'+(task.status||'')+'</td>'
+              +'</tr>';
+          }).join('');
+          html += '<tr class="noowner-detail-row" id="noowner-detail-'+d.key+'">'
+            +'<td colspan="9"><div class="noowner-panel">'
+            +'<div class="noowner-panel-title">\uD83D\uDC64 Actividades sin responsable ('+noownerCount+')</div>'
+            +'<table class="late-tbl"><thead><tr>'
+            +'<th style="width:90px">Tarea</th><th>Actividad</th>'
+            +'<th style="width:100px">Fecha</th><th style="width:130px">Estado</th>'
+            +'</tr></thead><tbody>'+noownRows+'</tbody></table>'
             +'</div></td></tr>';
         }
       });
