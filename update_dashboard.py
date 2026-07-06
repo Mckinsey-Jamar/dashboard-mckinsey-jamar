@@ -48,6 +48,20 @@ def main():
         "PTMZR":12,"RF1D":9,"PROP":22,"MDCB":9,
         "LEANW":0,"LEANWPA":0,"MXAT":0,"MDOOMC":0,"EDP":0,
     }
+    # Normalizar nombres de frente/subfrente que llegan de Jira
+    # para que coincidan con los nombres en SF_ORDER del dashboard
+    SF_NORMALIZE = {
+        # Subfrentes sin tilde → con tilde (nombre canónico)
+        'Curva de Valor de Credito': 'Curva de Valor Crédito',
+        'Curva de Valor Credito':    'Curva de Valor Crédito',
+        'E2E proceso de Credito':    'E2E proceso de Crédito',
+        'E2E Proceso de Credito':    'E2E proceso de Crédito',
+        'Post-Venta':                'Post-venta',
+        'Almacen':                   'Almacenamiento',
+    }
+    def norm_sf(v): return SF_NORMALIZE.get(v, v)
+    def norm_fr(v): return v  # frente generalmente viene bien
+
     
     # ── Helpers Jira ───────────────────────────────────────────────────────────────
     def jira_auth():
@@ -195,7 +209,7 @@ def main():
     
         # Subfrente (customfield_11055)
         sf_list   = f.get("customfield_11055") or []
-        subfrente = sf_list[0].get("value","") if sf_list else ""
+        subfrente = norm_sf(sf_list[0].get("value","") if sf_list else "")
     
         # Status
         st = f["status"]["name"].split(":")[0].strip()
