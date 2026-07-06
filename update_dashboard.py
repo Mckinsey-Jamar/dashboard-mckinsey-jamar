@@ -335,6 +335,7 @@ def main():
         if "fields" not in i: continue
         if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
         sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
+        if f.get("duedate"): continue  # excluir si tiene fecha real — no es sin fecha
         if mo:
             assignee_display = (f.get('assignee') or {}).get('displayName', '')
             nodt_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
