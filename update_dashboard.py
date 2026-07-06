@@ -147,10 +147,15 @@ def main():
         return total,prog
     
     def fmt_task(t):
-        return ("    {key:'"+t["key"]+"',summary:\""+t["summary"]+"\","
-                "duedate:'"+t.get("due","")+"',assignee:\""+t["assignee"]+"\","
-                "status:\""+t.get("status","")+"\" }")
-    
+        key     = str(t.get("key") or "")
+        summary = str(t.get("summary") or "")
+        due     = str(t.get("due") or "")
+        assignee= str(t.get("assignee") or "Sin asignar")
+        status  = str(t.get("status") or "")
+        return ("    {key:'"+key+"',summary:\""+summary+"\","
+                "duedate:'"+due+"',assignee:\""+assignee+"\","
+                "status:\""+status+"\" }")
+
     def build_var(name,by_mo,comment):
         lines=["var "+name+" = {","  // "+TODAY+" \u2014 "+comment]
         for mo_key in sorted(MO_TO_SW.keys(),key=lambda x:int(x.split("-")[1])):
