@@ -326,7 +326,7 @@ def main():
     
     # Próximas + sin fecha
     nodt_issues=jira_all(
-        "project in ("+ALL_SW_DYN+") AND (due is EMPTY OR due > '"+WEEK_END+"') "
+        "project in ("+ALL_SW_DYN+") AND due is EMPTY "
         "AND statusCategory != Done ORDER BY project ASC",
         ["summary","status","duedate","assignee","project"],100,15)
     nodt_by_mo=defaultdict(list)
@@ -395,7 +395,7 @@ def main():
     # 3. Listas
     html=replace_var(html,"LATE_TASKS",  build_var("LATE_TASKS", late_by_mo,  str(total_late)+" tardias"))
     html=replace_var(html,"WEEK_TASKS",  build_var("WEEK_TASKS", week_by_mo,  str(total_week)+" esta semana"))
-    html=replace_var(html,"NO_DATE_TASKS",build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" proximas+sinfecha"))
+    html=replace_var(html,"NO_DATE_TASKS",build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" sin fecha"))
     
     now_str=datetime.now().strftime("%H:%M")
     result=gh_put("index.html",html,sha,
