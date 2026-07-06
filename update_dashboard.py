@@ -335,6 +335,9 @@ def main():
         if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
         sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
         if mo:
+            # Excluir de sin fecha si tiene responsable asignado
+            assignee_display = (f.get('assignee') or {}).get('displayName', '')
+            if assignee_display and assignee_display.strip(): continue
             nodt_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
                 "due":f.get("duedate",""),
                 "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
