@@ -362,6 +362,18 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
   .week-due.soon{color:#E65100;font-weight:700;}
 
   /* ── No-date panel ── */
+
+.noowner-badge{display:inline-flex;align-items:center;gap:3px;background:#EDE7F6;color:#4527A0;border:1px solid #B39DDB;border-radius:4px;padding:2px 8px;font-size:9.5px;font-weight:700;cursor:pointer;margin-top:4px;transition:background .15s;}
+.noowner-badge:hover{background:#D1C4E9;border-color:#9575CD;}
+.noowner-badge.open{background:#D1C4E9;}
+.noowner-detail-row{display:none;}
+.noowner-detail-row td{padding:0;}
+.noowner-panel{background:#F9F7FD;border-top:1px solid #EDE7F6;padding:8px 12px;}
+.noowner-tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.noowner-tbl th{text-align:left;color:#888;font-weight:600;padding:3px 6px;border-bottom:1px solid #EDE7F6;font-size:10px;}
+.noowner-tbl td{padding:4px 6px;border-bottom:1px solid #F3E5F5;color:#333;}
+.noowner-tbl tr:hover td{background:#F3E5F5;}
+.noowner-tbl .tk-key{color:#4527A0;font-weight:600;font-size:10px;}
 .nodate-badge{display:inline-flex;align-items:center;gap:3px;background:#FFF0F0;color:#C62828;border:1px solid #FFCDD2;border-radius:4px;padding:2px 8px;font-size:9.5px;font-weight:700;cursor:pointer;margin-top:4px;transition:background .15s;}
 .nodate-badge:hover{background:#FFEBEE;border-color:#EF9A9A;}
 .nodate-badge.open{background:#FFEBEE;}
@@ -958,6 +970,18 @@ function toggleNodateTasks(moKey, badge) {
   badge.textContent = isOpen ? '⏳ '+n+' sin fecha ▾' : '⏳ '+n+' sin fecha ▴';
 }
 
+
+function toggleNoOwnerTbl(moKey, badge) {
+  var row = document.getElementById('noowner-detail-' + moKey);
+  if(!row) return;
+  var isOpen = row.style.display !== 'none' && row.style.display !== '';
+  row.style.display = isOpen ? 'none' : 'table-row';
+  badge.classList.toggle('open', !isOpen);
+  var n = (NO_OWNER_TASKS[moKey]||[]).length;
+  badge.textContent = isOpen
+    ? '\uD83D\uDC64 '+n+' sin responsable \u25BE'
+    : '\uD83D\uDC64 '+n+' sin responsable \u25B4';
+}
 
 function toggleNoDatTbl(moKey, badge) {
   var row = document.getElementById('nodate-detail-' + moKey);
@@ -1802,7 +1826,8 @@ var NO_DATE_TASKS = {
     {key:'MXAT-3',summary:"Experiencia de calificación de armado",duedate:'',assignee:"Sin asignar",status:"To Do" },
     {key:'MXAT-2',summary:"Revision del flujo de asignacion de citas de entrega",duedate:'',assignee:"Sin asignar",status:"To Do" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+}
+var NO_OWNER_TASKS = {};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 var NODATE_TASKS = {
   // 2026-06-25 - 200 actividades sin fecha
   'MO-1': [
@@ -2254,6 +2279,10 @@ function renderTable(data) {
         var nodateArr   = NO_DATE_TASKS[d.key] || [];
         var nodateCount = nodateArr.length;
 
+        // ── Categoría 4: Sin responsable (NO_OWNER_TASKS) ──────────────────────────
+        var noownerArr   = NO_OWNER_TASKS[d.key] || [];
+        var noownerCount = noownerArr.length;
+
         // ── Badges ────────────────────────────────────────────────────────────
         var lateBadge = lateCount > 0
           ? '<div><span class="late-badge" id="late-btn-'+d.key+'" onclick="toggleLateTasks(\''+d.key+'\',this)">\uD83D\uDD34 '+lateCount+' atrasada'+(lateCount>1?'s':'')+' \u25BE</span></div>'
@@ -2267,13 +2296,17 @@ function renderTable(data) {
           ? '<div><span class="nodate-badge" id="nodate-btn-'+d.key+'" onclick="toggleNoDatTbl(\''+d.key+'\',this)">\u2B1C '+nodateCount+' sin fecha \u25BE</span></div>'
           : '';
 
+        var noownerBadge = noownerCount > 0
+          ? '<div><span class="noowner-badge" id="noowner-btn-'+d.key+'" onclick="toggleNoOwnerTbl(\''+d.key+'\',this)">\uD83D\uDC64 '+noownerCount+' sin responsable \u25BE</span></div>'
+          : '';
+
         // ── Celda de actividades ──────────────────────────────────────────────
         var taskCell;
         if(t){
           var pct = t.total > 0 ? Math.round(t.done / t.total * 100) : 0;
           taskCell = '<div class="task-mini">'
             +'<div style="font-size:9px;color:#666;">'+t.done+'\u2705 '+(t.prog||0)+'\uD83D\uDD04 '+t.todo+'\u2B1C</div>'
-            +lateBadge + weekBadge + nodateBadge
+            +lateBadge + weekBadge + nodateBadge + noownerBadge
             +'<div class="task-bar"><div class="tb-d" style="flex:'+t.done+'"></div><div class="tb-p" style="flex:'+(t.prog||0)+'"></div><div class="tb-t" style="flex:'+t.todo+'"></div></div>'
             +'<div style="font-size:9px;color:#aaa;">'+pct+'% \u00B7 '+t.total+' hitos</div>'
             +'</div>';
