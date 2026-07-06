@@ -256,7 +256,7 @@ def main():
     # Query A: no-done CON fecha
     nd_fecha=jira_all(
         "project in ("+ALL_SW_DYN+") AND due >= '2020-01-01' AND statusCategory != Done "
-        "ORDER BY project ASC",["status","project"],100,8)
+        "ORDER BY project ASC",["summary","status","duedate","assignee","project"],100,8)
     
     # Query B: no-done SIN fecha
     nd_nodate=jira_all(
@@ -327,7 +327,7 @@ def main():
     
     # Próximas + sin fecha
     nodt_issues=jira_all(
-        "project in ("+ALL_SW_DYN+") AND due is EMPTY AND assignee is EMPTY "
+        "project in ("+ALL_SW_DYN+") AND due is EMPTY "
         "AND statusCategory != Done ORDER BY project ASC",
         ["summary","status","duedate","assignee","project"],100,15)
     nodt_by_mo=defaultdict(list)
@@ -336,14 +336,42 @@ def main():
         if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
         sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
         if mo:
-            # Excluir de sin fecha si tiene responsable asignado
             assignee_display = (f.get('assignee') or {}).get('displayName', '')
-            if assignee_display and assignee_display.strip(): continue
             nodt_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
                 "due":f.get("duedate",""),
                 "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
                 "status":f["status"]["name"]})
     total_nodt=sum(len(v) for v in nodt_by_mo.values())
+
+    # ── NO_OWNER_TASKS: sin fecha O sin responsable ──────────────────────────────
+    print('Sin responsable...')
+    noown_by_mo=defaultdict(list)
+    # Fuente 1: tareas CON fecha pero SIN responsable (de nd_fecha)
+    for iss in nd_fecha:
+        if 'fields' not in iss: continue
+        if iss['fields']['status'].get('statusCategory',{}).get('key','')=='done': continue
+        sw2=iss['fields'].get('project',{}).get('key',''); mo2=SW_TO_MO.get(sw2)
+        f2=iss['fields']
+        if mo2:
+            asn2=(f2.get('assignee') or {}).get('displayName','')
+            if not asn2 or not asn2.strip():
+                noown_by_mo[mo2].append({'key':iss['key'],'summary':clean(f2.get('summary') or ''),
+                    'due':f2.get('duedate',''),
+                    'assignee':'Sin asignar','status':f2['status']['name']})
+    # Fuente 2: tareas SIN fecha Y SIN responsable (de nodt_issues)
+    for iss in nodt_issues:
+        if 'fields' not in iss: continue
+        if iss['fields']['status'].get('statusCategory',{}).get('key','')=='done': continue
+        sw2=iss['fields'].get('project',{}).get('key',''); mo2=SW_TO_MO.get(sw2)
+        f2=iss['fields']
+        if mo2:
+            asn2=(f2.get('assignee') or {}).get('displayName','')
+            if not asn2 or not asn2.strip():
+                noown_by_mo[mo2].append({'key':iss['key'],'summary':clean(f2.get('summary') or ''),
+                    'due':f2.get('duedate',''),
+                    'assignee':'Sin asignar','status':f2['status']['name']})
+    total_noown=sum(len(v) for v in noown_by_mo.values())
+    print('  Sin responsable: '+str(total_noown))
     print("  Proximas+SinFecha: "+str(total_nodt))
     
     # ── ACTUALIZAR HTML ───────────────────────────────────────────────────────────
@@ -400,6 +428,7 @@ def main():
     html=replace_var(html,"LATE_TASKS",  build_var("LATE_TASKS", late_by_mo,  str(total_late)+" tardias"))
     html=replace_var(html,"WEEK_TASKS",  build_var("WEEK_TASKS", week_by_mo,  str(total_week)+" esta semana"))
     html=replace_var(html,"NO_DATE_TASKS",build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" sin fecha"))
+    html=replace_var(html,"NO_OWNER_TASKS",build_var("NO_OWNER_TASKS",noown_by_mo,str(total_noown)+" sin responsable"))
     
     now_str=datetime.now().strftime("%H:%M")
     result=gh_put("index.html",html,sha,
