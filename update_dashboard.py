@@ -284,13 +284,14 @@ def main():
     
     # Tardías
     late_issues=jira_post(
-        "project in ("+ALL_SW_DYN+") AND due < '"+TODAY+"' AND statusCategory != Done AND status not in ('Bloqueada','Blocked') "
+        "project in ("+ALL_SW_DYN+") AND due < '"+TODAY+"' AND statusCategory != Done AND status not in ('Bloqueada','Bloqueado','Blocked') "
         "ORDER BY project ASC, due ASC",
         ["summary","status","duedate","assignee","project"],100)
     late_by_mo=defaultdict(list)
     for i in late_issues:
         if "fields" not in i: continue
         if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
+        if i["fields"]["status"]["name"] in ("Bloqueada","Bloqueado","Blocked"): continue  # excluir bloqueadas de atrasadas
         sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
         if mo:
             late_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
