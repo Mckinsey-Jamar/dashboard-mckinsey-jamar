@@ -403,6 +403,59 @@ def main():
     print("\n✅ Commit: "+result["commit"]["sha"][:7])
     print("   Sync:"+str(changed)+" MO | Late:"+str(total_late)+" | Semana:"+str(total_week)+" | Proximas:"+str(total_nodt))
 
+    # ── Actualizar rama gh-pages para GitHub Pages (legacy build) ─────────────
+    try:
+        # Obtener sha del HTML recién commiteado
+        html_info_req=urllib.request.Request(
+            "https://api.github.com/repos/"+GH_REPO+"/contents/index.html",
+            headers=gh_headers())
+        with urllib.request.urlopen(html_info_req) as ri:
+            html_info=json.loads(ri.read())
+        html_file_sha=html_info["sha"]
+
+        # .nojekyll blob
+        nj_req=urllib.request.Request(
+            "https://api.github.com/repos/"+GH_REPO+"/git/blobs",
+            data=json.dumps({"content":"","encoding":"utf-8"}).encode(),
+            headers=gh_headers(),method="POST")
+        with urllib.request.urlopen(nj_req) as ri:
+            nj_sha=json.loads(ri.read())["sha"]
+
+        # Tree con index.html + .nojekyll
+        tree_req=urllib.request.Request(
+            "https://api.github.com/repos/"+GH_REPO+"/git/trees",
+            data=json.dumps({"tree":[
+                {"path":"index.html","mode":"100644","type":"blob","sha":html_file_sha},
+                {"path":".nojekyll","mode":"100644","type":"blob","sha":nj_sha}
+            ]}).encode(),headers=gh_headers(),method="POST")
+        with urllib.request.urlopen(tree_req) as ri:
+            tree_sha=json.loads(ri.read())["sha"]
+
+        # Obtener sha actual de gh-pages
+        ghp_ref_req=urllib.request.Request(
+            "https://api.github.com/repos/"+GH_REPO+"/git/ref/heads/gh-pages",
+            headers=gh_headers())
+        with urllib.request.urlopen(ghp_ref_req) as ri:
+            ghp_sha=json.loads(ri.read())["object"]["sha"]
+
+        # Commit a gh-pages
+        ghp_com_req=urllib.request.Request(
+            "https://api.github.com/repos/"+GH_REPO+"/git/commits",
+            data=json.dumps({"message":"deploy: "+result["commit"]["sha"][:7],
+                             "tree":tree_sha,"parents":[ghp_sha]}).encode(),
+            headers=gh_headers(),method="POST")
+        with urllib.request.urlopen(ghp_com_req) as ri:
+            ghp_new_sha=json.loads(ri.read())["sha"]
+
+        # Update ref
+        urllib.request.urlopen(urllib.request.Request(
+            "https://api.github.com/repos/"+GH_REPO+"/git/refs/heads/gh-pages",
+            data=json.dumps({"sha":ghp_new_sha,"force":True}).encode(),
+            headers=gh_headers(),method="PATCH"))
+        print("✅ gh-pages actualizado — "+ghp_new_sha[:7])
+    except Exception as e_ghp:
+        print("  WARN gh-pages: "+str(e_ghp)[:80])
+
 if __name__ == "__main__":
     try:
         main()
