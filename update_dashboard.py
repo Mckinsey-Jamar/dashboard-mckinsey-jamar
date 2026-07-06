@@ -284,7 +284,7 @@ def main():
     
     # Tardías
     late_issues=jira_post(
-        "project in ("+ALL_SW_DYN+") AND due < '"+TODAY+"' AND statusCategory != Done "
+        "project in ("+ALL_SW_DYN+") AND due < '"+TODAY+"' AND statusCategory != Done AND status not in ('Bloqueada','Blocked') "
         "ORDER BY project ASC, due ASC",
         ["summary","status","duedate","assignee","project"],100)
     late_by_mo=defaultdict(list)
@@ -326,7 +326,7 @@ def main():
     
     # Próximas + sin fecha
     nodt_issues=jira_all(
-        "project in ("+ALL_SW_DYN+") AND due is EMPTY "
+        "project in ("+ALL_SW_DYN+") AND due is EMPTY AND assignee is EMPTY "
         "AND statusCategory != Done ORDER BY project ASC",
         ["summary","status","duedate","assignee","project"],100,15)
     nodt_by_mo=defaultdict(list)
