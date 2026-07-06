@@ -354,8 +354,8 @@ def main():
         sw2=iss['fields'].get('project',{}).get('key',''); mo2=SW_TO_MO.get(sw2)
         f2=iss['fields']
         if mo2:
-            asn2=(f2.get('assignee') or {}).get('displayName','')
-            if not asn2 or not asn2.strip():
+            asn2=f2.get('assignee')
+            if asn2 is not None and asn2:  # None = sin responsable en API
                 noown_by_mo[mo2].append({'key':iss['key'],'summary':clean(f2.get('summary') or ''),
                     'due':f2.get('duedate',''),
                     'assignee':'Sin asignar','status':f2['status']['name']})
@@ -366,8 +366,8 @@ def main():
         sw2=iss['fields'].get('project',{}).get('key',''); mo2=SW_TO_MO.get(sw2)
         f2=iss['fields']
         if mo2:
-            asn2=(f2.get('assignee') or {}).get('displayName','')
-            if not asn2 or not asn2.strip():
+            asn2=f2.get('assignee')
+            if asn2 is not None and asn2:  # None = sin responsable en API
                 noown_by_mo[mo2].append({'key':iss['key'],'summary':clean(f2.get('summary') or ''),
                     'due':f2.get('duedate',''),
                     'assignee':'Sin asignar','status':f2['status']['name']})
