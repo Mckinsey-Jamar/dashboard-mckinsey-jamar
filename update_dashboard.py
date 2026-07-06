@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
-update_dashboard.py — Dashboard McKinsey-Jamar (Opcion B completa)
-Actualiza: MO statuses, LATE_TASKS, WEEK_TASKS, NO_DATE_TASKS, conteos done/prog/todo
+update_dashboard.py — Dashboard McKinsey-Jamar v2.0
+Flujo completo en cada ejecución (cada 10 min):
+  1. SYNC ESTRUCTURAL: sincroniza summary, frente, subfrente, status, owner, pais, sw
+  2. ESTADOS: recalcula done/prog/todo (Opcion B)
+  3. LISTAS: reconstruye LATE, WEEK, PROXIMAS+SINFECHA
 """
 import os, re, json, base64, urllib.request, urllib.error
 from collections import defaultdict
@@ -15,16 +18,7 @@ GH_REPO    = "mckinsey-jamar/dashboard-mckinsey-jamar"
 TODAY      = date.today().isoformat()
 WEEK_END   = (date.today() + timedelta(days=7)).isoformat()
 
-KNOWN_TOTALS = {
-    "SOE":99,"DEP":139,"MSOP":29,"MEJ":37,"PROVED":37,"ECI":28,"DEIT":111,
-    "SLOBM":14,"JCTR":58,"SLOBDECO":55,"SLOBDECPA":22,"RCD3":43,"IMPCSE":24,
-    "MIOT":1,"OPR":20,"ZT5F":13,"FCCDA":38,"WF5":28,"SDR":29,"PDSP":96,
-    "IM":28,"OP":48,"TLGDL":12,"EEMOC":10,"SF":47,"EODV":42,"ISMC":3,
-    "IEPRFEEFDC":70,"ICD":34,"CODCEYBM":9,"IPDPCDAR":50,"IPDPCDBR":54,
-    "PTMZR":12,"RF1D":9,"PROP":22,"MDCB":9,
-    # Nuevos proyectos (2026-07-03)
-    "LEANW":0,"LEANWPA":0,"MXAT":0,"MDOOMC":0,"EDP":0,
-}
+# SW_TO_MO: mapeo definitivo + detectado dinámicamente
 SW_TO_MO = {
     "SOE":"MO-1","DEP":"MO-2","MSOP":"MO-3","MEJ":"MO-4","PROVED":"MO-5",
     "ECI":"MO-7","DEIT":"MO-8","SLOBM":"MO-10","JCTR":"MO-65",
@@ -35,13 +29,23 @@ SW_TO_MO = {
     "IEPRFEEFDC":"MO-54","ICD":"MO-56","CODCEYBM":"MO-50",
     "IPDPCDAR":"MO-58","IPDPCDBR":"MO-59","PTMZR":"MO-11",
     "RF1D":"MO-89","PROP":"MO-88","MDCB":"MO-52",
-    # Nuevos proyectos detectados desde Jira (2026-07-03)
     "LEANW":"MO-30","LEANWPA":"MO-69","MXAT":"MO-77",
     "MDOOMC":"MO-49","EDP":"MO-53",
 }
 MO_TO_SW = {v:k for k,v in SW_TO_MO.items()}
-ALL_SW   = ",".join(SW_TO_MO.keys())
 
+# KNOWN_TOTALS: se actualiza dinámicamente si not_done > total
+KNOWN_TOTALS = {
+    "SOE":99,"DEP":139,"MSOP":29,"MEJ":37,"PROVED":37,"ECI":28,"DEIT":111,
+    "SLOBM":14,"JCTR":58,"SLOBDECO":55,"SLOBDECPA":22,"RCD3":43,"IMPCSE":24,
+    "MIOT":1,"OPR":20,"ZT5F":13,"FCCDA":38,"WF5":28,"SDR":29,"PDSP":96,
+    "IM":28,"OP":48,"TLGDL":12,"EEMOC":10,"SF":47,"EODV":42,"ISMC":3,
+    "IEPRFEEFDC":70,"ICD":34,"CODCEYBM":9,"IPDPCDAR":50,"IPDPCDBR":54,
+    "PTMZR":12,"RF1D":9,"PROP":22,"MDCB":9,
+    "LEANW":0,"LEANWPA":0,"MXAT":0,"MDOOMC":0,"EDP":0,
+}
+
+# ── Helpers Jira ───────────────────────────────────────────────────────────────
 def jira_auth():
     cred = base64.b64encode((JIRA_EMAIL+":"+JIRA_TOKEN).encode()).decode()
     return {"Authorization":"Basic "+cred,
@@ -49,8 +53,7 @@ def jira_auth():
 
 def jira_post(jql, fields=None, max_results=100):
     body = {"jql":jql,"maxResults":max_results}
-    if fields:
-        body["fields"] = fields if isinstance(fields,list) else [fields]
+    if fields: body["fields"] = fields if isinstance(fields,list) else [fields]
     req = urllib.request.Request(
         JIRA_BASE+"/rest/api/3/search/jql",
         data=json.dumps(body).encode(), headers=jira_auth(), method="POST")
@@ -58,36 +61,36 @@ def jira_post(jql, fields=None, max_results=100):
         with urllib.request.urlopen(req, timeout=25) as r:
             return json.loads(r.read()).get("issues",[])
     except Exception as ex:
-        print("  JIRA ERR: "+str(ex)[:80]+" | "+jql[:50])
-        return []
+        print("  JIRA ERR: "+str(ex)[:80]+" | "+jql[:60]); return []
 
 def jira_all(jql, fields=None, per_page=100, max_pages=8):
-    all_issues = []; next_token = None
+    all_issues=[]; next_token=None
     for page in range(max_pages):
-        body = {"jql":jql,"maxResults":per_page}
-        if fields: body["fields"] = fields if isinstance(fields,list) else [fields]
-        if next_token: body["nextPageToken"] = next_token
-        req = urllib.request.Request(
+        body={"jql":jql,"maxResults":per_page}
+        if fields: body["fields"]=fields if isinstance(fields,list) else [fields]
+        if next_token: body["nextPageToken"]=next_token
+        req=urllib.request.Request(
             JIRA_BASE+"/rest/api/3/search/jql",
-            data=json.dumps(body).encode(), headers=jira_auth(), method="POST")
+            data=json.dumps(body).encode(),headers=jira_auth(),method="POST")
         try:
-            with urllib.request.urlopen(req, timeout=25) as r:
-                data = json.loads(r.read())
+            with urllib.request.urlopen(req,timeout=25) as r:
+                data=json.loads(r.read())
         except Exception as ex:
             print("  PAGE ERR p"+str(page)+": "+str(ex)[:60]); break
-        issues = data.get("issues",[])
+        issues=data.get("issues",[])
         all_issues.extend(issues)
         if data.get("isLast",True) or not issues: break
-        next_token = data.get("nextPageToken")
+        next_token=data.get("nextPageToken")
         if not next_token: break
     return all_issues
 
+# ── Helpers GitHub ─────────────────────────────────────────────────────────────
 def gh_headers():
     return {"Authorization":"token "+GH_PAT,
             "Accept":"application/vnd.github.v3+json","Content-Type":"application/json"}
 
 def gh_get(path):
-    req = urllib.request.Request(
+    req=urllib.request.Request(
         "https://api.github.com/repos/"+GH_REPO+"/contents/"+path,
         headers=gh_headers())
     with urllib.request.urlopen(req) as r:
@@ -104,6 +107,7 @@ def gh_put(path,content,sha,message):
     with urllib.request.urlopen(req) as r:
         return json.loads(r.read())
 
+# ── Helpers generales ─────────────────────────────────────────────────────────
 def clean(s):
     return (s or "").strip().replace('"','\\"').replace("'","\\'")
 
@@ -138,90 +142,124 @@ def count_by_proj(issues):
         if cat=="indeterminate": prog[proj]+=1
     return total,prog
 
-def fmt_task(key,summary,due,assignee,status=""):
-    return ("    {key:'"+key+"',summary:\""+summary+"\","
-            "duedate:'"+due+"',assignee:\""+assignee+"\","
-            "status:\""+status+"\" }")
+def fmt_task(t):
+    return ("    {key:'"+t["key"]+"',summary:\""+t["summary"]+"\","
+            "duedate:'"+t.get("due","")+"',assignee:\""+t["assignee"]+"\","
+            "status:\""+t.get("status","")+"\" }")
 
 def build_var(name,by_mo,comment):
-    lines=["var "+name+" = {","  // "+TODAY+" \xe2\x80\x94 "+comment]
-    for sw,mo in sorted(SW_TO_MO.items(),key=lambda x:int(x[1].split("-")[1])):
-        tasks=by_mo.get(mo,[])
+    lines=["var "+name+" = {","  // "+TODAY+" \u2014 "+comment]
+    for mo_key in sorted(MO_TO_SW.keys(),key=lambda x:int(x.split("-")[1])):
+        tasks=by_mo.get(mo_key,[])
         if not tasks: continue
-        lines.append("  '"+mo+"': [")
+        lines.append("  '"+mo_key+"': [")
         for j,t in enumerate(tasks):
-            lines.append(fmt_task(t["key"],t["summary"],t.get("due",""),
-                                  t["assignee"],t.get("status",""))+
-                         ("," if j<len(tasks)-1 else ""))
+            lines.append(fmt_task(t)+("," if j<len(tasks)-1 else ""))
         lines.append("  ],")
     lines.append("};")
     return "\n".join(lines)
 
-print("Actualizacion Opcion B — "+TODAY)
+# ══════════════════════════════════════════════════════════════════════════════
+print("="*60)
+print("Actualizacion v2.0 — "+TODAY)
+print("="*60)
 
-# 1. MO statuses
-print("MO statuses...")
-mo_issues=jira_post("project = MO ORDER BY key ASC",
-    ["summary","status","customfield_11057","customfield_11197","issuelinks"])
-MO_STATUS={}
+# ── PASO 1: SYNC ESTRUCTURAL ──────────────────────────────────────────────────
+print("\n[1/3] SYNC ESTRUCTURAL — MO issues con todos los campos...")
+
+mo_issues = jira_post(
+    "project = MO ORDER BY key ASC",
+    ["summary","status","customfield_11022","customfield_11055",
+     "customfield_11057","customfield_11197","issuelinks"], 100)
+
+print("  Issues MO: "+str(len(mo_issues)))
+
+# Construir mapa de datos desde Jira
+jira_data = {}
 for i in mo_issues:
-    f=i["fields"]; st=f["status"]["name"].split(":")[0].strip()
-    ow_list=f.get("customfield_11057") or []
-    ow=ow_list[0].get("value","Sin asignar") if ow_list else "Sin asignar"
-    # Extraer proyecto SW de issuelinks (Polaris work item link)
-    sw_from_link = ""
-    for lnk in f.get("issuelinks",[]):
-        linked = lnk.get("inwardIssue") or lnk.get("outwardIssue") or {}
-        lkey = linked.get("key","")
-        if lkey and lnk.get("type",{}).get("name","") == "Polaris work item link":
-            sw_from_link = lkey.split("-")[0]
-            break
-    MO_STATUS[i["key"]]={"status":st,"owner":ow,
-        "pais":get_pais(f.get("customfield_11197")),"sw":sw_from_link}
-print("  MO: "+str(len(MO_STATUS)))
+    key = i["key"]
+    f   = i["fields"]
 
-# Construir set dinámico de SW detectados desde issuelinks
-SW_FROM_JIRA = set(vals["sw"] for vals in MO_STATUS.values() if vals.get("sw"))
-SW_EXTRA = SW_FROM_JIRA - set(KNOWN_TOTALS.keys())  # SW nuevos no mapeados
-if SW_EXTRA:
-    print("  SW detectados (no en KNOWN_TOTALS): "+str(SW_EXTRA))
-    for sw in SW_EXTRA:
-        KNOWN_TOTALS[sw] = 0  # Se actualizará con el conteo real
-# ALL_SW_DYN incluye los hardcoded + los detectados desde Jira
-ALL_SW_DYN = ",".join(set(list(KNOWN_TOTALS.keys()) + list(SW_FROM_JIRA)))
+    # Frente (customfield_11022)
+    fr_list = f.get("customfield_11022") or []
+    frente  = fr_list[0].get("value","") if fr_list else ""
 
-# 2. Conteos done/prog/todo (Opcion B)
-print("Conteos...")
+    # Subfrente (customfield_11055)
+    sf_list   = f.get("customfield_11055") or []
+    subfrente = sf_list[0].get("value","") if sf_list else ""
+
+    # Status
+    st = f["status"]["name"].split(":")[0].strip()
+
+    # Owner (customfield_11057)
+    ow_list = f.get("customfield_11057") or []
+    owner   = ow_list[0].get("value","Sin asignar") if ow_list else "Sin asignar"
+
+    # Pais (customfield_11197)
+    pais = get_pais(f.get("customfield_11197"))
+
+    # Summary
+    summary = f.get("summary","")
+
+    # SW desde issuelinks (Polaris work item link)
+    sw = ""
+    for link in f.get("issuelinks",[]):
+        if link.get("type",{}).get("name") == "Polaris work item link":
+            inward = link.get("inwardIssue",{})
+            if inward and "key" in inward:
+                sw = inward["key"].split("-")[0]; break
+
+    # Si encontró sw nuevo no mapeado, agregarlo
+    if sw and sw not in SW_TO_MO:
+        SW_TO_MO[sw] = key
+        MO_TO_SW[key] = sw
+        if sw not in KNOWN_TOTALS: KNOWN_TOTALS[sw] = 0
+        print("  NUEVO SW detectado: "+sw+" → "+key)
+
+    jira_data[key] = {
+        "frente":frente,"subfrente":subfrente,"summary":clean(summary),
+        "status":st,"owner":clean(owner),"pais":pais,"sw":sw
+    }
+
+print("  Frentes detectados: "+str(set(v["frente"] for v in jira_data.values() if v["frente"])))
+
+# ── PASO 2: ESTADOS (Opcion B) ────────────────────────────────────────────────
+print("\n[2/3] ESTADOS — Conteos done/prog/todo...")
+
+# ALL_SW_DYN incluye SW hardcoded + detectados dinámicamente
+all_sw_set = set(list(KNOWN_TOTALS.keys()) + [v["sw"] for v in jira_data.values() if v["sw"]])
+ALL_SW_DYN = ",".join(all_sw_set)
+
+# Query A: no-done CON fecha
 nd_fecha=jira_all(
     "project in ("+ALL_SW_DYN+") AND due >= '2020-01-01' AND statusCategory != Done "
     "ORDER BY project ASC",["status","project"],100,8)
+
+# Query B: no-done SIN fecha
 nd_nodate=jira_all(
     "project in ("+ALL_SW_DYN+") AND due is EMPTY AND statusCategory != Done "
     "ORDER BY project ASC",["status","project"],100,5)
+
 tot_A,prog_A=count_by_proj(nd_fecha)
 tot_B,prog_B=count_by_proj(nd_nodate)
 print("  no-done-con-fecha: "+str(len(nd_fecha))+" | no-done-sin-fecha: "+str(len(nd_nodate)))
-
-# Agregar SW detectados a SW_TO_MO dinámicamente
-for mk,vals in MO_STATUS.items():
-    sw_d = vals.get("sw","")
-    if sw_d and sw_d not in SW_TO_MO:
-        SW_TO_MO[sw_d] = mk
-        MO_TO_SW[mk] = sw_d
-        print("  Mapeado: "+sw_d+" → "+mk)
 
 sw_counts={}
 for sw,total in KNOWN_TOTALS.items():
     nd_f=tot_A.get(sw,0); nd_n=tot_B.get(sw,0)
     not_done=nd_f+nd_n
-    if not_done>total: total=not_done
+    if not_done>total:
+        print("  WARN: "+sw+" creció — not_done="+str(not_done)+" > known="+str(total))
+        total=not_done
     done=max(0,total-not_done)
     prog=prog_A.get(sw,0)+prog_B.get(sw,0)
     todo=max(0,not_done-prog)
     sw_counts[sw]=(total,done,prog,todo,0)
 
-# 3. LATE_TASKS
-print("Tardias...")
+# ── PASO 3: LISTAS ───────────────────────────────────────────────────────────
+print("\n[3/3] LISTAS — Late, Semana, Proximas...")
+
+# Tardías
 late_issues=jira_post(
     "project in ("+ALL_SW_DYN+") AND due < '"+TODAY+"' AND statusCategory != Done "
     "ORDER BY project ASC, due ASC",
@@ -230,11 +268,14 @@ late_by_mo=defaultdict(list)
 for i in late_issues:
     if "fields" not in i: continue
     if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
-    mo=SW_TO_MO.get(i["fields"]["project"]["key"]); f=i["fields"]
+    sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
     if mo:
         late_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
             "due":f.get("duedate",""),
-            "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar"))})
+            "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
+            "status":f["status"]["name"]})
+
+# Actualizar late en sw_counts
 for sw in KNOWN_TOTALS:
     mo=SW_TO_MO.get(sw,"")
     t,d,p,td,_=sw_counts[sw]
@@ -242,8 +283,7 @@ for sw in KNOWN_TOTALS:
 total_late=sum(len(v) for v in late_by_mo.values())
 print("  Tardias: "+str(total_late))
 
-# 4. WEEK_TASKS
-print("Esta semana...")
+# Esta semana
 week_issues=jira_all(
     "project in ("+ALL_SW_DYN+") AND due >= '"+TODAY+"' AND due <= '"+WEEK_END+"' "
     "AND statusCategory != Done ORDER BY project ASC, due ASC",
@@ -252,18 +292,16 @@ week_by_mo=defaultdict(list)
 for i in week_issues:
     if "fields" not in i: continue
     if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
-    mo=SW_TO_MO.get(i["fields"]["project"]["key"]); f=i["fields"]
+    sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
     if mo:
         week_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
             "due":f.get("duedate",""),
             "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
             "status":f["status"]["name"]})
 total_week=sum(len(v) for v in week_by_mo.values())
-print("  Esta semana: "+str(total_week))
+print("  Semana: "+str(total_week))
 
-# 5. UPCOMING_TASKS: sin fecha + proximas (due > hoy+7, no-Done)
-# Captura todas las tareas que no aparecen en LATE ni en WEEK
-print("Proximas y sin fecha...")
+# Próximas + sin fecha
 nodt_issues=jira_all(
     "project in ("+ALL_SW_DYN+") AND (due is EMPTY OR due > '"+WEEK_END+"') "
     "AND statusCategory != Done ORDER BY project ASC",
@@ -272,62 +310,72 @@ nodt_by_mo=defaultdict(list)
 for i in nodt_issues:
     if "fields" not in i: continue
     if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
-    mo=SW_TO_MO.get(i["fields"]["project"]["key"]); f=i["fields"]
+    sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
     if mo:
         nodt_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
-            "due":"",
+            "due":f.get("duedate",""),
             "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
             "status":f["status"]["name"]})
 total_nodt=sum(len(v) for v in nodt_by_mo.values())
-print("  Sin fecha: "+str(total_nodt))
+print("  Proximas+SinFecha: "+str(total_nodt))
 
-# 6. Descargar y actualizar HTML
-print("HTML...")
+# ── ACTUALIZAR HTML ───────────────────────────────────────────────────────────
+print("\nActualizando HTML...")
 html,sha=gh_get("index.html")
 
-# MO statuses
-for mk,vals in MO_STATUS.items():
-    ns=vals["status"]; no=vals["owner"].replace("'","\\'"); np=vals["pais"]
+# 1. SYNC ESTRUCTURAL: actualizar cada campo por MO
+changed=0
+for mk,vals in jira_data.items():
+    base=r"(key:'"+re.escape(mk)+r"'"
+    # summary
+    old_sm=re.search(r"key:'"+re.escape(mk)+r"'[^,\n]*?,frente:'[^']*',subfrente:'[^']*',summary:'([^']*)'",html)
+    # frente, subfrente, summary en secuencia
+    if vals["frente"]:
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^,\n]*?,frente:')[^']*'",
+                    r"\g<1>"+vals["frente"]+"'",html,count=1)
+    if vals["subfrente"]:
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^,\n]*?,frente:'[^']*',subfrente:')[^']*'",
+                    r"\g<1>"+vals["subfrente"]+"'",html,count=1)
+    if vals["summary"]:
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^,\n]*?,frente:'[^']*',subfrente:'[^']*',summary:')[^']*'",
+                    r"\g<1>"+vals["summary"]+"'",html,count=1)
+    # status
     html=re.sub(r"(key:'"+re.escape(mk)+r"'[^,\n]*?,frente:[^,\n]*?,subfrente:[^,\n]*?,summary:[^,\n]*?,status:')[^']+'",
-                r"\g<1>"+ns+"'",html,count=1)
-    html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?owner:')[^']+'",
-                r"\g<1>"+no+"'",html,count=1)
-    if np:
-        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?pais:')[^']+'",
-                    r"\g<1>"+np+"'",html,count=1)
-    # Actualizar campo sw si se detectó desde issuelinks y está vacío
-    sw_detected = vals.get("sw","")
-    if sw_detected:
+                r"\g<1>"+vals["status"]+"'",html,count=1)
+    # owner
+    html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?owner:')[^']*'",
+                r"\g<1>"+vals["owner"]+"'",html,count=1)
+    # pais
+    if vals["pais"]:
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?pais:')[^']*'",
+                    r"\g<1>"+vals["pais"]+"'",html,count=1)
+    # sw (desde SW_TO_MO reversa + issuelinks)
+    sw_val = vals["sw"] or MO_TO_SW.get(mk,"")
+    if sw_val:
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?sw:')[^']*'",
-                    r"\g<1>"+sw_detected+"'",html,count=1)
+                    r"\g<1>"+sw_val+"'",html,count=1)
+    changed+=1
 
-# Actualizar campo sw desde SW_TO_MO para todas las iniciativas mapeadas
-for sw, mo in SW_TO_MO.items():
-    html=re.sub(r"(key:'"+re.escape(mo)+r"'[^}]*?sw:')[^']*'",
-                r"\g<1>"+sw+"'",html,count=1)
+print("  Iniciativas sincronizadas: "+str(changed))
 
-# SW_PROJECTS y DATA tasks
+# 2. Tasks counts
 for sw,(t,d,p,td,l) in sw_counts.items():
     nt="tasks:{total:"+str(t)+",done:"+str(d)+",prog:"+str(p)+",todo:"+str(td)+",late:"+str(l)+"}"
+    nt2="{total:"+str(t)+",done:"+str(d)+",prog:"+str(p)+",todo:"+str(td)+",late:"+str(l)+"}"
     html=re.sub(r"('"+re.escape(sw)+r"'\s*:\s*\{[^}]*?)tasks\s*:\s*(?:\{[^}]+\}|null)",
                 r"\g<1>"+nt,html,count=1)
     mo=SW_TO_MO.get(sw)
     if mo:
-        nt2="{total:"+str(t)+",done:"+str(d)+",prog:"+str(p)+",todo:"+str(td)+",late:"+str(l)+"}"
         html=re.sub(r"(key:'"+re.escape(mo)+r"'[^}]*?,tasks:)(\{[^}]+\}|null)",
                     r"\g<1>"+nt2,html,count=1)
 
-# LATE_TASKS, WEEK_TASKS, NO_DATE_TASKS
-late_js=build_var("LATE_TASKS",late_by_mo,str(total_late)+" tardias (no-Done)")
-week_js=build_var("WEEK_TASKS",week_by_mo,str(total_week)+" esta semana")
-nodt_js=build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" sin fecha")
-
-html=replace_var(html,"LATE_TASKS",late_js)
-html=replace_var(html,"WEEK_TASKS",week_js)
-html=replace_var(html,"NO_DATE_TASKS",nodt_js)
+# 3. Listas
+html=replace_var(html,"LATE_TASKS",  build_var("LATE_TASKS", late_by_mo,  str(total_late)+" tardias"))
+html=replace_var(html,"WEEK_TASKS",  build_var("WEEK_TASKS", week_by_mo,  str(total_week)+" esta semana"))
+html=replace_var(html,"NO_DATE_TASKS",build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" proximas+sinfecha"))
 
 now_str=datetime.now().strftime("%H:%M")
 result=gh_put("index.html",html,sha,
-    "auto: actualizacion completa — "+TODAY+" "+now_str+" COT")
-print("Commit: "+result["commit"]["sha"][:7])
-print("Late="+str(total_late)+" Semana="+str(total_week)+" SinFecha="+str(total_nodt))
+    "auto v2.0: sync+estados+listas — "+TODAY+" "+now_str+" COT")
+print("\n✅ Commit: "+result["commit"]["sha"][:7])
+print("   Sync:"+str(changed)+" MO | Late:"+str(total_late)+" | Semana:"+str(total_week)+" | Proximas:"+str(total_nodt))
