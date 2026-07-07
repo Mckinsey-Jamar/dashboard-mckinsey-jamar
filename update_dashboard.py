@@ -242,7 +242,7 @@ def main():
         jira_data[key] = {
             "frente":frente,"subfrente":subfrente,"summary":clean(summary),
             "rec": int(f.get("customfield_11094") or 0),  # impacto recurrente Miles USD
-            "ot":  int(f.get("customfield_11091") or 0),   # impacto one time
+            "ot":  int(f.get("customfield_11091") or 0) if frente != "Crédito" else 0,  # OT solo para Operaciones
             "status":st,"owner":clean(owner),"pais":pais,"sw":sw
         }
     
@@ -337,6 +337,7 @@ def main():
         if "fields" not in i: continue
         if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
         sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
+        if i["key"] in dated_task_keys: continue  # tiene fecha real aunque JQL diga due is EMPTY
         if f.get("duedate"): continue  # excluir si tiene fecha real — no es sin fecha
         if mo:
             assignee_display = (f.get('assignee') or {}).get('displayName', '')
@@ -344,6 +345,10 @@ def main():
                 "due":f.get("duedate",""),
                 "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
                 "status":f["status"]["name"]})
+    # Set de claves con fecha real (del índice JQL actual):
+    # Resuelve discrepancia Jira: 'due is EMPTY' devuelve tareas que sí tienen fecha
+    dated_task_keys=set(i2['key'] for i2 in nd_fecha)
+
     total_nodt=sum(len(v) for v in nodt_by_mo.values())
 
     # ── NO_OWNER_TASKS: sin fecha O sin responsable ──────────────────────────────
