@@ -1047,6 +1047,7 @@ function renderSFActivities(filtered) {
     html += '<div><div class="sf-act-name">'+cfg.sf+'</div><div class="sf-act-frente">'+cfg.frente+' · '+sfItems.length+' iniciativas</div></div>';
     if(hasPlan){
       html += '<div><div class="sf-act-total" style="color:'+clr+'">'+total+'</div><div class="sf-act-total-lbl">hitos</div></div>';
+    if(rec>0){ html += '<div style="text-align:right;padding-left:12px;border-left:1px solid #eee;margin-left:8px;"><div class="sf-act-total" style="color:'+clr+';font-size:1.05rem;">$'+(rec>=1000?(rec/1000).toFixed(1)+'B':rec+'M')+'</div><div class="sf-act-total-lbl">Rec</div></div>'; }
     }
     html += '</div>';
     if(hasPlan){
