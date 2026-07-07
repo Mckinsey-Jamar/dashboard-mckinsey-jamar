@@ -332,6 +332,8 @@ def main():
         "project in ("+ALL_SW_DYN+") AND due is EMPTY "
         "AND statusCategory != Done ORDER BY project ASC",
         ["summary","status","duedate","assignee","project"],100,15)
+    # Claves con fecha real según nd_fecha (resuelve Jira JQL index lag)
+    dated_task_keys = set(i2['key'] for i2 in nd_fecha)
     nodt_by_mo=defaultdict(list)
     for i in nodt_issues:
         if "fields" not in i: continue
@@ -345,9 +347,6 @@ def main():
                 "due":f.get("duedate",""),
                 "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
                 "status":f["status"]["name"]})
-    # Set de claves con fecha real (del índice JQL actual):
-    # Resuelve discrepancia Jira: 'due is EMPTY' devuelve tareas que sí tienen fecha
-    dated_task_keys=set(i2['key'] for i2 in nd_fecha)
 
     total_nodt=sum(len(v) for v in nodt_by_mo.values())
 
