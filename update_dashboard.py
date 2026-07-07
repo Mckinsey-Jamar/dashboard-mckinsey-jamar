@@ -241,6 +241,8 @@ def main():
     
         jira_data[key] = {
             "frente":frente,"subfrente":subfrente,"summary":clean(summary),
+            "rec": int(f.get("customfield_11094") or 0),  # impacto recurrente Miles USD
+            "ot":  int(f.get("customfield_11091") or 0),   # impacto one time
             "status":st,"owner":clean(owner),"pais":pais,"sw":sw
         }
     
@@ -405,6 +407,13 @@ def main():
         if vals["pais"]:
             html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?pais:')[^']*'",
                         lambda m,v=vals["pais"]: m.group(1)+v+"'",html,count=1)
+        # rec y ot (impactos)
+        rec_v = str(vals.get('rec', 0) or 0)
+        ot_v  = str(vals.get('ot', 0) or 0)
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,rec:)\d*",
+                   lambda m,v=rec_v: m.group(1)+v, html, count=1)
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ot:)\d*",
+                   lambda m,v=ot_v: m.group(1)+v, html, count=1)
         # sw (desde SW_TO_MO reversa + issuelinks)
         sw_val = vals["sw"] or MO_TO_SW.get(mk,"")
         if sw_val:
