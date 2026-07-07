@@ -241,7 +241,7 @@ def main():
     
         jira_data[key] = {
             "frente":frente,"subfrente":subfrente,"summary":clean(summary),
-            "rec": int(f.get("customfield_11094") or 0),  # impacto recurrente Miles USD
+            "rec": int(f.get("customfield_11094") or 0),  # KPI impacto en USD (customfield_11094) — NO convertir a COP
             "ot":  int(f.get("customfield_11091") or 0) if frente != "Crédito" else 0,  # OT solo para Operaciones
             "status":st,"owner":clean(owner),"pais":pais,"sw":sw
         }
