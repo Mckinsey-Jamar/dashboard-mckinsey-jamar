@@ -1029,7 +1029,7 @@ function renderSFActivities(filtered) {
     const sfItems = filtered.filter(function(d){return d.subfrente===cfg.sf;});
     if(!sfItems.length) return;
     // Aggregate tasks across all initiatives in this sf
-    let total=0, done=0, prog=0, todo=0, late=0, hasPlan=false;
+    let total=0, done=0, prog=0, todo=0, late=0, hasPlan=false, rec=0;
     sfItems.forEach(function(d){
       const swInfo = d.sw ? SW_PROJECTS[d.sw] : null;
       const t = swInfo ? swInfo.tasks : (d.tasks||null);
@@ -1037,6 +1037,7 @@ function renderSFActivities(filtered) {
         hasPlan=true;
         total+=t.total; done+=t.done; prog+=(t.prog||0); todo+=t.todo; late+=(t.late||0);
       }
+      rec += (d.rec || 0);
     });
     const isCr = cfg.frente==='Crédito';
     const clr = isCr ? 'var(--cr)' : 'var(--op)';
