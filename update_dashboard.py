@@ -408,12 +408,14 @@ def main():
             html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?pais:')[^']*'",
                         lambda m,v=vals["pais"]: m.group(1)+v+"'",html,count=1)
         # rec y ot (impactos)
-        rec_v = str(vals.get('rec', 0) or 0)
-        ot_v  = str(vals.get('ot', 0) or 0)
-        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,rec:)\d*",
-                   lambda m,v=rec_v: m.group(1)+v, html, count=1)
-        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ot:)\d*",
-                   lambda m,v=ot_v: m.group(1)+v, html, count=1)
+        # rec y ot: solo actualizar si Jira devuelve >0 (evita sobreescribir con 0)
+        rec_v=str(int(vals.get('rec',0) or 0)); ot_v=str(int(vals.get('ot',0) or 0))
+        if int(rec_v)>0:
+            html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,rec:)\d+",
+                       lambda m,v=rec_v: m.group(1)+v,html,count=1)
+        if int(ot_v)>0:
+            html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ot:)\d+",
+                       lambda m,v=ot_v: m.group(1)+v,html,count=1)
         # sw (desde SW_TO_MO reversa + issuelinks)
         sw_val = vals["sw"] or MO_TO_SW.get(mk,"")
         if sw_val:
