@@ -355,7 +355,7 @@ def main():
         f2=iss['fields']
         if mo2:
             asn2=f2.get('assignee')
-            if asn2 is not None and asn2:  # None = sin responsable en API
+            if asn2 is None or not asn2:  # Sin responsable = assignee nulo o vacío
                 noown_by_mo[mo2].append({'key':iss['key'],'summary':clean(f2.get('summary') or ''),
                     'due':f2.get('duedate',''),
                     'assignee':'Sin asignar','status':f2['status']['name']})
@@ -367,7 +367,7 @@ def main():
         f2=iss['fields']
         if mo2:
             asn2=f2.get('assignee')
-            if asn2 is not None and asn2:  # None = sin responsable en API
+            if asn2 is None or not asn2:  # Sin responsable = assignee nulo o vacío
                 noown_by_mo[mo2].append({'key':iss['key'],'summary':clean(f2.get('summary') or ''),
                     'due':f2.get('duedate',''),
                     'assignee':'Sin asignar','status':f2['status']['name']})
