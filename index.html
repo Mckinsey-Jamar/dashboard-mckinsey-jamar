@@ -3049,7 +3049,7 @@ function renderTable(data) {
         // ── Fila detalle Sin responsable ──────────────────────────────────────
         if(noownerCount > 0) {
           var noownRows = noownerArr.map(function(task){
-            return '<tr><td class="tk-key">'+task.key+'</td>'
+            return '<tr><td class="tk-key"><a href="https://hubdigitaljamar.atlassian.net/browse/'+task.key+'" target="_blank">'+task.key+'</a></td>'
               +'<td>'+task.summary+'</td>'
               +'<td style="color:#888;">'+(task.due ? task.due : 'Sin fecha')+'</td>'
               +'<td style="color:#888;">'+(task.status||'')+'</td>'
