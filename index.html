@@ -638,13 +638,13 @@ function getFiltered() {
 ============================================================ */
 function fmtImp(v) {
   if(!v || v===0) return '<span class="dash">—</span>';
-  const sign = v<0 ? '-$' : '$';
-  return `<span class="imp-val">${sign}${Math.abs(v).toLocaleString('es-CO',{maximumFractionDigits:1})}</span>`;
+  const sign = v<0 ? '-USD ' : 'USD ';
+  return `<span class="imp-val">${sign}${Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:1})}</span>`;
 }
 function fmtImpPlain(v) {
   if(!v || v===0) return '—';
-  const sign = v<0 ? '-$' : '$';
-  return `${sign}${Math.abs(v).toLocaleString('es-CO',{maximumFractionDigits:1})}`;
+  const sign = v<0 ? '-USD ' : 'USD ';
+  return `${sign}${Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:1})}`;
 }
 function stageBadgeClass(s) {
   return {L1:'b-l1',L2:'b-l2',L3:'b-l3',L4:'b-l4',L5:'b-l5'}[s]||'b-l4';
@@ -3184,7 +3184,7 @@ function formatRelative(date) {
   if(diff < 5)  return 'hace un momento';
   if(diff < 60) return 'hace ' + diff + 's';
   if(diff < 3600) return 'hace ' + Math.floor(diff/60) + ' min';
-  return date.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  return date.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
 }
 
 function updateSyncBar() {
@@ -3194,7 +3194,7 @@ function updateSyncBar() {
   var status  = document.getElementById('sync-status-lbl');
 
   if(lblLast && lastSyncTime) {
-    lblLast.textContent = formatRelative(lastSyncTime) + ' (' + lastSyncTime.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}) + ')';
+    lblLast.textContent = formatRelative(lastSyncTime) + ' (' + lastSyncTime.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) + ')';
   }
 
   if(nextSyncTime && lblCd && fill) {
@@ -3405,7 +3405,7 @@ function scheduleNextSync() {
 }
 
 /* INIT */
-document.getElementById('upd-date').textContent = new Date().toLocaleDateString('es-CO',{day:'2-digit',month:'long',year:'numeric'});
+document.getElementById('upd-date').textContent = new Date().toLocaleDateString('en-US',{day:'2-digit',month:'long',year:'numeric'});
 
 // Start countdown tick
 setInterval(updateSyncBar, 1000);
