@@ -327,60 +327,44 @@ def main():
     total_week=sum(len(v) for v in week_by_mo.values())
     print("  Semana: "+str(total_week))
     
-    # Próximas + sin fecha
-    nodt_issues=jira_all(
-        "project in ("+ALL_SW_DYN+") AND due is EMPTY "
-        "AND statusCategory != Done ORDER BY project ASC",
-        ["summary","status","duedate","assignee","project"],100,15)
-    # Claves con fecha real según nd_fecha (resuelve Jira JQL index lag)
-    dated_task_keys = set(i2['key'] for i2 in nd_fecha)
+    # ── SIN FECHA y SIN RESPONSABLE: filtro por campo REAL del API ────────────
+    # El índice JQL de Jira puede estar desactualizado para 'due'.
+    # Obtenemos TODAS las tareas no-done y filtramos por duedate/assignee REAL.
+    print('Sin fecha + Sin responsable...')
+    all_nondone=jira_all(
+        "project in ("+ALL_SW_DYN+") AND statusCategory != Done ORDER BY project ASC",
+        ["summary","status","duedate","assignee","project"],100,20)
+    print('  No-done total: '+str(len(all_nondone)))
+
     nodt_by_mo=defaultdict(list)
-    for i in nodt_issues:
-        if "fields" not in i: continue
-        if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
-        sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
-        if i["key"] in dated_task_keys: continue  # tiene fecha real aunque JQL diga due is EMPTY
-        if f.get("duedate"): continue  # excluir si tiene fecha real — no es sin fecha
-        if mo:
-            assignee_display = (f.get('assignee') or {}).get('displayName', '')
-            nodt_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
-                "due":f.get("duedate",""),
-                "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
-                "status":f["status"]["name"]})
+    noown_by_mo=defaultdict(list)
+    for task in all_nondone:
+        if 'fields' not in task: continue
+        tf=task['fields']
+        if tf['status'].get('statusCategory',{}).get('key','')=='done': continue
+        sw_t=tf.get('project',{}).get('key',''); mo_t=SW_TO_MO.get(sw_t)
+        if not mo_t: continue
+        real_due=tf.get('duedate')    # valor REAL del API, no del índice JQL
+        real_asn=tf.get('assignee')   # valor REAL del API
+        t_data={'key':task['key'],'summary':clean(tf.get('summary') or ''),
+            'due':real_due or '','assignee':clean((real_asn or {}).get('displayName','Sin asignar')),
+            'status':tf['status']['name']}
+        # Sin fecha: el API devuelve duedate vacío/None
+        if not real_due:
+            nodt_by_mo[mo_t].append(t_data)
+        # Sin responsable: el API devuelve assignee None
+        if real_asn is None:
+            noown_by_mo[mo_t].append({**t_data,'assignee':'Sin asignar'})
+
+    # Post-filtro de seguridad noown
+    for _mo in list(noown_by_mo.keys()):
+        noown_by_mo[_mo]=[t for t in noown_by_mo[_mo]
+            if not t.get('assignee') or t.get('assignee')=='Sin asignar']
 
     total_nodt=sum(len(v) for v in nodt_by_mo.values())
-
-    # ── NO_OWNER_TASKS: sin fecha O sin responsable ──────────────────────────────
-    print('Sin responsable...')
-    noown_by_mo=defaultdict(list)
-    # Fuente 1: tareas CON fecha pero SIN responsable (de nd_fecha)
-    for iss in nd_fecha:
-        if 'fields' not in iss: continue
-        if iss['fields']['status'].get('statusCategory',{}).get('key','')=='done': continue
-        sw2=iss['fields'].get('project',{}).get('key',''); mo2=SW_TO_MO.get(sw2)
-        f2=iss['fields']
-        if mo2:
-            asn2=f2.get('assignee')
-            if asn2 is None or not asn2:  # Sin responsable = assignee nulo o vacío
-                noown_by_mo[mo2].append({'key':iss['key'],'summary':clean(f2.get('summary') or ''),
-                    'due':f2.get('duedate',''),
-                    'assignee':'Sin asignar','status':f2['status']['name']})
-    # Fuente 2: tareas SIN fecha Y SIN responsable (de nodt_issues)
-    for iss in nodt_issues:
-        if 'fields' not in iss: continue
-        if iss['fields']['status'].get('statusCategory',{}).get('key','')=='done': continue
-        sw2=iss['fields'].get('project',{}).get('key',''); mo2=SW_TO_MO.get(sw2)
-        f2=iss['fields']
-        if mo2:
-            asn2=f2.get('assignee')
-            if asn2 is None or not asn2:  # Sin responsable = assignee nulo o vacío
-                noown_by_mo[mo2].append({'key':iss['key'],'summary':clean(f2.get('summary') or ''),
-                    'due':f2.get('duedate',''),
-                    'assignee':'Sin asignar','status':f2['status']['name']})
     total_noown=sum(len(v) for v in noown_by_mo.values())
+    print('  Sin fecha: '+str(total_nodt))
     print('  Sin responsable: '+str(total_noown))
-    print("  Proximas+SinFecha: "+str(total_nodt))
-    
     # ── ACTUALIZAR HTML ───────────────────────────────────────────────────────────
     print("\nActualizando HTML...")
     html,sha=gh_get("index.html")
