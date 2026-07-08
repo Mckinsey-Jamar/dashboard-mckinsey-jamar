@@ -210,6 +210,9 @@ def main():
         # Subfrente (customfield_11055)
         sf_list   = f.get("customfield_11055") or []
         subfrente = norm_sf(sf_list[0].get("value","") if sf_list else "")
+        # Regla: solo procesar iniciativas con Frente Y Subfrente asignados
+        if not frente or not subfrente:
+            continue  # excluir del dashboard completamente
     
         # Status
         st = f["status"]["name"].split(":")[0].strip()
