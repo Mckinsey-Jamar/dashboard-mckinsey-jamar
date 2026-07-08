@@ -251,17 +251,6 @@ def main():
     
     print("  Frentes detectados: "+str(set(v["frente"] for v in jira_data.values() if v["frente"])))
 
-    # Limpiar frente/subfrente en HTML para iniciativas excluidas de Jira
-    # (Si Jira quitó el frente/subfrente, limpiar para que el filtro JS funcione)
-    all_mo_in_html=set(re.findall(r"key:'(MO-\\d+)'",html))
-    valid_mo_keys=set(jira_data.keys())
-    for excluded_mo in all_mo_in_html - valid_mo_keys:
-        # Solo limpiar si está en DATA (no en LATE/WEEK/etc)
-        html=re.sub(r"(key:'"+re.escape(excluded_mo)+r"'[^,\\n]*?,frente:')[^']*'",
-                   lambda m: m.group(1)+"'", html, count=1)
-        html=re.sub(r"(key:'"+re.escape(excluded_mo)+r"'[^,\\n]*?,frente:''[^,\\n]*?,subfrente:')[^']*'",
-                   lambda m: m.group(1)+"'", html, count=1)
-    
     # ── PASO 2: ESTADOS (Opcion B) ────────────────────────────────────────────────
     print("\n[2/3] ESTADOS — Conteos done/prog/todo...")
     
@@ -382,6 +371,14 @@ def main():
     # ── ACTUALIZAR HTML ───────────────────────────────────────────────────────────
     print("\nActualizando HTML...")
     html,sha=gh_get("index.html")
+
+    # Limpiar frente en HTML para iniciativas que Jira ya no tiene con frente+subfrente
+    # Esto permite que el filtro JS DATA.filter() las excluya correctamente
+    _all_mo_html=set(re.findall(r"key:'(MO-\\d+)'",html[:html.find('var LATE_TASKS')]))
+    _valid_mo=set(jira_data.keys())
+    for _ex_mo in _all_mo_html - _valid_mo:
+        html=re.sub(r"(key:'"+re.escape(_ex_mo)+r"'[^,\n]*?,frente:')[^']*'",
+                   lambda m: m.group(1)+"'", html, count=1)
     
     # 1. SYNC ESTRUCTURAL: actualizar cada campo por MO
     changed=0
