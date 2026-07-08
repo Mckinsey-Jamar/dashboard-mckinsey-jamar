@@ -88,6 +88,17 @@ def main():
         except Exception as ex:
             print("  JIRA ERR: "+str(ex)[:80]+" | "+jql[:60]); return []
     
+    def jira_get(key, fields):
+        """GET individual de un issue — obtiene campos que el batch no devuelve"""
+        url=(JIRA_BASE+"/rest/api/3/issue/"+key
+             +"?fields="+",".join(fields))
+        req=urllib.request.Request(url,headers=jira_auth())
+        try:
+            with urllib.request.urlopen(req,timeout=15) as r:
+                return json.loads(r.read()).get("fields",{})
+        except Exception as ex:
+            print("  jira_get err "+key+": "+str(ex)[:50]); return {}
+
     def jira_all(jql, fields=None, per_page=100, max_pages=8):
         all_issues=[]; next_token=None
         for page in range(max_pages):
@@ -260,6 +271,22 @@ def main():
         }
     
     print("  Frentes detectados: "+str(set(v["frente"] for v in jira_data.values() if v["frente"])))
+
+    # ── PASO 2: Sincronizar KPI impacto (REC/OT) con query individual por issue ──
+    # El batch API no devuelve customfield_11094 para proyectos Product Discovery
+    # Se consulta cada MO individualmente para obtener el valor actual de Jira
+    print("Sincronizando KPI impacto (REC/OT)...")
+    rec_updated=0
+    for mo_key, vals in jira_data.items():
+        kpi=jira_get(mo_key,["customfield_11094","customfield_11091"])
+        rec=int(kpi.get("customfield_11094") or 0)
+        ot=int(kpi.get("customfield_11091") or 0)
+        # OT solo para Operaciones
+        if vals.get("frente")=="Crédito": ot=0
+        jira_data[mo_key]["rec"]=rec
+        jira_data[mo_key]["ot"]=ot
+        if rec>0: rec_updated+=1
+    print("  MOs con REC>0: "+str(rec_updated))
 
     # ── PASO 2: ESTADOS (Opcion B) ────────────────────────────────────────────────
     print("\n[2/3] ESTADOS — Conteos done/prog/todo...")
@@ -460,15 +487,14 @@ def main():
         if vals["pais"]:
             html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?pais:')[^']*'",
                         lambda m,v=vals["pais"]: m.group(1)+v+"'",html,count=1)
-        # rec y ot (impactos)
-        # rec y ot: solo actualizar si Jira devuelve >0 (evita sobreescribir con 0)
-        rec_v=str(int(vals.get('rec',0) or 0)); ot_v=str(int(vals.get('ot',0) or 0))
-        if int(rec_v)>0:
-            html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,rec:)\d+",
-                       lambda m,v=rec_v: m.group(1)+v,html,count=1)
-        if int(ot_v)>0:
-            html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ot:)\d+",
-                       lambda m,v=ot_v: m.group(1)+v,html,count=1)
+        # rec y ot — SIEMPRE actualizar desde jira_data (valor actual de KPI impacto)
+        rec_v=str(vals.get('rec',0) or 0)
+        ot_v =str(vals.get('ot',0)  or 0)
+        # Actualizar siempre, incluso si es 0 (para reflejar cambios en Jira)
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,rec:)\d+",
+                   lambda m,v=rec_v: m.group(1)+v,html,count=1)
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ot:)\d+",
+                   lambda m,v=ot_v: m.group(1)+v,html,count=1)
         # sw (desde SW_TO_MO reversa + issuelinks)
         sw_val = vals["sw"] or MO_TO_SW.get(mk,"")
         if sw_val:
