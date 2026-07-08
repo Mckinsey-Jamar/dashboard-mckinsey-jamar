@@ -340,15 +340,29 @@ def main():
     total_week=sum(len(v) for v in week_by_mo.values())
     print("  Semana: "+str(total_week))
     
-    # ── SIN FECHA y SIN RESPONSABLE: filtro por campo REAL del API ────────────
-    # El índice JQL de Jira puede estar desactualizado para 'due'.
-    # Obtenemos TODAS las tareas no-done y filtramos por duedate/assignee REAL.
+    # ── SIN FECHA y SIN RESPONSABLE — solución triple capa ─────────────────────
+    # Problema: el batch API puede devolver duedate=null aunque el issue tenga fecha
+    # Solución: combinar valor del API + conjunto de tareas con fecha confirmada por JQL
+
+    # Paso A: obtener TODAS las tareas no-done con sus campos reales del API
     print('Sin fecha + Sin responsable...')
     all_nondone=jira_all(
         "project in ("+ALL_SW_DYN+") AND statusCategory != Done ORDER BY project ASC",
-        ["summary","status","duedate","assignee","project"],100,20)
+        ["summary","status","duedate","assignee","project"],100,30)
     print('  No-done total: '+str(len(all_nondone)))
 
+    # Paso B: obtener conjunto de tareas con fecha CONFIRMADA por JQL
+    # (cubre tareas pasadas y futuras confirmadas por el índice JQL)
+    future_dated=jira_all(
+        "project in ("+ALL_SW_DYN+") AND due > '"+TODAY+"' AND statusCategory != Done ORDER BY project ASC",
+        ["project"],100,15)
+    # Combinar late, week y future para el set de claves CON fecha confirmada
+    confirmed_dated_keys=set()
+    for iss in list(late_issues)+list(week_issues)+future_dated:
+        confirmed_dated_keys.add(iss['key'])
+    print('  Claves con fecha confirmada: '+str(len(confirmed_dated_keys)))
+
+    # Paso C: clasificar en sin fecha y sin responsable
     nodt_by_mo=defaultdict(list)
     noown_by_mo=defaultdict(list)
     for task in all_nondone:
@@ -357,15 +371,17 @@ def main():
         if tf['status'].get('statusCategory',{}).get('key','')=='done': continue
         sw_t=tf.get('project',{}).get('key',''); mo_t=SW_TO_MO.get(sw_t)
         if not mo_t: continue
-        real_due=tf.get('duedate')    # valor REAL del API, no del índice JQL
+        real_due=tf.get('duedate')    # valor REAL del API
         real_asn=tf.get('assignee')   # valor REAL del API
         t_data={'key':task['key'],'summary':clean(tf.get('summary') or ''),
             'due':real_due or '','assignee':clean((real_asn or {}).get('displayName','Sin asignar')),
             'status':tf['status']['name']}
-        # Sin fecha: el API devuelve duedate vacío/None
-        if not real_due:
+        # SIN FECHA: sin date en API Y no está en confirmed_dated_keys
+        # Doble verificación para manejar inconsistencias del API de Jira
+        has_date = bool(real_due) or task['key'] in confirmed_dated_keys
+        if not has_date:
             nodt_by_mo[mo_t].append(t_data)
-        # Sin responsable: el API devuelve assignee None
+        # SIN RESPONSABLE: assignee es None en el API
         if real_asn is None:
             noown_by_mo[mo_t].append({**t_data,'assignee':'Sin asignar'})
 
