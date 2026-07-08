@@ -36,6 +36,13 @@ def main():
         "LEANW":"MO-30","LEANWPA":"MO-69","MXAT":"MO-77",
         "MDOOMC":"MO-49","EDP":"MO-53",
     }
+
+    # Iniciativas excluidas del dashboard: frente/subfrente en blanco en Jira PD
+    # El índice JQL puede estar desactualizado — actualizar si cambia en Jira
+    EXCLUDED_MO = {
+        "MO-60",  # 1AP sin frente/subfrente en Jira
+        "MO-61",  # 1EP sin frente en Jira
+    }
     MO_TO_SW = {v:k for k,v in SW_TO_MO.items()}
     
     # KNOWN_TOTALS: se actualiza dinámicamente si not_done > total
@@ -211,6 +218,9 @@ def main():
         sf_list   = f.get("customfield_11055") or []
         subfrente = norm_sf(sf_list[0].get("value","") if sf_list else "")
         # Regla: solo procesar iniciativas con Frente Y Subfrente asignados
+        # También excluir si está en EXCLUDED_MO (índice Jira puede estar desactualizado)
+        if key in EXCLUDED_MO:
+            continue
         if not frente or not subfrente:
             continue  # excluir del dashboard completamente
     
