@@ -548,7 +548,7 @@ var DATA = [
   {key:'MO-25',frente:'Operaciones',subfrente:'Transporte',summary:'4H. Gestionar el pico de despachos de fin de mes / cuarto',status:'L1',cat:'Habilitadora',owner:'Tatiana Zuluaga',pais:'COL',rec:81,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-25',sw:'',tasks:null},
   {key:'MO-26',frente:'Operaciones',subfrente:'Transporte',summary:'4B. Definir mix óptimo de insourcing y outsourcing de transporte',status:'L3',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-26',sw:'MIOT',tasks:{total:1,done:0,prog:0,todo:1,late:0}},
   {key:'MO-27',frente:'Operaciones',subfrente:'Transporte',summary:'4C. Mejorar entrega en primer intento, cumplimiento de citas y entrega a tiempo',status:'L3',cat:'Caso de Negocio',owner:'Marla Lambertino',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-27',sw:'',tasks:null},
-  {key:'MO-28',frente:'Operaciones',subfrente:'Transporte',summary:'4E. Implementar cobro por segunda entrega',status:'L3',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-28',sw:'IMPCSE',tasks:{total:24,done:5,prog:1,todo:18,late:3}},
+  {key:'MO-28',frente:'Operaciones',subfrente:'Transporte',summary:'4E. Implementar cobro por segunda entrega',status:'L3',cat:'Caso de Negocio',owner:'Ervin Trujillo',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-28',sw:'IMPCSE',tasks:{total:24,done:5,prog:1,todo:18,late:1}},
   {key:'MO-29',frente:'Operaciones',subfrente:'Transporte',summary:'4DP. Optimizar ruteo (Mejorar utilizacion y costo de entrega)',status:'L1',cat:'Habilitadora',owner:'Reinaldo Justiniani',pais:'PAN',rec:85,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-29',sw:'',tasks:null},
   {key:'MO-30',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3A. Implementar la metodología de Lean Warehouse',status:'L3',cat:'Caso de Negocio',owner:'Sneider Chacon',pais:'COL',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-30',sw:'LEANW',tasks:{total:20,done:0,prog:7,todo:13,late:0}},
   {key:'MO-31',frente:'Operaciones',subfrente:'Almacenamiento',summary:'3D. Mejorar la tecnología de Almacenamiento',status:'L2',cat:'Habilitadora',owner:'Jorge Mejia',pais:'COL',rec:179,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-31',sw:'SB3D',tasks:{total:13,done:0,prog:2,todo:11,late:0}},
@@ -1125,7 +1125,7 @@ const SW_PROJECTS = {
   'SLOBDECPA':{name:"2EP. Liquidación SLOB Decoración Panamá",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:22,done:0,prog:2,todo:20,late:0}},
   /* ── Transporte ── */
   'RCD3':{name:"4A. Reducir costos de flete",frente:"Operaciones",subfrente:"Transporte",tasks:{total:43,done:10,prog:5,todo:28,late:2}},
-  'IMPCSE':{name:"4B. Cobro segunda entrega",frente:"Operaciones",subfrente:"Transporte",tasks:{total:24,done:5,prog:1,todo:18,late:3}},
+  'IMPCSE':{name:"4B. Cobro segunda entrega",frente:"Operaciones",subfrente:"Transporte",tasks:{total:24,done:5,prog:1,todo:18,late:1}},
   'MIOT':{name:"4C. Mix insourcing/outsourcing",frente:"Operaciones",subfrente:"Transporte",tasks:{total:1,done:0,prog:0,todo:1,late:0}},
   'OPR':{name:"4F. Optimizar ruteo",frente:"Operaciones",subfrente:"Transporte",tasks:{total:20,done:3,prog:3,todo:14,late:1}},
   /* ── Post-venta ── */
@@ -1160,7 +1160,7 @@ const SW_PROJECTS = {
 
 /* ── LATE TASKS — tareas vencidas por iniciativa (actualizado 2026-06-16) ── */
 var LATE_TASKS = {
-  // 2026-07-08 — 22 tardias
+  // 2026-07-08 — 20 tardias
   'MO-2': [
     {key:'DEP-99',summary:"Establecer baseline pre-despliegue por SKU × tienda",duedate:'2026-06-29',assignee:"Sin asignar",status:"In Progress" },
     {key:'DEP-96',summary:"Calcular inventario semilla por SKU × tienda (60 días)",duedate:'2026-06-30',assignee:"Sin asignar",status:"In Progress" },
@@ -1176,8 +1176,6 @@ var LATE_TASKS = {
     {key:'RCD3-8',summary:"Contratacion agente contact",duedate:'2026-07-07',assignee:"Marla Lambertino Perez",status:"In Progress" }
   ],
   'MO-28': [
-    {key:'IMPCSE-25',summary:"Reunión con el equipo de crédito",duedate:'2026-06-25',assignee:"Ervin Trujillo Rojas",status:"To Do" },
-    {key:'IMPCSE-7',summary:"Go live piloto cobro segunda entrega piloto 1",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"To Do" },
     {key:'IMPCSE-2',summary:"Piloto con una tienda pequeña",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"In Progress" }
   ],
   'MO-34': [
@@ -1201,11 +1199,11 @@ var LATE_TASKS = {
   'MO-76': [
     {key:'OPR-15',summary:"Análisis de la data actual de planeación y rutas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"In Progress" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 var WEEK_TASKS = {
-  // 2026-07-08 — 147 esta semana
+  // 2026-07-08 — 146 esta semana
   'MO-2': [
     {key:'DEP-24',summary:"Primer Comité de Surtido",duedate:'2026-07-08',assignee:"Sin asignar",status:"In Progress" },
     {key:'DEP-97',summary:"Ejecutar envío quincenal de lotes a tiendas",duedate:'2026-07-14',assignee:"Sin asignar",status:"To Do" },
@@ -1273,9 +1271,6 @@ var WEEK_TASKS = {
   'MO-24': [
     {key:'RCD3-19',summary:"Capacitacion en atom",duedate:'2026-07-15',assignee:"Sin asignar",status:"In Progress" },
     {key:'RCD3-17',summary:"Capacitacion del agente",duedate:'2026-07-15',assignee:"Marla Lambertino Perez",status:"In Progress" }
-  ],
-  'MO-26': [
-    {key:'MIOT-1',summary:"Clean sheets transporte",duedate:'2026-07-15',assignee:"Ervin Trujillo Rojas",status:"To Do" }
   ],
   'MO-30': [
     {key:'LEANW-16',summary:"Lanzar el piloto y su monitorización",duedate:'2026-07-10',assignee:"Sneyder Chacón",status:"To Do" },
@@ -1409,7 +1404,7 @@ var WEEK_TASKS = {
     {key:'MXAT-31',summary:"Piloto Atlántico - solo Alcobas y camas",duedate:'2026-07-15',assignee:"Marla Lambertino Perez",status:"In Progress" },
     {key:'MXAT-12',summary:"Definir productos armables por el transportista",duedate:'2026-07-15',assignee:"Marla Lambertino Perez",status:"To Do" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 var NO_DATE_TASKS = {
   // 2026-07-08 — 376 sin fecha
@@ -1841,7 +1836,7 @@ var NO_DATE_TASKS = {
     {key:'MXAT-3',summary:"Experiencia de calificación de armado",duedate:'',assignee:"Sin asignar",status:"To Do" },
     {key:'MXAT-2',summary:"Revision del flujo de asignacion de citas de entrega",duedate:'',assignee:"Sin asignar",status:"To Do" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 var NO_OWNER_TASKS = {
   // 2026-07-08 — 612 sin responsable
   'MO-1': [
@@ -2290,15 +2285,15 @@ var NO_OWNER_TASKS = {
   ],
   'MO-28': [
     {key:'IMPCSE-26',summary:"Implementar cobro por segunda entrega",duedate:'',assignee:"Sin asignar",status:"Definición" },
-    {key:'IMPCSE-23',summary:"Revisión de KPIs y mejora continua",duedate:'2026-10-13',assignee:"Sin asignar",status:"To Do" },
-    {key:'IMPCSE-22',summary:"Go-live total",duedate:'2026-10-10',assignee:"Sin asignar",status:"To Do" },
-    {key:'IMPCSE-19',summary:"Piloto 3 - Costa 1",duedate:'2026-09-30',assignee:"Sin asignar",status:"To Do" },
-    {key:'IMPCSE-18',summary:"Piloto 2 - Cundinamarca",duedate:'2026-09-25',assignee:"Sin asignar",status:"To Do" },
-    {key:'IMPCSE-17',summary:"Piloto 1 - Antioquia",duedate:'2026-09-11',assignee:"Sin asignar",status:"To Do" },
-    {key:'IMPCSE-15',summary:"Configuracion en SAP",duedate:'2026-08-31',assignee:"Sin asignar",status:"To Do" },
-    {key:'IMPCSE-14',summary:"Creacion de ruta operativa para pedidos que tengan mas de 2 intentos de entrega",duedate:'2026-08-15',assignee:"Sin asignar",status:"To Do" },
-    {key:'IMPCSE-13',summary:"Definicion del modelo operativo del cobro para creditos y contado",duedate:'2026-08-07',assignee:"Sin asignar",status:"To Do" },
-    {key:'IMPCSE-12',summary:"Gromming para definir politica de despacho de nuevo intento deentrega y gestion del cobro",duedate:'2026-08-07',assignee:"Sin asignar",status:"To Do" }
+    {key:'IMPCSE-23',summary:"Revisión de KPIs y mejora continua",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" },
+    {key:'IMPCSE-22',summary:"Go-live total",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" },
+    {key:'IMPCSE-19',summary:"Piloto 3 - Costa 1",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" },
+    {key:'IMPCSE-18',summary:"Piloto 2 - Cundinamarca",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" },
+    {key:'IMPCSE-17',summary:"Piloto 1 - Antioquia",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" },
+    {key:'IMPCSE-15',summary:"Configuracion en SAP",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" },
+    {key:'IMPCSE-14',summary:"Creacion de ruta operativa para pedidos que tengan mas de 2 intentos de entrega",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" },
+    {key:'IMPCSE-13',summary:"Definicion del modelo operativo del cobro para creditos y contado",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" },
+    {key:'IMPCSE-12',summary:"Gromming para definir politica de despacho de nuevo intento deentrega y gestion del cobro",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" }
   ],
   'MO-34': [
     {key:'FCCDA-47',summary:"Pruebas tecnicas",duedate:'2026-07-11',assignee:"Sin asignar",status:"To Do" },
@@ -2504,7 +2499,7 @@ var NO_OWNER_TASKS = {
     {key:'PROP-17',summary:"Implementar y hacer seguimiento del producto definido",duedate:'2026-08-31',assignee:"Sin asignar",status:"To Do" },
     {key:'PROP-16',summary:"Desarrollar el producto para testeo",duedate:'2026-08-07',assignee:"Sin asignar",status:"To Do" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 var NODATE_TASKS = {
   // 2026-06-25 - 200 actividades sin fecha
   'MO-1': [
