@@ -531,7 +531,7 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
    rec = customfield_11094 (Miles USD estimado, parcial)
    ot  = customfield_11091 (pendiente de carga en Jira)
 ============================================================ */
-const DATA = [
+var DATA = [
   {key:'MO-1',frente:'Operaciones',subfrente:'S&OP',summary:'1D. Implementar el proceso de S&OE',status:'L3',cat:'Habilitadora',owner:'Sebastian Rivero',pais:'COL',rec:1082,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-1',sw:'SOE',tasks:{total:99,done:34,prog:16,todo:49,late:0}},
   {key:'MO-2',frente:'Operaciones',subfrente:'S&OP',summary:'1E. Depuración del portafolio',status:'L3',cat:'Caso de Negocio',owner:'Alvaro Cueto',pais:'Global',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-2',sw:'DEP',tasks:{total:139,done:34,prog:23,todo:82,late:5}},
   {key:'MO-3',frente:'Operaciones',subfrente:'S&OP',summary:'1A. Mejorar el proceso de S&OP',status:'L3',cat:'Caso de Negocio',owner:'Leandro Candama',pais:'Global',rec:135,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-3',sw:'MSOP',tasks:{total:29,done:16,prog:0,todo:13,late:0}},
@@ -600,6 +600,9 @@ const DATA = [
   {key:'MO-89',frente:'Crédito',subfrente:'Curva de Valor Crédito',summary:'1D. Implementar palancas transversales para clientes',status:'L3',cat:'Caso de Negocio',owner:'Manuelita Sarmiento',pais:'PAN',rec:41663,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-89',sw:'RF1D',tasks:{total:9,done:1,prog:3,todo:5,late:0}},
   {key:'MO-90',frente:'Crédito',subfrente:'FOE',summary:'4G. Comunicación de curva de valor de crédito',status:'L1',cat:'Habilitadora',owner:'Silvana Noriega',pais:'PAN',rec:0,ot:0,url:'https://hubdigitaljamar.atlassian.net/browse/MO-90',sw:'',tasks:null}
 ];
+// Regla: solo mostrar iniciativas con Frente Y Subfrente asignados
+DATA = DATA.filter(function(d){ return d.frente && d.subfrente; });
+
 
 
 
