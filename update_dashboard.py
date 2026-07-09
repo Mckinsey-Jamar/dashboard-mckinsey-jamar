@@ -273,21 +273,33 @@ def main():
     print("  Frentes detectados: "+str(set(v["frente"] for v in jira_data.values() if v["frente"])))
 
     # ── PASO 2: Sincronizar KPI impacto (REC/OT) con query individual por issue ──
-    # El batch API no devuelve customfield_11094 para proyectos Product Discovery
-    # Se consulta cada MO individualmente para obtener el valor actual de Jira
-    print("Sincronizando KPI impacto (REC/OT)...")
-    rec_updated=0
-    for mo_key, vals in jira_data.items():
-        kpi=jira_get(mo_key,["customfield_11094","customfield_11091"])
-        rec=int(kpi.get("customfield_11094") or 0)
-        ot=int(kpi.get("customfield_11091") or 0)
+    # ── SYNC REC/OT: consulta en CADA ciclo, sin caché, directo de Jira PD ─────
+    # Usa JQL 'customfield_11094 > 0' que funciona correctamente con el token
+    # Esto garantiza que cada cambio en KPI impacto se refleja en el siguiente ciclo
+    print('Sincronizando KPI impacto (REC) desde Jira PD...')
+    rec_issues_from_jira=jira_post(
+        "project = MO AND customfield_11094 > 0 ORDER BY key ASC",
+        ["customfield_11094","customfield_11091"], 100)
+    # Construir mapa: MO-key → {rec, ot} con valores ACTUALES de Jira
+    rec_map_jira={}
+    for ri in rec_issues_from_jira:
+        rk=ri['key']
+        rf=ri['fields']
+        r_rec=int(rf.get('customfield_11094') or 0)
+        r_ot =int(rf.get('customfield_11091') or 0)
         # OT solo para Operaciones
-        if vals.get("frente")=="Crédito": ot=0
-        jira_data[mo_key]["rec"]=rec
-        jira_data[mo_key]["ot"]=ot
-        if rec>0: rec_updated+=1
-    print("  MOs con REC>0: "+str(rec_updated))
-
+        if jira_data.get(rk,{}).get('frente')=='Crédito': r_ot=0
+        rec_map_jira[rk]={'rec':r_rec,'ot':r_ot}
+        # Actualizar jira_data con valores reales
+        if rk in jira_data:
+            jira_data[rk]['rec']=r_rec
+            jira_data[rk]['ot']=r_ot
+    # Para MOs que NO están en rec_issues (rec=0 o campo vacío en Jira), poner a 0
+    for mk_z in list(jira_data.keys()):
+        if mk_z not in rec_map_jira:
+            jira_data[mk_z]['rec']=0
+            jira_data[mk_z]['ot']=0
+    print('  MOs con REC>0: '+str(len(rec_map_jira))+'  → valores leídos de KPI impacto')
     # ── PASO 2: ESTADOS (Opcion B) ────────────────────────────────────────────────
     print("\n[2/3] ESTADOS — Conteos done/prog/todo...")
     
