@@ -156,6 +156,7 @@ def main():
         return "Global" if col and pan else "PAN" if pan else "COL" if col else ""
     
     def replace_var(html,name,new_content):
+        """Reemplaza var NAME={...} en HTML y elimina duplicados para evitar colisiones JS."""
         s=html.find("var "+name+" = {")
         if s==-1: return html
         depth=0; pos=s+len("var "+name+" = ")
@@ -163,10 +164,25 @@ def main():
             if html[pos]=="{": depth+=1
             elif html[pos]=="}":
                 depth-=1
-                if depth==0: return html[:s]+new_content+html[pos+1:]
+                if depth==0:
+                    result=html[:s]+new_content+html[pos+1:]
+                    # Eliminar cualquier declaración duplicada posterior (bug histórico)
+                    search_from=len(html[:s]+new_content)//2
+                    dup=result.find("var "+name+" = {",search_from)
+                    while dup!=-1:
+                        d2=0; p2=dup
+                        while p2<len(result):
+                            if result[p2]=="{": d2+=1
+                            elif result[p2]=="}":
+                                d2-=1
+                                if d2==0:
+                                    result=result[:dup].rstrip("\n")+"\n"+result[p2+1:].lstrip("\n")
+                                    break
+                            p2+=1
+                        dup=result.find("var "+name+" = {",search_from)
+                    return result
             pos+=1
         return html
-    
     def count_by_proj(issues):
         total=defaultdict(int); prog=defaultdict(int)
         for iss in issues:
