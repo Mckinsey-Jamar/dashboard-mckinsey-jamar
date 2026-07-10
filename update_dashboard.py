@@ -283,6 +283,7 @@ def main():
             "frente":frente,"subfrente":subfrente,"summary":clean(summary),
             "rec": int(f.get("customfield_11094") or 0),  # KPI impacto en USD (customfield_11094) — NO convertir a COP
             "ot":  int(f.get("customfield_11091") or 0) if frente != "Crédito" else 0,  # OT solo para Operaciones
+            "ct": 0,
             "status":st,"owner":clean(owner),"pais":pais,"sw":sw
         }
     
@@ -316,6 +317,18 @@ def main():
             jira_data[mk_z]['rec']=0
             jira_data[mk_z]['ot']=0
     print('  MOs con REC>0: '+str(len(rec_map_jira))+'  → valores leídos de KPI impacto')
+
+    # SYNC Capital de Trabajo (customfield_11566) — sin caché
+    ct_issues_jira=jira_post(
+        "project = MO AND customfield_11566 > 0 ORDER BY key ASC",
+        ["customfield_11566"], 100)
+    ct_map_jira={}
+    for ci in ct_issues_jira:
+        ct_v=int(ci['fields'].get('customfield_11566') or 0)
+        if ct_v>0: ct_map_jira[ci['key']]=ct_v; jira_data[ci['key']]['ct']=ct_v if ci['key'] in jira_data else ct_v
+    for mk_z in list(jira_data.keys()):
+        if mk_z not in ct_map_jira: jira_data[mk_z].setdefault('ct',0)
+    print('  CT total: USD '+str(sum(ct_map_jira.values()))+'  MOs: '+str(len(ct_map_jira)))
     # ── PASO 2: ESTADOS (Opcion B) ────────────────────────────────────────────────
     print("\n[2/3] ESTADOS — Conteos done/prog/todo...")
     
@@ -523,6 +536,9 @@ def main():
                    lambda m,v=rec_v: m.group(1)+v,html,count=1)
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ot:)\d+",
                    lambda m,v=ot_v: m.group(1)+v,html,count=1)
+        ct_v_=str(jira_data[mk].get('ct',0) or 0)
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ct:)\d+",
+                   lambda m,v=ct_v_: m.group(1)+v,html,count=1)
         # sw (desde SW_TO_MO reversa + issuelinks)
         sw_val = vals["sw"] or MO_TO_SW.get(mk,"")
         if sw_val:
