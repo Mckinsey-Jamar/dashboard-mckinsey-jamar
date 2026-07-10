@@ -556,6 +556,19 @@ def main():
     html=replace_var(html,"NO_OWNER_TASKS",build_var("NO_OWNER_TASKS",noown_by_mo,str(total_noown)+" sin responsable"))
     
     now_str=datetime.now().strftime("%H:%M")
+    # Safety check: no subir HTML si está incompleto (guardia anti-corrupción)
+    # El HTML completo debe tener las 4 variables JS y ser >200KB
+    _html_ok = (
+        html.count('var LATE_TASKS') >= 1 and
+        html.count('var WEEK_TASKS') >= 1 and
+        html.count('var NO_DATE_TASKS') >= 1 and
+        html.count('var NO_OWNER_TASKS') >= 1 and
+        len(html) > 200000
+    )
+    if not _html_ok:
+        print('❌ ABORT: HTML incompleto ('+str(len(html))+'B, missing vars) — no se sube')
+        return
+    print('✅ HTML OK: '+str(len(html)//1024)+'KB, todas las variables presentes')
     result=gh_put("index.html",html,sha,
         "auto v2.0: sync+estados+listas — "+TODAY+" "+now_str+" COT")
     print("\n✅ Commit: "+result["commit"]["sha"][:7])
