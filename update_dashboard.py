@@ -520,14 +520,11 @@ def main():
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ot:)\d+",
                    lambda m,v=ot_v: m.group(1)+v,html,count=1)
         # Capital de Trabajo: agregar ct si no existe, o actualizar si ya existe
+        # Capital de Trabajo: ct entre ot y url en DATA
         ct_v_=str(jira_data[mk].get('ct',0) or 0)
-        if re.search(r"key:'"+re.escape(mk)+r"'[^}]*?,ct:",html):
-            html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ct:)\d+",
-                       lambda m,v=ct_v_: m.group(1)+v,html,count=1)
-        else:
-            # Agregar ct después de ot si no existe en el entry
-            html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?,ot:)(\d+)",
-                       lambda m,v=ct_v_: m.group(1)+m.group(2)+',ct:'+v,html,count=1)
+        html=re.sub(
+            r"(key:'"+re.escape(mk)+r"'[^\n]*?,ct:)\d+",
+            lambda m,v=ct_v_: m.group(1)+v, html, count=1)
         # sw (desde SW_TO_MO reversa + issuelinks)
         sw_val = vals["sw"] or MO_TO_SW.get(mk,"")
         if sw_val:
