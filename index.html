@@ -672,6 +672,7 @@ function renderKPIs(data) {
   const total = data.length;
   const totalRec = data.reduce(function(s,d){return s+(d.rec||0);},0);
   const totalOT  = data.reduce(function(s,d){return s+(d.ot||0);},0);
+  const totalCT  = data.reduce(function(s,d){return s+(d.ct||0);},0);
   const STAGES = ['L1','L2','L3','L4','L5'];
   const CATS = [
     {k:'Caso de Negocio',cls:'bc',lbl:'Caso de negocio'},
@@ -698,6 +699,8 @@ function renderKPIs(data) {
     +'<div style="font-size:16px;font-weight:800;margin-top:1px;">'+(totalRec>0?fmtImpPlain(totalRec):'—')+'</div>'
     +'<div style="font-size:9px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.6px;margin-top:6px;">OT MUSD</div>'
     +'<div style="font-size:16px;font-weight:800;margin-top:1px;">'+(totalOT!==0?fmtImpPlain(totalOT):'—')+'</div>'
+    +'<div style="font-size:9px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.6px;margin-top:6px;">Capital de Trabajo</div>'
+    +'<div style="font-size:16px;font-weight:800;margin-top:1px;color:#6DD5FA;">'+(totalCT>0?fmtImpPlain(totalCT):'—')+'</div>'
     +'</div></div>';
 
   // Stages card
@@ -1055,7 +1058,7 @@ function renderSFActivities(filtered) {
     html += '<div><div class="sf-act-name">'+cfg.sf+'</div><div class="sf-act-frente">'+cfg.frente+' · '+sfItems.length+' iniciativas</div></div>';
     if(hasPlan){
       html += '<div><div class="sf-act-total" style="color:'+clr+'">'+total+'</div><div class="sf-act-total-lbl">hitos</div></div>';
-    if(rec>0){ html += '<div style="text-align:right;padding-left:12px;border-left:1px solid #eee;margin-left:8px;"><div class="sf-act-total" style="color:'+clr+';font-size:1.05rem;">USD '+(rec>=1000000?(rec/1000000).toFixed(2)+'M':rec>=1000?(rec/1000).toFixed(0)+'K':Math.round(rec).toLocaleString())+'</div><div class="sf-act-total-lbl">Rec</div></div>'; }
+    if(rec>0){ html += '<div style="text-align:right;padding-left:12px;border-left:1px solid #eee;margin-left:8px;"><div class="sf-act-total" style="color:'+clr+';font-size:1.05rem;">USD '+(rec>=1000000?(rec/1000000).toFixed(2)+'M':rec>=1000?(rec/1000).toFixed(0)+'K':Math.round(rec).toLocaleString())+'</div><div class="sf-act-total-lbl">Rec</div></div>'; } if(ct>0){ html += '<div style="text-align:right;padding-left:12px;border-left:1px solid #eee;margin-left:8px;">'+'<div class="sf-act-total" style="color:#1565C0;font-size:1.05rem;">USD '+(ct>=1000000?(ct/1000000).toFixed(2)+'M':ct>=1000?(ct/1000).toFixed(0)+'K':Math.round(ct).toLocaleString())+'</div><div class="sf-act-total-lbl">Cap. Trabajo</div></div>'; }
     }
     html += '</div>';
     if(hasPlan){
