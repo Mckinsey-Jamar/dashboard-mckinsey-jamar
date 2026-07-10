@@ -834,6 +834,7 @@ function buildSFPanelHTML(sfItems) {
     html += '<div class="sf-ini-right">';
     if(d.rec>0) html += '<div style="font-size:11px;font-weight:700;">'+fmtImpPlain(d.rec)+'</div><div style="font-size:9px;color:#aaa;">Rec. MUSD</div>';
     if(d.ot && d.ot!==0) html += '<div style="font-size:10px;font-weight:700;color:var(--teal);margin-top:4px;">'+fmtImpPlain(d.ot)+'</div><div style="font-size:9px;color:#aaa;">OT MUSD</div>';
+    if(d.ct>0) html += '<div style="font-size:10px;font-weight:700;color:#1565C0;margin-top:4px;">'+fmtImpPlain(d.ct)+'</div><div style="font-size:9px;color:#aaa;">Cap. Trabajo</div>';
     html += '</div>';
     html += '</div>'; // sf-ini-row
     // Late panel below card
