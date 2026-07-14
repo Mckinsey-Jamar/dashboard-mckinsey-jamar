@@ -409,6 +409,14 @@ def main():
         "project in ("+ALL_SW_DYN+") AND due > '"+TODAY+"' AND statusCategory != Done ORDER BY project ASC",
         ["project"],100,15)
     # Combinar late, week y future para el set de claves CON fecha confirmada
+
+    # Query de tareas con assignee CONFIRMADO (resuelve índice JQL desactualizado)
+    # Similar a confirmed_dated_keys para fechas
+    confirmed_assigned=jira_all(
+        "project in ("+ALL_SW_DYN+") AND assignee is not EMPTY AND statusCategory != Done ORDER BY project ASC",
+        ["project"],100,30)
+    confirmed_assigned_keys=set(i2['key'] for i2 in confirmed_assigned)
+    print('  Tareas con assignee confirmado: '+str(len(confirmed_assigned_keys)))
     confirmed_dated_keys=set()
     for iss in list(late_issues)+list(week_issues)+future_dated:
         confirmed_dated_keys.add(iss['key'])
@@ -434,7 +442,7 @@ def main():
         if not has_date:
             nodt_by_mo[mo_t].append(t_data)
         # SIN RESPONSABLE: assignee es None en el API
-        if real_asn is None:
+        if real_asn is None and task['key'] not in confirmed_assigned_keys:
             noown_by_mo[mo_t].append({**t_data,'assignee':'Sin asignar'})
 
 
