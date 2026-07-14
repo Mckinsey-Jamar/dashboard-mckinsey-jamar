@@ -48,7 +48,7 @@ def main():
         "IPDPCDAR":"MO-58","IPDPCDBR":"MO-59","PROP":"MO-88","RF1D":"MO-89",
         # Otros
         "MDOOMC":"MO-49","EDP":"MO-53",
-        # NOTA: RCD3 removido — MO-24 no tiene frente/subfrente en Jira PD
+        "RCD3":"MO-27",  # 4C. Mejorar entrega en primer intento (Transporte)
     }
 
     # Iniciativas excluidas del dashboard: frente/subfrente en blanco en Jira PD
