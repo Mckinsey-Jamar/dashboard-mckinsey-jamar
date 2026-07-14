@@ -1130,7 +1130,7 @@ const SW_PROJECTS = {
   'SLOBDECO':{name:"2E. Liquidación SLOB Decoración",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:55,done:3,prog:6,todo:46,late:6}},
   'SLOBDECPA':{name:"2EP. Liquidación SLOB Decoración Panamá",frente:"Operaciones",subfrente:"Inventarios",tasks:{total:22,done:0,prog:4,todo:18,late:0}},
   /* ── Transporte ── */
-  'RCD3':{name:"4A. Reducir costos de flete",frente:"Operaciones",subfrente:"Transporte",tasks:{total:43,done:11,prog:5,todo:27,late:1}},
+  'RCD3':{name:"4A. Reducir costos de flete",frente:"Operaciones",subfrente:"Transporte",tasks:{total:43,done:11,prog:5,todo:27,late:0}},
   'IMPCSE':{name:"4B. Cobro segunda entrega",frente:"Operaciones",subfrente:"Transporte",tasks:{total:24,done:5,prog:1,todo:18,late:1}},
   'MIOT':{name:"4C. Mix insourcing/outsourcing",frente:"Operaciones",subfrente:"Transporte",tasks:{total:1,done:0,prog:0,todo:1,late:0}},
   'OPR':{name:"4F. Optimizar ruteo",frente:"Operaciones",subfrente:"Transporte",tasks:{total:20,done:3,prog:3,todo:14,late:1}},
@@ -1166,7 +1166,7 @@ const SW_PROJECTS = {
 
 /* ── LATE TASKS — tareas vencidas por iniciativa (actualizado 2026-06-16) ── */
 var LATE_TASKS = {
-  // 2026-07-14 — 81 tardias
+  // 2026-07-14 — 80 tardias
   'MO-2': [
     {key:'DEP-24',summary:"Primer Comité de Surtido",duedate:'2026-07-08',assignee:"Sin asignar",status:"In Progress" }
   ],
@@ -1218,9 +1218,6 @@ var LATE_TASKS = {
   ],
   'MO-11': [
     {key:'PTMZR-8',summary:"Revisión logística Zabra-Jamar",duedate:'2026-06-15',assignee:"Sebastian Rivero",status:"In Progress" }
-  ],
-  'MO-24': [
-    {key:'RCD3-12',summary:"Compra y entrega del equipo",duedate:'2026-07-07',assignee:"Marla Lambertino Perez",status:"In Progress" }
   ],
   'MO-28': [
     {key:'IMPCSE-2',summary:"Piloto con una tienda pequeña",duedate:'2026-06-30',assignee:"Ervin Trujillo Rojas",status:"In Progress" }
@@ -1286,11 +1283,11 @@ var LATE_TASKS = {
   'MO-76': [
     {key:'OPR-15',summary:"Análisis de la data actual de planeación y rutas",duedate:'2026-06-26',assignee:"Ervin Trujillo Rojas",status:"In Progress" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 var WEEK_TASKS = {
-  // 2026-07-14 — 146 esta semana
+  // 2026-07-14 — 144 esta semana
   'MO-2': [
     {key:'DEP-97',summary:"Ejecutar envío quincenal de lotes a tiendas",duedate:'2026-07-14',assignee:"Sin asignar",status:"To Do" },
     {key:'DEP-147',summary:"Desarrollo de herramienta de optimización del portafolio",duedate:'2026-07-15',assignee:"Sin asignar",status:"In Progress" },
@@ -1321,10 +1318,6 @@ var WEEK_TASKS = {
     {key:'PTMZR-7',summary:"Definición de SLAs con Zabra",duedate:'2026-07-14',assignee:"Sebastian Rivero",status:"In Progress" },
     {key:'PTMZR-6',summary:"Revisión contractual con Industrias Zabra S.A.",duedate:'2026-07-14',assignee:"Sebastian Rivero",status:"In Progress" },
     {key:'PTMZR-12',summary:"Diseño flujos AS-IS y TO-BE",duedate:'2026-07-17',assignee:"Sebastian Rivero",status:"To Do" }
-  ],
-  'MO-24': [
-    {key:'RCD3-19',summary:"Capacitacion en atom",duedate:'2026-07-15',assignee:"Sin asignar",status:"In Progress" },
-    {key:'RCD3-17',summary:"Capacitacion del agente",duedate:'2026-07-15',assignee:"Marla Lambertino Perez",status:"In Progress" }
   ],
   'MO-30': [
     {key:'LEANW-25',summary:"Definir el modelo de trabajo de repliegue como una acción mas de obligatorio cumplimiento en el cendis, incluye la definición de politicas de repliegue de reabastecimiento, recepción y post-picking",duedate:'2026-07-14',assignee:"Sneyder Chacón",status:"To Do" },
@@ -1489,10 +1482,10 @@ var WEEK_TASKS = {
     {key:'MXAT-40',summary:"Kick off",duedate:'2026-07-17',assignee:"Marla Lambertino Perez",status:"To Do" },
     {key:'MXAT-27',summary:"Definir políticas y flujos necesarios para escenarios donde el cliente solicite armado pago",duedate:'2026-07-17',assignee:"Sin asignar",status:"To Do" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 var NO_DATE_TASKS = {
-  // 2026-07-14 — 409 sin fecha
+  // 2026-07-14 — 389 sin fecha
   'MO-1': [
     {key:'SOE-99',summary:"Transferencia formal del modelo",duedate:'',assignee:"Sin asignar",status:"To Do" },
     {key:'SOE-98',summary:"Mecanismo de mejora continua",duedate:'',assignee:"Sin asignar",status:"To Do" },
@@ -1751,28 +1744,6 @@ var NO_DATE_TASKS = {
     {key:'EMPA-4',summary:"Validar la externalización completa del empaque",duedate:'',assignee:"Sin asignar",status:"Backlog" },
     {key:'EMPA-3',summary:"Optimizar el empaque",duedate:'',assignee:"Sin asignar",status:"Backlog" }
   ],
-  'MO-24': [
-    {key:'RCD3-52',summary:"Cierre formal del proyecto y entrega de resultados",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-51',summary:"Documentación de lecciones aprendidas",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-50',summary:"Ajustes correctivos según resultados",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-49',summary:"Medición de KPIs post-implementación",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-48',summary:"Pruebas piloto del nuevo proceso",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-47',summary:"Capacitación a transportadores y áreas de soporte",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-46',summary:"Desarrollo/ajuste de la app (TI)",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-45',summary:"Corrección masiva de datos de cubicaje",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-44',summary:"Validación con áreas involucradas",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-43',summary:"Rediseño del flujo de gestión de entregas fallidas",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-42',summary:"Diseño de controles en app del transportador",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-41',summary:"Definición de solución para corrección de cubicajes",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-40',summary:"Seguimiento y cierre",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
-    {key:'RCD3-39',summary:"Implementación",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
-    {key:'RCD3-38',summary:"Diseño de soluciones",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
-    {key:'RCD3-37',summary:"Cuantificación del impacto por cliente y área",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
-    {key:'RCD3-36',summary:"Análisis de casos de entregas fallidas mal registradas",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
-    {key:'RCD3-35',summary:"Auditoría de cubicajes en el sistema",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
-    {key:'RCD3-34',summary:"Mapeo del proceso actual de planificación y cargue",duedate:'',assignee:"Marla Lambertino Perez",status:"To Do" },
-    {key:'RCD3-33',summary:"Diagnostico y analisis",duedate:'',assignee:"Marla Lambertino Perez",status:"In Progress" }
-  ],
   'MO-28': [
     {key:'IMPCSE-26',summary:"Implementar cobro por segunda entrega",duedate:'',assignee:"Sin asignar",status:"Definición" }
   ],
@@ -1958,9 +1929,9 @@ var NO_DATE_TASKS = {
     {key:'MXAT-3',summary:"Experiencia de calificación de armado",duedate:'',assignee:"Sin asignar",status:"To Do" },
     {key:'MXAT-2',summary:"Revisión del flujo de asignación de citas de armado transportista/especialista",duedate:'',assignee:"Sin asignar",status:"To Do" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 var NO_OWNER_TASKS = {
-  // 2026-07-14 — 608 sin responsable
+  // 2026-07-14 — 591 sin responsable
   'MO-1': [
     {key:'SOE-99',summary:"Transferencia formal del modelo",duedate:'',assignee:"Sin asignar",status:"To Do" },
     {key:'SOE-98',summary:"Mecanismo de mejora continua",duedate:'',assignee:"Sin asignar",status:"To Do" },
@@ -2403,25 +2374,6 @@ var NO_OWNER_TASKS = {
     {key:'EMPA-2',summary:"Implementar modelo de operación optimizada en bodega",duedate:'2026-09-02',assignee:"Sin asignar",status:"En ejecución" },
     {key:'EMPA-1',summary:"Monitorización resultados empaque CESMAR (reclamos y logistica inversa)",duedate:'2026-09-30',assignee:"Sin asignar",status:"En ejecución" }
   ],
-  'MO-24': [
-    {key:'RCD3-52',summary:"Cierre formal del proyecto y entrega de resultados",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-51',summary:"Documentación de lecciones aprendidas",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-50',summary:"Ajustes correctivos según resultados",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-49',summary:"Medición de KPIs post-implementación",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-48',summary:"Pruebas piloto del nuevo proceso",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-47',summary:"Capacitación a transportadores y áreas de soporte",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-46',summary:"Desarrollo/ajuste de la app (TI)",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-45',summary:"Corrección masiva de datos de cubicaje",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-44',summary:"Validación con áreas involucradas",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-43',summary:"Rediseño del flujo de gestión de entregas fallidas",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-42',summary:"Diseño de controles en app del transportador",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-41',summary:"Definición de solución para corrección de cubicajes",duedate:'',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-25',summary:"Socializacion del guion equipo comercial",duedate:'2026-08-07',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-24',summary:"Construccion del guion equipo comercial",duedate:'2026-08-07',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-19',summary:"Capacitacion en atom",duedate:'2026-07-15',assignee:"Sin asignar",status:"In Progress" },
-    {key:'RCD3-16',summary:"Revision y ajustes del bot actual",duedate:'2026-07-24',assignee:"Sin asignar",status:"To Do" },
-    {key:'RCD3-15',summary:"Ajuste mensaje confirmación bot - atom",duedate:'2026-07-24',assignee:"Sin asignar",status:"To Do" }
-  ],
   'MO-28': [
     {key:'IMPCSE-26',summary:"Implementar cobro por segunda entrega",duedate:'',assignee:"Sin asignar",status:"Definición" },
     {key:'IMPCSE-23',summary:"Revisión de KPIs y mejora continua",duedate:'2026-10-30',assignee:"Sin asignar",status:"To Do" },
@@ -2615,7 +2567,7 @@ var NO_OWNER_TASKS = {
   'MO-88': [
     {key:'PROP-21',summary:"Te igualo la cuota con el mercado",duedate:'2026-07-31',assignee:"Sin asignar",status:"To Do" }
   ],
-};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+};;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 var NODATE_TASKS = {
   // 2026-06-25 - 200 actividades sin fecha
   'MO-1': [
