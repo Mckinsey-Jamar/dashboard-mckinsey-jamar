@@ -399,8 +399,9 @@ def main():
     print('Sin fecha + Sin responsable...')
     all_nondone=jira_all(
         "project in ("+ALL_SW_DYN+") AND statusCategory != Done ORDER BY project ASC",
-        ["summary","status","duedate","assignee","project"],100,30)
-    print('  No-done total: '+str(len(all_nondone)))
+        ["summary","status","duedate","assignee","project"],100,50)
+    _nd_total=len(all_nondone)
+    print('  No-done total: '+str(_nd_total)+(' ⚠️ POSIBLE TRUNCADO (llegó al límite)' if _nd_total==5000 else ''))
 
     # Paso B: obtener conjunto de tareas con fecha CONFIRMADA por JQL
     # (cubre tareas pasadas y futuras confirmadas por el índice JQL)
@@ -550,9 +551,6 @@ def main():
     html=replace_var(html,"WEEK_TASKS",  build_var("WEEK_TASKS", week_by_mo,  str(total_week)+" esta semana"))
     html=replace_var(html,"NO_DATE_TASKS",build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" sin fecha"))
     # Post-filtro: eliminar tareas que llegaron con assignee real
-    for _mo in list(noown_by_mo.keys()):
-        noown_by_mo[_mo]=[t for t in noown_by_mo[_mo]
-            if not t.get('assignee') or t.get('assignee')=='Sin asignar']
     html=replace_var(html,"NO_OWNER_TASKS",build_var("NO_OWNER_TASKS",noown_by_mo,str(total_noown)+" sin responsable"))
     
     now_str=datetime.now().strftime("%H:%M")
