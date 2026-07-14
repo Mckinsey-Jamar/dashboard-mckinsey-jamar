@@ -370,6 +370,18 @@ def main():
         mo=SW_TO_MO.get(sw,"")
         t,d,p,td,_=sw_counts[sw]
         sw_counts[sw]=(t,d,p,td,len(late_by_mo.get(mo,[])))
+
+    # Verificar atrasadas: confirmar que siguen sin-done y con due < today
+    late_keys=[t['key'] for mo in late_by_mo.values() for t in mo]
+    if late_keys:
+        verified_late=verify_by_keys(late_keys, ['duedate','status'])
+        late_false={v['key'] for v in verified_late
+            if not v['fields'].get('duedate') or
+            v['fields']['status'].get('statusCategory',{}).get('key','')=='done'}
+        if late_false:
+            print('  Atrasadas: '+str(len(late_false))+' tareas incorrectas → removiendo')
+            for mo_k in list(late_by_mo.keys()):
+                late_by_mo[mo_k]=[t for t in late_by_mo[mo_k] if t['key'] not in late_false]
     total_late=sum(len(v) for v in late_by_mo.values())
     print("  Tardias: "+str(total_late))
     
@@ -478,6 +490,40 @@ def main():
         noown_by_mo[_mo]=[t for t in noown_by_mo[_mo]
             if not t.get('assignee') or t.get('assignee')=='Sin asignar']
 
+
+    # ── VERIFICACIÓN DIRECTA POR KEY — la única fuente confiable ────────────────
+    # El índice JQL puede estar desactualizado. Consultamos directamente por key
+    # para obtener los valores REALES de assignee y duedate.
+    def verify_by_keys(keys_list, fields):
+        """Consulta hasta 200 tareas por key en chunks — retorna valores reales del API"""
+        if not keys_list: return []
+        results=[]
+        chunk_size=100
+        for ci in range(0, len(keys_list), chunk_size):
+            chunk=keys_list[ci:ci+chunk_size]
+            jql='key in ('+','.join(chunk)+')'
+            results+=jira_post(jql, fields, chunk_size)
+        return results
+
+    # Verificar sin responsable: consultar assignee REAL para candidatos
+    noown_keys=[t['key'] for mo in noown_by_mo.values() for t in mo]
+    if noown_keys:
+        verified_noown=verify_by_keys(noown_keys, ['assignee'])
+        real_assigned={v['key'] for v in verified_noown if v['fields'].get('assignee')}
+        if real_assigned:
+            print('  Sin responsable: '+str(len(real_assigned))+' tareas tienen assignee real → removiendo')
+            for mo_k in list(noown_by_mo.keys()):
+                noown_by_mo[mo_k]=[t for t in noown_by_mo[mo_k] if t['key'] not in real_assigned]
+
+    # Verificar sin fecha: consultar duedate REAL para candidatos
+    nodt_keys=[t['key'] for mo in nodt_by_mo.values() for t in mo]
+    if nodt_keys:
+        verified_nodt=verify_by_keys(nodt_keys, ['duedate'])
+        real_dated2={v['key'] for v in verified_nodt if v['fields'].get('duedate')}
+        if real_dated2:
+            print('  Sin fecha: '+str(len(real_dated2))+' tareas tienen duedate real → removiendo')
+            for mo_k in list(nodt_by_mo.keys()):
+                nodt_by_mo[mo_k]=[t for t in nodt_by_mo[mo_k] if t['key'] not in real_dated2]
     total_nodt=sum(len(v) for v in nodt_by_mo.values())
     total_noown=sum(len(v) for v in noown_by_mo.values())
     print('  Sin fecha: '+str(total_nodt))
