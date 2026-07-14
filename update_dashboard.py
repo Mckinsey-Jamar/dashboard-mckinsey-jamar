@@ -24,17 +24,31 @@ def main():
     
     # SW_TO_MO: mapeo definitivo + detectado dinámicamente
     SW_TO_MO = {
+        # S&OP
         "SOE":"MO-1","DEP":"MO-2","MSOP":"MO-3","MEJ":"MO-4","PROVED":"MO-5",
-        "ECI":"MO-7","DEIT":"MO-8","SLOBM":"MO-10","JCTR":"MO-65",
-        "SLOBDECO":"MO-66","SLOBDECPA":"MO-67","RCD3":"MO-24","IMPCSE":"MO-28",
-        "MIOT":"MO-26","OPR":"MO-76","ZT5F":"MO-33","FCCDA":"MO-34","WF5":"MO-35",
-        "SDR":"MO-36","PDSP":"MO-37","IM":"MO-40","OP":"MO-41","TLGDL":"MO-44",
-        "EEMOC":"MO-45","SF":"MO-46","EODV":"MO-47","ISMC":"MO-55",
-        "IEPRFEEFDC":"MO-54","ICD":"MO-56","CODCEYBM":"MO-50",
-        "IPDPCDAR":"MO-58","IPDPCDBR":"MO-59","PTMZR":"MO-11",
-        "RF1D":"MO-89","PROP":"MO-88","MDCB":"MO-52",
-        "LEANW":"MO-30","LEANWPA":"MO-69","MXAT":"MO-77",
+        # Inventarios
+        "ECI":"MO-7","DEIT":"MO-8","DEF":"MO-9","SLOBM":"MO-10",
+        "JCTR":"MO-65","SLOBDECO":"MO-66","SLOBDECPA":"MO-67",
+        # Almacenamiento
+        "PTMZR":"MO-11","EMPA":"MO-13","LEANW":"MO-30","SB3D":"MO-31",
+        "LEANWPA":"MO-69",
+        # Transporte
+        "IMPCSE":"MO-28","MIOT":"MO-26","FCCDA":"MO-34","OPR":"MO-76","MXAT":"MO-77",
+        # Post-venta
+        "ZT5F":"MO-33","WF5":"MO-35","SDR":"MO-36","PDSP":"MO-37","IM":"MO-40","OP":"MO-41",
+        # FOE
+        "TLGDL":"MO-44","EEMOC":"MO-45","SF":"MO-46","EODV":"MO-47",
+        # Post-venta adicional
+        "ISMC":"MO-55",
+        # Crédito — E2E
+        "IEPRFEEFDC":"MO-54","ICD":"MO-56",
+        # Crédito — Modelo Riesgos
+        "CODCEYBM":"MO-50","MDCB":"MO-52",
+        # Crédito — Curva de Valor
+        "IPDPCDAR":"MO-58","IPDPCDBR":"MO-59","PROP":"MO-88","RF1D":"MO-89",
+        # Otros
         "MDOOMC":"MO-49","EDP":"MO-53",
+        # NOTA: RCD3 removido — MO-24 no tiene frente/subfrente en Jira PD
     }
 
     # Iniciativas excluidas del dashboard: frente/subfrente en blanco en Jira PD
