@@ -371,6 +371,9 @@ def main():
         t,d,p,td,_=sw_counts[sw]
         sw_counts[sw]=(t,d,p,td,len(late_by_mo.get(mo,[])))
 
+    # Verificar sin responsable: consultar assignee REAL para candidatos
+
+    # Verificar atrasadas: confirmar que siguen sin-done y con due < today
     def verify_by_keys(keys_list, fields):
         """Consulta hasta 200 tareas por key en chunks — retorna valores reales del API"""
         if not keys_list: return []
@@ -382,9 +385,7 @@ def main():
             results+=jira_post(jql, fields, chunk_size)
         return results
 
-    # Verificar sin responsable: consultar assignee REAL para candidatos
 
-    # Verificar atrasadas: confirmar que siguen sin-done y con due < today
     late_keys=[t['key'] for mo in late_by_mo.values() for t in mo]
     if late_keys:
         verified_late=verify_by_keys(late_keys, ['duedate','status'])
