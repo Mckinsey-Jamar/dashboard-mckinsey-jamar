@@ -371,6 +371,19 @@ def main():
         t,d,p,td,_=sw_counts[sw]
         sw_counts[sw]=(t,d,p,td,len(late_by_mo.get(mo,[])))
 
+    def verify_by_keys(keys_list, fields):
+        """Consulta hasta 200 tareas por key en chunks — retorna valores reales del API"""
+        if not keys_list: return []
+        results=[]
+        chunk_size=100
+        for ci in range(0, len(keys_list), chunk_size):
+            chunk=keys_list[ci:ci+chunk_size]
+            jql='key in ('+','.join(chunk)+')'
+            results+=jira_post(jql, fields, chunk_size)
+        return results
+
+    # Verificar sin responsable: consultar assignee REAL para candidatos
+
     # Verificar atrasadas: confirmar que siguen sin-done y con due < today
     late_keys=[t['key'] for mo in late_by_mo.values() for t in mo]
     if late_keys:
@@ -494,18 +507,6 @@ def main():
     # ── VERIFICACIÓN DIRECTA POR KEY — la única fuente confiable ────────────────
     # El índice JQL puede estar desactualizado. Consultamos directamente por key
     # para obtener los valores REALES de assignee y duedate.
-    def verify_by_keys(keys_list, fields):
-        """Consulta hasta 200 tareas por key en chunks — retorna valores reales del API"""
-        if not keys_list: return []
-        results=[]
-        chunk_size=100
-        for ci in range(0, len(keys_list), chunk_size):
-            chunk=keys_list[ci:ci+chunk_size]
-            jql='key in ('+','.join(chunk)+')'
-            results+=jira_post(jql, fields, chunk_size)
-        return results
-
-    # Verificar sin responsable: consultar assignee REAL para candidatos
     noown_keys=[t['key'] for mo in noown_by_mo.values() for t in mo]
     if noown_keys:
         verified_noown=verify_by_keys(noown_keys, ['assignee'])
