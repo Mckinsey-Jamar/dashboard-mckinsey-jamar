@@ -393,9 +393,12 @@ def main():
     late_keys=[t['key'] for mo in late_by_mo.values() for t in mo]
     if late_keys:
         verified_late=verify_by_keys(late_keys, ['duedate','status'])
-        late_false={v['key'] for v in verified_late
-            if not v['fields'].get('duedate') or
-            v['fields']['status'].get('statusCategory',{}).get('key','')=='done'}
+        late_false={v['key'] for v in verified_late if (
+            not v['fields'].get('duedate')                                            # sin fecha real
+            or v['fields'].get('duedate','')>=TODAY                                   # fecha cambió al futuro
+            or v['fields']['status'].get('statusCategory',{}).get('key','')=='done'   # completada
+            or v['fields']['status'].get('name','') in                                # estados done
+               ('Terminado','Done','Cerrado','Resuelto','Closed','Resolved'))}
         if late_false:
             print('  Atrasadas: '+str(len(late_false))+' tareas incorrectas → removiendo')
             for mo_k in list(late_by_mo.keys()):
