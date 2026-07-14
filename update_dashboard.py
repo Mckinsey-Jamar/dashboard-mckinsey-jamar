@@ -375,14 +375,18 @@ def main():
 
     # Verificar atrasadas: confirmar que siguen sin-done y con due < today
     def verify_by_keys(keys_list, fields):
-        """Consulta hasta 200 tareas por key en chunks — retorna valores reales del API"""
+        """
+        Verifica cada tarea usando el endpoint INDIVIDUAL /rest/api/3/issue/{key}.
+        RAZÓN: el batch search API devuelve valores del índice JQL que puede estar
+        desactualizado (ej: assignee o duedate null aunque el issue los tenga seteados).
+        El endpoint individual siempre retorna los valores reales almacenados.
+        """
         if not keys_list: return []
         results=[]
-        chunk_size=100
-        for ci in range(0, len(keys_list), chunk_size):
-            chunk=keys_list[ci:ci+chunk_size]
-            jql='key in ('+','.join(chunk)+')'
-            results+=jira_post(jql, fields, chunk_size)
+        for key in keys_list:
+            f=jira_get(key, fields)   # endpoint individual — siempre retorna valor real
+            if f is not None:
+                results.append({'key':key,'fields':f})
         return results
 
 
