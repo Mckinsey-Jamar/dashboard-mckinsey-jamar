@@ -387,53 +387,91 @@ def main():
         t,d,p,td,_=sw_counts[sw]
         sw_counts[sw]=(t,d,p,td,len(late_by_mo.get(mo,[])))
 
-    # ════════════════════════════════════════════════════════════════
-    # VERIFICACIÓN FINAL — usa jira_get (API individual, no batch)
-    # El batch API puede tener índice JQL desactualizado.
-    # jira_get consulta DIRECTAMENTE la base de datos de Jira.
-    # ════════════════════════════════════════════════════════════════
+    # Verificar sin responsable: consultar assignee REAL para candidatos
 
-    # ── 1. ATRASADAS: verificar duedate Y status real por jira_get ──
-    print('Verificando atrasadas con jira_get...')
+    # Verificar atrasadas: confirmar que siguen sin-done y con due < today
+    def verify_by_keys(keys_list, fields):
+        """
+        Verifica cada tarea usando el endpoint INDIVIDUAL /rest/api/3/issue/{key}.
+        RAZÓN: el batch search API devuelve valores del índice JQL que puede estar
+        desactualizado (ej: assignee o duedate null aunque el issue los tenga seteados).
+        El endpoint individual siempre retorna los valores reales almacenados.
+        """
+        if not keys_list: return []
+        results=[]
+        for key in keys_list:
+            f=jira_get(key, fields)   # endpoint individual — siempre retorna valor real
+            if f is not None:
+                results.append({'key':key,'fields':f})
+        return results
+
+
     late_keys=[t['key'] for mo in late_by_mo.values() for t in mo]
-    _before_late=sum(len(v) for v in late_by_mo.values())
     if late_keys:
-        verified_late=verify_by_keys(late_keys,['duedate','status'])
+        verified_late=verify_by_keys(late_keys, ['duedate','status'])
         late_false={v['key'] for v in verified_late if (
-            not v['fields'].get('duedate')                                   # sin fecha real
-            or v['fields'].get('duedate','')>=TODAY                          # fecha hoy o futuro → no atrasada
-            or v['fields']['status'].get('statusCategory',{}).get('key','')=='done'  # completada
-            or v['fields']['status'].get('name','') in                       # estados done explícitos
-               ('Terminado','Done','Cerrado','Resuelto','Cerrada','Terminada','Closed','Resolved'))}
+            not v['fields'].get('duedate')                                            # sin fecha real
+            or v['fields'].get('duedate','')>=TODAY                                   # fecha cambió al futuro
+            or v['fields']['status'].get('statusCategory',{}).get('key','')=='done'   # completada
+            or v['fields']['status'].get('name','') in                                # estados done
+               ('Terminado','Done','Cerrado','Resuelto','Closed','Resolved'))}
         if late_false:
+            print('  Atrasadas: '+str(len(late_false))+' tareas incorrectas → removiendo')
             for mo_k in list(late_by_mo.keys()):
                 late_by_mo[mo_k]=[t for t in late_by_mo[mo_k] if t['key'] not in late_false]
-        _after_late=sum(len(v) for v in late_by_mo.values())
-        print('  Atrasadas: '+str(_before_late)+' → '+str(_after_late)
-              +(' (−'+str(_before_late-_after_late)+' sin fecha/done/futuro)' if _before_late!=_after_late else ' (sin cambios)'))
     total_late=sum(len(v) for v in late_by_mo.values())
+    print("  Tardias: "+str(total_late))
+    
+    # Esta semana
+    week_issues=jira_all(
+        "project in ("+ALL_SW_DYN+") AND due >= '"+TODAY+"' AND due <= '"+WEEK_END+"' "
+        "AND statusCategory != Done ORDER BY project ASC, due ASC",
+        ["summary","status","duedate","assignee","project"],100,3)
+    week_by_mo=defaultdict(list)
+    for i in week_issues:
+        if "fields" not in i: continue
+        if i["fields"]["status"].get("statusCategory",{}).get("key","")=="done": continue
+        sw=i["fields"]["project"]["key"]; mo=SW_TO_MO.get(sw); f=i["fields"]
+        if mo:
+            week_by_mo[mo].append({"key":i["key"],"summary":clean(f["summary"]),
+                "due":f.get("duedate",""),
+                "assignee":clean((f.get("assignee") or {}).get("displayName","Sin asignar")),
+                "status":f["status"]["name"]})
+    total_week=sum(len(v) for v in week_by_mo.values())
+    print("  Semana: "+str(total_week))
+    
+    # ── SIN FECHA y SIN RESPONSABLE — solución triple capa ─────────────────────
+    # Problema: el batch API puede devolver duedate=null aunque el issue tenga fecha
+    # Solución: combinar valor del API + conjunto de tareas con fecha confirmada por JQL
 
-    # ── SIN FECHA + SIN RESPONSABLE — fuente: API real, sin índice JQL ──
+    # Paso A: obtener TODAS las tareas no-done con sus campos reales del API
     print('Sin fecha + Sin responsable...')
     all_nondone=jira_all(
         "project in ("+ALL_SW_DYN+") AND statusCategory != Done ORDER BY project ASC",
         ["summary","status","duedate","assignee","project"],100,50)
-    print('  No-done total: '+str(len(all_nondone)))
+    _nd_total=len(all_nondone)
+    print('  No-done total: '+str(_nd_total)+(' ⚠️ POSIBLE TRUNCADO (llegó al límite)' if _nd_total==5000 else ''))
 
-    # Fechas confirmadas: late + week + future_dated
+    # Paso B: obtener conjunto de tareas con fecha CONFIRMADA por JQL
+    # (cubre tareas pasadas y futuras confirmadas por el índice JQL)
     future_dated=jira_all(
         "project in ("+ALL_SW_DYN+") AND due > '"+TODAY+"' AND statusCategory != Done ORDER BY project ASC",
         ["project"],100,15)
-    confirmed_dated_keys=set()
-    for iss in list(late_issues)+future_dated:  # week_issues definido después
-        confirmed_dated_keys.add(iss['key'])
+    # Combinar late, week y future para el set de claves CON fecha confirmada
 
-    # Assignees confirmados (cross-check vs índice JQL)
+    # Query de tareas con assignee CONFIRMADO (resuelve índice JQL desactualizado)
+    # Similar a confirmed_dated_keys para fechas
     confirmed_assigned=jira_all(
         "project in ("+ALL_SW_DYN+") AND assignee is not EMPTY AND statusCategory != Done ORDER BY project ASC",
         ["project"],100,30)
     confirmed_assigned_keys=set(i2['key'] for i2 in confirmed_assigned)
+    print('  Tareas con assignee confirmado: '+str(len(confirmed_assigned_keys)))
+    confirmed_dated_keys=set()
+    for iss in list(late_issues)+list(week_issues)+future_dated:
+        confirmed_dated_keys.add(iss['key'])
+    print('  Claves con fecha confirmada: '+str(len(confirmed_dated_keys)))
 
+    # Paso C: clasificar en sin fecha y sin responsable
     nodt_by_mo=defaultdict(list)
     noown_by_mo=defaultdict(list)
     for task in all_nondone:
@@ -442,50 +480,138 @@ def main():
         if tf['status'].get('statusCategory',{}).get('key','')=='done': continue
         sw_t=tf.get('project',{}).get('key',''); mo_t=SW_TO_MO.get(sw_t)
         if not mo_t: continue
-        real_due=tf.get('duedate')
-        real_asn=tf.get('assignee')
+        real_due=tf.get('duedate')    # valor REAL del API
+        real_asn=tf.get('assignee')   # valor REAL del API
         t_data={'key':task['key'],'summary':clean(tf.get('summary') or ''),
             'due':real_due or '','assignee':clean((real_asn or {}).get('displayName','Sin asignar')),
             'status':tf['status']['name']}
-        has_date=bool(real_due) or task['key'] in confirmed_dated_keys
+        # SIN FECHA: sin date en API Y no está en confirmed_dated_keys
+        # Doble verificación para manejar inconsistencias del API de Jira
+        has_date = bool(real_due) or task['key'] in confirmed_dated_keys
         if not has_date:
             nodt_by_mo[mo_t].append(t_data)
+        # SIN RESPONSABLE: assignee es None en el API
         if real_asn is None and task['key'] not in confirmed_assigned_keys:
             noown_by_mo[mo_t].append({**t_data,'assignee':'Sin asignar'})
 
-    # Post-filtro noown
+
+        # VERIFICACIÓN INDIVIDUAL: para tasks sin fecha según batch API,
+        # verificar por proyecto directamente (resuelve inconsistencia Jira API)
+        sinf_keys_by_proj = defaultdict(list)
+        for mo_v, tasks_v in nodt_by_mo.items():
+            sw_v = MO_TO_SW.get(mo_v, '')
+            for t_v in tasks_v:
+                sinf_keys_by_proj[sw_v].append(t_v['key'])
+
+        # Para cada proyecto con tasks sin fecha, verificar duedate real
+        real_dated = set()  # keys que en realidad SÍ tienen fecha
+        for sw_v, keys_v in sinf_keys_by_proj.items():
+            if not keys_v: continue
+            # Query individual por proyecto y claves específicas
+            chunk = ','.join(keys_v[:100])  # max 100 por query
+            verified = jira_post(
+                'key in (' + chunk + ') AND due is not EMPTY',
+                ['duedate'], 100)
+            for viss in verified:
+                if viss.get('fields', {}).get('duedate'):
+                    real_dated.add(viss['key'])
+
+        # Eliminar de sin fecha los que sí tienen fecha real
+        if real_dated:
+            print('  Tareas con fecha real encontradas: ' + str(len(real_dated)))
+            for mo_v in list(nodt_by_mo.keys()):
+                nodt_by_mo[mo_v] = [t for t in nodt_by_mo[mo_v]
+                    if t['key'] not in real_dated]
+    # Post-filtro de seguridad noown
     for _mo in list(noown_by_mo.keys()):
         noown_by_mo[_mo]=[t for t in noown_by_mo[_mo]
             if not t.get('assignee') or t.get('assignee')=='Sin asignar']
 
-    # ── VERIFICACIÓN SIN FECHA: duedate real por jira_get ──────────
-    print('Verificando sin fecha...')
-    nodt_keys=[t['key'] for mo in nodt_by_mo.values() for t in mo]
-    _bnd=sum(len(v) for v in nodt_by_mo.values())
-    if nodt_keys:
-        verified_nodt=verify_by_keys(nodt_keys,['duedate'])
-        real_dated2={v['key'] for v in verified_nodt if v['fields'].get('duedate')}
-        if real_dated2:
-            for mo_k in list(nodt_by_mo.keys()):
-                nodt_by_mo[mo_k]=[t for t in nodt_by_mo[mo_k] if t['key'] not in real_dated2]
-        print('  Sin fecha: '+str(_bnd)+' → '+str(sum(len(v) for v in nodt_by_mo.values())))
-    total_nodt=sum(len(v) for v in nodt_by_mo.values())
 
-    # ── VERIFICACIÓN SIN RESPONSABLE: assignee real por jira_get ──
-    print('Verificando sin responsable...')
+    # ── VERIFICACIÓN DIRECTA POR KEY — la única fuente confiable ────────────────
+    # El índice JQL puede estar desactualizado. Consultamos directamente por key
+    # para obtener los valores REALES de assignee y duedate.
     noown_keys=[t['key'] for mo in noown_by_mo.values() for t in mo]
-    _bno=sum(len(v) for v in noown_by_mo.values())
     if noown_keys:
-        verified_noown=verify_by_keys(noown_keys,['assignee'])
+        verified_noown=verify_by_keys(noown_keys, ['assignee'])
         real_assigned={v['key'] for v in verified_noown if v['fields'].get('assignee')}
         if real_assigned:
+            print('  Sin responsable: '+str(len(real_assigned))+' tareas tienen assignee real → removiendo')
             for mo_k in list(noown_by_mo.keys()):
                 noown_by_mo[mo_k]=[t for t in noown_by_mo[mo_k] if t['key'] not in real_assigned]
-        print('  Sin resp: '+str(_bno)+' → '+str(sum(len(v) for v in noown_by_mo.values())))
+
+    # Verificar sin fecha: consultar duedate REAL para candidatos
+    nodt_keys=[t['key'] for mo in nodt_by_mo.values() for t in mo]
+    if nodt_keys:
+        verified_nodt=verify_by_keys(nodt_keys, ['duedate'])
+        real_dated2={v['key'] for v in verified_nodt if v['fields'].get('duedate')}
+        if real_dated2:
+            print('  Sin fecha: '+str(len(real_dated2))+' tareas tienen duedate real → removiendo')
+            for mo_k in list(nodt_by_mo.keys()):
+                nodt_by_mo[mo_k]=[t for t in nodt_by_mo[mo_k] if t['key'] not in real_dated2]
+    total_nodt=sum(len(v) for v in nodt_by_mo.values())
     total_noown=sum(len(v) for v in noown_by_mo.values())
 
-    print('Verificación completa — Atrasadas:'+str(total_late)+' SinFecha:'+str(total_nodt)+' SinResp:'+str(total_noown))
+    # ════════════════════════════════════════════════════════════════
+    # VERIFICACIÓN FINAL — jira_get (endpoint individual, no batch)
+    # Resuelve el índice JQL desactualizado de Jira.
+    # ════════════════════════════════════════════════════════════════
 
+    def verify_by_keys(keys_list, fields):
+        """Verifica campo real via /rest/api/3/issue/{key} — siempre exacto"""
+        if not keys_list: return []
+        results=[]
+        for key in keys_list:
+            f=jira_get(key, fields)
+            if f is not None:
+                results.append({'key':key,'fields':f})
+        return results
+
+    # ── 1. Atrasadas: verificar duedate y status real ───────────────
+    _bl=sum(len(v) for v in late_by_mo.values())
+    late_keys=[t['key'] for mo in late_by_mo.values() for t in mo]
+    if late_keys:
+        vl=verify_by_keys(late_keys,['duedate','status'])
+        lf={v['key'] for v in vl if(
+            not v['fields'].get('duedate')
+            or v['fields'].get('duedate','')>=TODAY
+            or v['fields']['status'].get('statusCategory',{}).get('key','')=='done'
+            or v['fields']['status'].get('name','') in
+               ('Terminado','Done','Cerrado','Resuelto','Cerrada','Terminada','Closed','Resolved'))}
+        if lf:
+            for mk in list(late_by_mo.keys()):
+                late_by_mo[mk]=[t for t in late_by_mo[mk] if t['key'] not in lf]
+        print('  Atrasadas verificadas: '+str(_bl)+' → '+str(sum(len(v) for v in late_by_mo.values())))
+        total_late=sum(len(v) for v in late_by_mo.values())
+
+    # ── 2. Sin fecha: verificar duedate real ────────────────────────
+    _bn=sum(len(v) for v in nodt_by_mo.values())
+    nodt_keys=[t['key'] for mo in nodt_by_mo.values() for t in mo]
+    if nodt_keys:
+        vn=verify_by_keys(nodt_keys,['duedate'])
+        nf={v['key'] for v in vn if v['fields'].get('duedate')}
+        if nf:
+            for mk in list(nodt_by_mo.keys()):
+                nodt_by_mo[mk]=[t for t in nodt_by_mo[mk] if t['key'] not in nf]
+        print('  Sin fecha verificadas: '+str(_bn)+' → '+str(sum(len(v) for v in nodt_by_mo.values())))
+        total_nodt=sum(len(v) for v in nodt_by_mo.values())
+
+    # ── 3. Sin responsable: verificar assignee real ─────────────────
+    _bo=sum(len(v) for v in noown_by_mo.values())
+    noown_keys=[t['key'] for mo in noown_by_mo.values() for t in mo]
+    if noown_keys:
+        vo=verify_by_keys(noown_keys,['assignee'])
+        ra={v['key'] for v in vo if v['fields'].get('assignee')}
+        if ra:
+            for mk in list(noown_by_mo.keys()):
+                noown_by_mo[mk]=[t for t in noown_by_mo[mk] if t['key'] not in ra]
+        print('  Sin resp verificadas: '+str(_bo)+' → '+str(sum(len(v) for v in noown_by_mo.values())))
+        total_noown=sum(len(v) for v in noown_by_mo.values())
+
+    print('✅ LISTAS FINALES: Atrasadas='+str(total_late)+' SinFecha='+str(total_nodt)+' SinResp='+str(total_noown))
+    print('  Sin fecha: '+str(total_nodt))
+    print('  Sin responsable: '+str(total_noown))
+    # ── ACTUALIZAR HTML ───────────────────────────────────────────────────────────
     print("\nActualizando HTML...")
     html,sha=gh_get("index.html")
 
