@@ -57,6 +57,7 @@ def main():
         "MO-24",  # 4A sin frente/subfrente en Jira PD
     "MO-60",  # 1AP sin frente/subfrente en Jira
         "MO-61",  # 1EP sin frente en Jira
+    "MO-62",  # 1EP sin frente/subfrente en Jira
     }
     MO_TO_SW = {v:k for k,v in SW_TO_MO.items()}
     
