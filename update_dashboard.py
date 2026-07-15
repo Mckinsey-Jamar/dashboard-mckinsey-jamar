@@ -413,41 +413,6 @@ def main():
               +(' (−'+str(_before_late-_after_late)+' sin fecha/done/futuro)' if _before_late!=_after_late else ' (sin cambios)'))
     total_late=sum(len(v) for v in late_by_mo.values())
 
-    # ── 2. SIN FECHA: verificar duedate real por jira_get ────────────
-    print('Verificando sin fecha con jira_get...')
-    nodt_keys=[t['key'] for mo in nodt_by_mo.values() for t in mo]
-    _before_nodt=sum(len(v) for v in nodt_by_mo.values())
-    if nodt_keys:
-        verified_nodt=verify_by_keys(nodt_keys,['duedate'])
-        real_dated2={v['key'] for v in verified_nodt if v['fields'].get('duedate')}
-        if real_dated2:
-            for mo_k in list(nodt_by_mo.keys()):
-                nodt_by_mo[mo_k]=[t for t in nodt_by_mo[mo_k] if t['key'] not in real_dated2]
-        _after_nodt=sum(len(v) for v in nodt_by_mo.values())
-        print('  Sin fecha: '+str(_before_nodt)+' → '+str(_after_nodt)
-              +(' (−'+str(_before_nodt-_after_nodt)+' tienen fecha real)' if _before_nodt!=_after_nodt else ' (sin cambios)'))
-    total_nodt=sum(len(v) for v in nodt_by_mo.values())
-
-    # ── 3. SIN RESPONSABLE: verificar assignee real por jira_get ─────
-    print('Verificando sin responsable con jira_get...')
-    noown_keys=[t['key'] for mo in noown_by_mo.values() for t in mo]
-    _before_noown=sum(len(v) for v in noown_by_mo.values())
-    if noown_keys:
-        verified_noown=verify_by_keys(noown_keys,['assignee'])
-        real_assigned={v['key'] for v in verified_noown if v['fields'].get('assignee')}
-        if real_assigned:
-            for mo_k in list(noown_by_mo.keys()):
-                noown_by_mo[mo_k]=[t for t in noown_by_mo[mo_k] if t['key'] not in real_assigned]
-        _after_noown=sum(len(v) for v in noown_by_mo.values())
-        print('  Sin responsable: '+str(_before_noown)+' → '+str(_after_noown)
-              +(' (−'+str(_before_noown-_after_noown)+' tienen assignee real)' if _before_noown!=_after_noown else ' (sin cambios)'))
-    total_noown=sum(len(v) for v in noown_by_mo.values())
-
-    print('VERIFICACIÓN COMPLETA:')
-    print('  🔴 Atrasadas:       '+str(total_late))
-    print('  ⬜ Sin fecha:       '+str(total_nodt))
-    print('  👤 Sin responsable: '+str(total_noown))
-    # ── ACTUALIZAR HTML ───────────────────────────────────────────────────────────
     print("\nActualizando HTML...")
     html,sha=gh_get("index.html")
 
