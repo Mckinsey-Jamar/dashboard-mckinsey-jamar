@@ -425,7 +425,7 @@ def main():
         "project in ("+ALL_SW_DYN+") AND due > '"+TODAY+"' AND statusCategory != Done ORDER BY project ASC",
         ["project"],100,15)
     confirmed_dated_keys=set()
-    for iss in list(late_issues)+list(week_issues)+future_dated:
+    for iss in list(late_issues)+future_dated:  # week_issues definido después
         confirmed_dated_keys.add(iss['key'])
 
     # Assignees confirmados (cross-check vs índice JQL)
