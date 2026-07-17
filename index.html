@@ -648,7 +648,10 @@ function fmtImp(v) {
 function fmtImpPlain(v) {
   if(!v || v===0) return '—';
   const sign = v<0 ? '-USD ' : 'USD ';
-  return `${sign}${Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:1})}`;
+  const abs  = Math.abs(v);
+  if(abs >= 1000000) return sign + (abs/1000000).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + 'M';
+  if(abs >= 1000)    return sign + (abs/1000).toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1}) + 'K';
+  return sign + Math.round(abs).toLocaleString('en-US');
 }
 function stageBadgeClass(s) {
   return {L1:'b-l1',L2:'b-l2',L3:'b-l3',L4:'b-l4',L5:'b-l5'}[s]||'b-l4';
