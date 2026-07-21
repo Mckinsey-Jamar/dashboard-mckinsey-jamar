@@ -292,46 +292,22 @@ def main():
     # ── SYNC REC/OT: consulta en CADA ciclo, sin caché, directo de Jira PD ─────
     # Usa JQL 'customfield_11094 > 0' que funciona correctamente con el token
     # Esto garantiza que cada cambio en KPI impacto se refleja en el siguiente ciclo
-    print('Sincronizando KPI impacto (REC) desde Jira PD...')
-    rec_issues_from_jira=jira_post(
-        "project = MO AND customfield_11094 > 0 ORDER BY key ASC",
-        ["customfield_11094","customfield_11091"], 100)
-    # Construir mapa: MO-key → {rec, ot} con valores ACTUALES de Jira
-    rec_map_jira={}
-    for ri in rec_issues_from_jira:
-        rk=ri['key']
-        rf=ri['fields']
-        r_rec=int(rf.get('customfield_11094') or 0)
-        r_ot =int(rf.get('customfield_11091') or 0)
-        # OT solo para Operaciones
-        if jira_data.get(rk,{}).get('frente')=='Crédito': r_ot=0
-        rec_map_jira[rk]={'rec':r_rec,'ot':r_ot}
-        # Actualizar jira_data con valores reales
-        if rk in jira_data:
-            jira_data[rk]['rec']=r_rec
-            jira_data[rk]['ot']=r_ot
-    # Para MOs que NO están en rec_issues (rec=0 o campo vacío en Jira), poner a 0
-    for mk_z in list(jira_data.keys()):
-        if mk_z not in rec_map_jira:
-            jira_data[mk_z]['rec']=0
-            jira_data[mk_z]['ot']=0
-    print('  MOs con REC>0: '+str(len(rec_map_jira))+'  → valores leídos de KPI impacto')
-    # ── VERIFICACIÓN REC: usar jira_get para corregir valores del índice JQL desactualizado ──
-    # El batch API puede devolver valores incorrectos (ej: 1082 en lugar de 1082000)
-    # jira_get consulta directamente la base de datos de Jira — siempre exacto
-    print('Verificando REC con jira_get (endpoint individual)...')
+    # ── PASO 2: Sincronizar REC/OT usando jira_get individual (no batch API) ──────
+    # RAZÓN: el batch search API devuelve customfield_11094 escalado diferente
+    # para iniciativas de Operaciones vs Crédito (bug de Jira PD).
+    # jira_get (/rest/api/3/issue/{key}) siempre retorna el valor real correcto.
+    print('Sincronizando REC/OT con jira_get (endpoint individual — valores exactos)...')
+    rec_count=0; rec_total=0
     for mk_rec in list(jira_data.keys()):
-        if jira_data[mk_rec].get('frente') not in ('Operaciones','Crédito',''): continue
         real_fields=jira_get(mk_rec, ['customfield_11094','customfield_11091'])
         if real_fields:
-            real_rec=int(real_fields.get('customfield_11094') or 0)
-            real_ot =int(real_fields.get('customfield_11091') or 0)
-            if jira_data[mk_rec].get('frente')=='Crédito': real_ot=0
-            if real_rec != jira_data[mk_rec].get('rec',0):
-                print('    REC corregido '+mk_rec+': '+str(jira_data[mk_rec].get('rec',0))+' → '+str(real_rec))
-                jira_data[mk_rec]['rec']=real_rec
-            if real_ot != jira_data[mk_rec].get('ot',0):
-                jira_data[mk_rec]['ot']=real_ot
+            r_rec=int(real_fields.get('customfield_11094') or 0)
+            r_ot =int(real_fields.get('customfield_11091') or 0)
+            if jira_data[mk_rec].get('frente')=='Crédito': r_ot=0
+            jira_data[mk_rec]['rec']=r_rec
+            jira_data[mk_rec]['ot']=r_ot
+            if r_rec>0: rec_count+=1; rec_total+=r_rec
+    print('  REC: '+str(rec_count)+' MOs con valor > 0  Total: USD '+str(rec_total))
 
     # SYNC Capital de Trabajo (customfield_11566) — sin caché
     ct_issues_jira=jira_post(
