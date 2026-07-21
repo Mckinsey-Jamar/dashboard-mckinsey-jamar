@@ -316,6 +316,22 @@ def main():
             jira_data[mk_z]['rec']=0
             jira_data[mk_z]['ot']=0
     print('  MOs con REC>0: '+str(len(rec_map_jira))+'  → valores leídos de KPI impacto')
+    # ── VERIFICACIÓN REC: usar jira_get para corregir valores del índice JQL desactualizado ──
+    # El batch API puede devolver valores incorrectos (ej: 1082 en lugar de 1082000)
+    # jira_get consulta directamente la base de datos de Jira — siempre exacto
+    print('Verificando REC con jira_get (endpoint individual)...')
+    for mk_rec in list(jira_data.keys()):
+        if jira_data[mk_rec].get('frente') not in ('Operaciones','Crédito',''): continue
+        real_fields=jira_get(mk_rec, ['customfield_11094','customfield_11091'])
+        if real_fields:
+            real_rec=int(real_fields.get('customfield_11094') or 0)
+            real_ot =int(real_fields.get('customfield_11091') or 0)
+            if jira_data[mk_rec].get('frente')=='Crédito': real_ot=0
+            if real_rec != jira_data[mk_rec].get('rec',0):
+                print('    REC corregido '+mk_rec+': '+str(jira_data[mk_rec].get('rec',0))+' → '+str(real_rec))
+                jira_data[mk_rec]['rec']=real_rec
+            if real_ot != jira_data[mk_rec].get('ot',0):
+                jira_data[mk_rec]['ot']=real_ot
 
     # SYNC Capital de Trabajo (customfield_11566) — sin caché
     ct_issues_jira=jira_post(
