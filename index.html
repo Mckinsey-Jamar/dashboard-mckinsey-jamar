@@ -1,4 +1,32 @@
-<!DOCTYPE html>
+<!DOCTYPE 
+          // ── En Curso — fila estática (igual que noowner) ───────────
+          var inprogArr2 = INPROG_TASKS[d.key] || [];
+          var inprogCount2 = inprogArr2.length;
+          var inprogRowsStatic = inprogArr2.map(function(t){
+            var _ih='';
+            if(t.ps) _ih+='<div class="tk-hier tk-parent">\u21b3 '+t.ps+'</div>';
+            if(t.es) _ih+='<div class="tk-hier tk-epic">\u21b3 '+t.es+'</div>';
+            var _due=t.duedate||t.due||'Sin fecha';
+            var _asn=(t.assignee&&t.assignee!=='Sin asignar')?t.assignee:'Sin responsable';
+            return '<tr>'
+              +'<td class="tk-key"><a href="https://hubdigitaljamar.atlassian.net/browse/'+t.key+'" target="_blank">'+t.key+'</a></td>'
+              +'<td>'+t.summary+_ih+'</td>'
+              +'<td style="color:#888;">'+_due+'</td>'
+              +'<td style="color:#1565C0;font-weight:600;">'+t.status+'</td>'
+              +'<td style="color:#555;">'+_asn+'</td>'
+              +'</tr>';
+          }).join('');
+          html += '<tr class="inprog-detail-row" id="inprog-detail-'+d.key+'">'
+            +'<td colspan="9"><div class="inprog-panel">'
+            +'<div class="inprog-panel-title">\u25B6 Actividades en curso ('+inprogCount2+')</div>'
+            +'<table class="late-tbl"><thead><tr>'
+            +'<th style="width:90px">Tarea</th><th>Actividad</th>'
+            +'<th style="width:90px">Fecha</th><th style="width:110px">Estado</th>'
+            +'<th style="width:130px">Responsable</th>'
+            +'</tr></thead><tbody>'+inprogRowsStatic+'</tbody></table>'
+            +'</div></td></tr>';
+
+html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -2916,33 +2944,7 @@ function renderTable(data) {
             +'</div></td></tr>';
 
 
-          // ── En Curso — fila estática (igual que noowner) ───────────
-          var inprogArr2 = INPROG_TASKS[d.key] || [];
-          var inprogCount2 = inprogArr2.length;
-          var inprogRowsStatic = inprogArr2.map(function(t){
-            var _ih='';
-            if(t.ps) _ih+='<div class="tk-hier tk-parent">\u21b3 '+t.ps+'</div>';
-            if(t.es) _ih+='<div class="tk-hier tk-epic">\u21b3 '+t.es+'</div>';
-            var _due=t.duedate||t.due||'Sin fecha';
-            var _asn=(t.assignee&&t.assignee!=='Sin asignar')?t.assignee:'Sin responsable';
-            return '<tr>'
-              +'<td class="tk-key"><a href="https://hubdigitaljamar.atlassian.net/browse/'+t.key+'" target="_blank">'+t.key+'</a></td>'
-              +'<td>'+t.summary+_ih+'</td>'
-              +'<td style="color:#888;">'+_due+'</td>'
-              +'<td style="color:#1565C0;font-weight:600;">'+t.status+'</td>'
-              +'<td style="color:#555;">'+_asn+'</td>'
-              +'</tr>';
-          }).join('');
-          html += '<tr class="inprog-detail-row" id="inprog-detail-'+d.key+'">'
-            +'<td colspan="9"><div class="inprog-panel">'
-            +'<div class="inprog-panel-title">\u25B6 Actividades en curso ('+inprogCount2+')</div>'
-            +'<table class="late-tbl"><thead><tr>'
-            +'<th style="width:90px">Tarea</th><th>Actividad</th>'
-            +'<th style="width:90px">Fecha</th><th style="width:110px">Estado</th>'
-            +'<th style="width:130px">Responsable</th>'
-            +'</tr></thead><tbody>'+inprogRowsStatic+'</tbody></table>'
-            +'</div></td></tr>';
-
+          
        }
       });
 
