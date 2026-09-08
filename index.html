@@ -2819,7 +2819,7 @@ function renderTable(data) {
         var inprogArr   = INPROG_TASKS[d.key] || [];
         var inprogCount = inprogArr.length;
 
-        var inprogBadge = inprogCount > 0
+        var inprogBadge =inprogCount > 0
           ? '<div><span class="inprog-badge" id="inprog-btn-'+d.key+'" onclick="toggleInProgTbl(\''+d.key+'\',this)">\u25B6 '+inprogCount+' en curso \u25BE</span></div>'
           : '';
 
