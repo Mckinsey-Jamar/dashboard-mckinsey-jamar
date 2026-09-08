@@ -999,54 +999,13 @@ function toggleNodateTasks(moKey, badge) {
 
 
 function toggleInProgTbl(moKey, badge) {
-  var tasks = INPROG_TASKS[moKey] || [];
-  if(!tasks.length) return;
-  // Buscar o crear el panel dinámicamente
-  var panelId = 'inprog-panel-dyn-' + moKey;
-  var existing = document.getElementById(panelId);
-  if(existing) {
-    // Ya existe → cerrar
-    existing.remove();
-    badge.classList.remove('open');
-    badge.textContent = '\u25B6 ' + tasks.length + ' en curso \u25BE';
-    return;
-  }
-  // Construir filas
-  var rows = tasks.map(function(t) {
-    var hier = '';
-    if(t.ps) hier += '<div class="tk-hier tk-parent">\u21b3 '+t.ps+'</div>';
-    if(t.es) hier += '<div class="tk-hier tk-epic">\u21b3 '+t.es+'</div>';
-    var due = t.duedate || t.due || 'Sin fecha';
-    var asn = (t.assignee && t.assignee !== 'Sin asignar') ? t.assignee : 'Sin responsable';
-    return '<tr>'
-      + '<td class="tk-key"><a href="https://hubdigitaljamar.atlassian.net/browse/'+t.key+'" target="_blank">'+t.key+'</a></td>'
-      + '<td>'+t.summary+hier+'</td>'
-      + '<td style="color:#888;">'+due+'</td>'
-      + '<td style="color:#1565C0;font-weight:600;">'+t.status+'</td>'
-      + '<td style="color:#555;">'+asn+'</td>'
-      + '</tr>';
-  }).join('');
-  // Crear fila TR e insertar después del badge
-  var tr = document.createElement('tr');
-  tr.id = panelId;
-  tr.className = 'inprog-detail-row';
-  tr.innerHTML = '<td colspan="9"><div class="inprog-panel">'
-    + '<div class="inprog-panel-title">\u25B6 Actividades en curso ('+tasks.length+')</div>'
-    + '<table class="late-tbl"><thead><tr>'
-    + '<th style="width:90px">Tarea</th><th>Actividad</th>'
-    + '<th style="width:90px">Fecha</th><th style="width:110px">Estado</th>'
-    + '<th style="width:130px">Responsable</th>'
-    + '</tr></thead><tbody>'+rows+'</tbody></table>'
-    + '</div></td>';
-  // Insertar en la tabla después de la fila del badge
-  var badgeTr = badge.closest('tr');
-  if(badgeTr && badgeTr.nextSibling) {
-    badgeTr.parentNode.insertBefore(tr, badgeTr.nextSibling);
-  } else if(badgeTr) {
-    badgeTr.parentNode.appendChild(tr);
-  }
-  badge.classList.add('open');
-  badge.textContent = '\u25B6 ' + tasks.length + ' en curso \u25B4';
+  var row = document.getElementById('inprog-detail-' + moKey);
+  if(!row) return;
+  var isOpen = row.style.display === 'table-row';
+  row.style.display = isOpen ? 'none' : 'table-row';
+  badge.classList.toggle('open', !isOpen);
+  var n = (INPROG_TASKS[moKey]||[]).length;
+  badge.textContent = isOpen ? '\u25B6 '+n+' en curso \u25BE' : '\u25B6 '+n+' en curso \u25B4';
 }
 
 function toggleNoOwnerTbl(moKey, badge) {
@@ -2956,6 +2915,33 @@ function renderTable(data) {
             +'</tr></thead><tbody>'+noownRows+'</tbody></table>'
             +'</div></td></tr>';
 
+
+          // ── En Curso — fila estática (igual que noowner) ───────────
+          var inprogArr2 = INPROG_TASKS[d.key] || [];
+          var inprogCount2 = inprogArr2.length;
+          var inprogRowsStatic = inprogArr2.map(function(t){
+            var _ih='';
+            if(t.ps) _ih+='<div class="tk-hier tk-parent">\u21b3 '+t.ps+'</div>';
+            if(t.es) _ih+='<div class="tk-hier tk-epic">\u21b3 '+t.es+'</div>';
+            var _due=t.duedate||t.due||'Sin fecha';
+            var _asn=(t.assignee&&t.assignee!=='Sin asignar')?t.assignee:'Sin responsable';
+            return '<tr>'
+              +'<td class="tk-key"><a href="https://hubdigitaljamar.atlassian.net/browse/'+t.key+'" target="_blank">'+t.key+'</a></td>'
+              +'<td>'+t.summary+_ih+'</td>'
+              +'<td style="color:#888;">'+_due+'</td>'
+              +'<td style="color:#1565C0;font-weight:600;">'+t.status+'</td>'
+              +'<td style="color:#555;">'+_asn+'</td>'
+              +'</tr>';
+          }).join('');
+          html += '<tr class="inprog-detail-row" id="inprog-detail-'+d.key+'">'
+            +'<td colspan="9"><div class="inprog-panel">'
+            +'<div class="inprog-panel-title">\u25B6 Actividades en curso ('+inprogCount2+')</div>'
+            +'<table class="late-tbl"><thead><tr>'
+            +'<th style="width:90px">Tarea</th><th>Actividad</th>'
+            +'<th style="width:90px">Fecha</th><th style="width:110px">Estado</th>'
+            +'<th style="width:130px">Responsable</th>'
+            +'</tr></thead><tbody>'+inprogRowsStatic+'</tbody></table>'
+            +'</div></td></tr>';
 
        }
       });
