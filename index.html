@@ -375,23 +375,23 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
 .inprog-detail-row td{padding:0;}
 
 /* ─── Vista jerárquica ejecutiva v2 ─── */
-.htbl{width:100%;border-collapse:collapse;font-size:11px;margin:0;}
-.hhdr th{font-size:9px;font-weight:700;color:#90A4AE;letter-spacing:.5px;text-transform:uppercase;padding:5px 8px 4px;border-bottom:1.5px solid #E0E0E0;text-align:left;white-space:nowrap;}
-.hca{width:auto;min-width:160px;}
-.hcs{width:100px;white-space:nowrap;}
-.hcd{width:85px;white-space:nowrap;}
-.hcr{width:130px;}
-.hrl td,.hrc td,.hrctx td{padding:5px 8px;border-bottom:1px solid #F3F3F3;vertical-align:middle;}
+.htbl{width:100%;border-collapse:collapse;font-size:11px;margin:0;table-layout:fixed;}
+.hhdr th{font-size:9.5px;font-weight:700;color:#78909C;letter-spacing:.3px;text-transform:uppercase;padding:5px 10px 4px;border-bottom:1px solid #E0E0E0;text-align:left;white-space:nowrap;background:transparent;}
+.hca{width:auto;}
+.hcs{width:105px;white-space:nowrap;}
+.hcd{width:95px;white-space:nowrap;}
+.hcr{width:140px;}
+.hrl td,.hrc td,.hrctx td{padding:6px 10px;border-bottom:1px solid #EEEEEE;vertical-align:middle;}
 .hrl{background:#FFFFFF;}
 .hrc{background:#FAFAFA;}
 .hrctx{background:#F5F7F9;}
 .hrctx td{padding:4px 8px;}
-.hact{display:flex;align-items:center;gap:5px;}
-.han0{font-weight:700;font-size:11.5px;color:#1A237E;}
-.han1{font-weight:600;font-size:11px;color:#263238;}
-.han2{font-weight:500;font-size:10.5px;color:#424242;}
-.hctx0{font-weight:700;font-size:11.5px;color:#37474F;}
-.hctx1{font-weight:600;font-size:11px;color:#546E7A;font-style:italic;}
+.hact{display:flex;align-items:center;gap:4px;}
+.han0{font-weight:700;font-size:11px;color:#263238;}
+.han1{font-weight:600;font-size:11px;color:#37474F;}
+.han2{font-weight:500;font-size:11px;color:#546E7A;}
+.hctx0{font-weight:700;font-size:11px;color:#37474F;}
+.hctx1{font-weight:500;font-size:11px;color:#78909C;font-style:italic;}
 .hkey{font-size:9px;color:#B0BEC5;font-weight:600;text-decoration:none;white-space:nowrap;margin-right:2px;}
 .hkey:hover{color:#1565C0;}
 .hst{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:3px;}
@@ -403,7 +403,7 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
 .hno{color:#BDBDBD;font-style:italic;font-size:10px;}
 .hier-panel-body{padding:0;}
 .hier-panel-count{font-weight:400;font-size:11px;color:#78909C;}
-.hier-sep{height:1px;background:#E0E0E0;margin:8px 0;}
+.hier-sep{height:0;}
 .noowner-panel-title{font-size:10px;font-weight:700;color:#4527A0;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #D1C4E9;}
 .noowner-panel{background:#F9F7FD;border-top:1px solid #EDE7F6;padding:8px 12px;}
 .inprog-panel{background:#F0F7FF;border-top:2px solid #90CAF9;padding:8px 12px;}
@@ -1210,6 +1210,26 @@ function buildHierPanel(tasks){
     count:count
   };
 }
+function toggleInProgTbl(moKey, badge) {
+  var row = document.getElementById('inprog-detail-' + moKey);
+  if(!row) return;
+  var isOpen = row.style.display === 'table-row';
+  if(!isOpen) {
+    var tasks = (INPROG_TASKS[moKey]||[]);
+    var hier = buildHierPanel(tasks);
+    var pb = row.querySelector('.hier-panel-body');
+    if(pb) pb.innerHTML = hier.html;
+    var ct = row.querySelector('.hier-panel-count');
+    if(ct) ct.textContent = '('+hier.count+')';
+  }
+  row.style.display = isOpen ? 'none' : 'table-row';
+  badge.classList.toggle('open', !isOpen);
+  var n = (INPROG_TASKS[moKey]||[]).length;
+  badge.textContent = isOpen
+    ? '\u25B6 '+n+' en curso \u25BE'
+    : '\u25B6 '+n+' en curso \u25B4';
+}
+
 function toggleNoOwnerTbl(moKey, badge) {
   var row = document.getElementById('noowner-detail-' + moKey);
   if(!row) return;
