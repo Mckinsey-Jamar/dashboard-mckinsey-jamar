@@ -1070,109 +1070,150 @@ function hCtx(summary, lvl){
   return '<div class="'+cls+'"><span class="'+ncls+'">'+escH(summary)+'</span></div>';
 }
 
+// ═══ buildHierPanel v3 — Jerarquía ejecutiva con columnas, sin etiquetas ════
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function hStBadge(status){
+  if(!status) return '';
+  var s=status.toLowerCase(), cls='hst-todo';
+  if(s.includes('curso')||s.includes('progress')||s.includes('ejecuc')) cls='hst-prog';
+  else if(s.includes('done')||s.includes('final')||s.includes('cerr'))  cls='hst-done';
+  else if(s.includes('atra')||s.includes('late'))                        cls='hst-late';
+  else if(s.includes('bloq'))                                             cls='hst-blk';
+  return '<span class="hst '+cls+'">'+escH(status)+'</span>';
+}
+
+function hRow(t, depth, isLeaf){
+  var pad=(8+depth*16)+'px';
+  var due=escH(t.duedate||t.due||'Sin fecha');
+  var asn=(t.assignee&&t.assignee!=='Sin asignar')
+    ?escH(t.assignee):'<span class="hno">Sin responsable</span>';
+  var nc=depth===0?'han0':depth===1?'han1':'han2';
+  var rc=isLeaf?'hrl':'hrc';
+  var key='<a class="hkey" href="https://hubdigitaljamar.atlassian.net/browse/'
+    +t.key+'" target="_blank">'+t.key+'</a>';
+  return '<tr class="'+rc+'">'
+    +'<td class="hca"><div class="hact" style="padding-left:'+pad+'">'
+    +key+'<span class="'+nc+'">'+escH(t.summary)+'</span></div></td>'
+    +'<td class="hcs">'+hStBadge(t.status)+'</td>'
+    +'<td class="hcd">'+due+'</td>'
+    +'<td class="hcr">'+asn+'</td>'
+    +'</tr>';
+}
+
+function hCtxRow(summary, depth){
+  var pad=(8+depth*16)+'px';
+  var nc=depth===0?'hctx0':'hctx1';
+  return '<tr class="hrctx">'
+    +'<td class="hca" colspan="4">'
+    +'<div class="hact" style="padding-left:'+pad+'">'
+    +'<span class="'+nc+'">'+escH(summary)+'</span></div></td>'
+    +'</tr>';
+}
+
 function buildHierPanel(tasks){
   if(!tasks||!tasks.length) return {html:'',count:0};
+
+  // Calcular ancestros del set filtrado
+  // psSet: summaries que son padres de otro issue en el set (Task/Story)
+  // esSet: summaries que son Epic de otro issue en el set
   var psSet=new Set(tasks.filter(function(t){return t.ps;}).map(function(t){return t.ps;}));
-  var leaves=tasks.filter(function(t){return !psSet.has(t.summary);});
-  var count=leaves.length;
+  var esSet=new Set(tasks.filter(function(t){return t.es;}).map(function(t){return t.es;}));
 
-  var epicMap={};
-  var epicOrder=[];
-  var noEpic=[];
+  // Hoja = item que NO es ancestro (no aparece como ps ni como es de otro)
+  var count=tasks.filter(function(t){
+    return !psSet.has(t.summary) && !esSet.has(t.summary);
+  }).length;
 
+  // Construir árbol
+  var epicMap={}, epicOrder=[], noEpic=[];
   tasks.forEach(function(t){
     if(t.es){
-      if(!epicMap[t.es]){epicMap[t.es]={byPs:{},direct:[]};epicOrder.push(t.es);}
-      var em=epicMap[t.es];
-      if(t.ps){
-        if(!em.byPs[t.ps]) em.byPs[t.ps]=[];
-        em.byPs[t.ps].push(t);
-      } else { em.direct.push(t); }
+      if(!epicMap[t.es]){epicMap[t.es]={byPs:{},direct:[],epicItem:null};epicOrder.push(t.es);}
+      t.ps
+        ?(epicMap[t.es].byPs[t.ps]=epicMap[t.es].byPs[t.ps]||[],epicMap[t.es].byPs[t.ps].push(t))
+        :epicMap[t.es].direct.push(t);
     } else { noEpic.push(t); }
   });
 
-  var html='';
-  var firstEpic=true;
+  // Fusionar noEpic con epicMap: si un noEpic item ES el Epic de un grupo
+  var noEpicRemainder=[];
+  noEpic.forEach(function(t){
+    if(epicMap[t.summary]){
+      // Este item es el Epic root — adjuntar sus datos al grupo
+      epicMap[t.summary].epicItem=t;
+    } else if(psSet.has(t.summary)||esSet.has(t.summary)){
+      // Es contexto de otro item en el set
+      noEpicRemainder.push({ctx:true,summary:t.summary});
+    } else {
+      noEpicRemainder.push({ctx:false,t:t});
+    }
+  });
 
+  var hdr='<tr class="hhdr">'
+    +'<th class="hca">PLAN DE TRABAJO</th>'
+    +'<th class="hcs">ESTADO</th>'
+    +'<th class="hcd">VENCIMIENTO</th>'
+    +'<th class="hcr">RESPONSABLE</th></tr>';
+  var rows='';
+
+  // Épics del árbol
   epicOrder.forEach(function(es){
     var em=epicMap[es];
-    if(!firstEpic) html+='<div class="hier-sep"></div>';
-    firstEpic=false;
+    var epicItem=em.epicItem;
+    var isEpicLeaf=epicItem&&!psSet.has(epicItem.summary)&&!esSet.has(epicItem.summary);
+    var hasChildren=Object.keys(em.byPs).length>0||em.direct.length>0;
 
-    // ¿El Epic es también un item filtrado?
-    var epicItem=em.direct.find(function(t){return !psSet.has(t.summary);});
-    var hasChildren=(Object.keys(em.byPs).length>0)||
-      em.direct.filter(function(t){return t!==epicItem;}).length>0;
-
-    if(epicItem&&!hasChildren){
-      html+=hLeaf(epicItem,0);
+    if(isEpicLeaf&&!hasChildren){
+      rows+=hRow(epicItem,0,true);
     } else {
-      // Epic como encabezado visual
-      if(epicItem){
-        html+='<div class="h0"><span class="h0-name">'+escH(es)+'</span>'+hMeta(epicItem)+'</div>';
-      } else {
-        html+=hCtx(es,0);
-      }
+      // Epic como encabezado (contexto o resultado con hijos)
+      rows+=epicItem?hRow(epicItem,0,false):hCtxRow(es,0);
 
-      // Tasks directas del epic
+      // Hijos directos (Tasks sin ps)
       em.direct.forEach(function(t){
-        if(t===epicItem) return;
-        if(!psSet.has(t.summary)){
-          html+=hLeaf(t,1);
-        } else {
-          html+=hCtx(t.summary,1);
-          (em.byPs[t.summary]||[]).forEach(function(sub){ html+=hLeaf(sub,2); });
+        var isLeaf=!psSet.has(t.summary)&&!esSet.has(t.summary);
+        if(isLeaf){rows+=hRow(t,1,true);}
+        else{
+          rows+=hRow(t,1,false);
+          (em.byPs[t.summary]||[]).forEach(function(s){
+            var sIsLeaf=!psSet.has(s.summary)&&!esSet.has(s.summary);
+            rows+=hRow(s,2,sIsLeaf);
+          });
         }
       });
 
-      // Tasks referenciadas como ps
+      // Tasks referenciadas como ps (no están como direct)
       Object.keys(em.byPs).forEach(function(ps){
-        var alreadyShown=em.direct.some(function(d){return d.summary===ps;});
-        if(alreadyShown) return;
-        var psAsItem=tasks.find(function(t){return t.summary===ps&&t.es===es&&!t.ps;});
-        if(psAsItem){
-          html+='<div class="h1"><span class="h1-name">'+escH(ps)+'</span>'+hMeta(psAsItem)+'</div>';
-        } else {
-          html+=hCtx(ps,1);
-        }
-        em.byPs[ps].forEach(function(sub){ html+=hLeaf(sub,2); });
+        if(em.direct.some(function(d){return d.summary===ps;})) return;
+        var psItem=tasks.find(function(t){return t.summary===ps&&t.es===es&&!t.ps;});
+        rows+=psItem?hRow(psItem,1,false):hCtxRow(ps,1);
+        em.byPs[ps].forEach(function(s){
+          var sIsLeaf=!psSet.has(s.summary)&&!esSet.has(s.summary);
+          rows+=hRow(s,2,sIsLeaf);
+        });
       });
     }
   });
 
-  // Sin Epic
-  noEpic.forEach(function(t){
-    if(psSet.has(t.summary)){
-      html+=hCtx(t.summary,0);
-      tasks.filter(function(s){return s.ps===t.summary;}).forEach(function(sub){ html+=hLeaf(sub,1); });
-    } else {
-      html+=hLeaf(t,0);
+  // Items sin Epic (que no son contexto de un Epic del árbol)
+  noEpicRemainder.forEach(function(item){
+    if(item.ctx){rows+=hCtxRow(item.summary,0);}
+    else{
+      var isLeaf=!psSet.has(item.t.summary)&&!esSet.has(item.t.summary);
+      rows+=hRow(item.t,0,isLeaf);
+      if(!isLeaf){
+        tasks.filter(function(s){return s.ps===item.t.summary;})
+          .forEach(function(s){rows+=hRow(s,1,true);});
+      }
     }
   });
 
-  return {html:html,count:count};
+  return {
+    html:'<table class="htbl"><thead>'+hdr+'</thead><tbody>'+rows+'</tbody></table>',
+    count:count
+  };
 }
-
-function toggleInProgTbl(moKey, badge) {
-  var row = document.getElementById('inprog-detail-' + moKey);
-  if(!row) return;
-  var isOpen = row.style.display === 'table-row';
-  if(!isOpen) {
-    var tasks = (INPROG_TASKS[moKey]||[]);
-    var hier = buildHierPanel(tasks);
-    var pb = row.querySelector('.hier-panel-body');
-    if(pb) pb.innerHTML = hier.html;
-    var ct = row.querySelector('.hier-panel-count');
-    if(ct) ct.textContent = '('+hier.count+')';
-  }
-  row.style.display = isOpen ? 'none' : 'table-row';
-  badge.classList.toggle('open', !isOpen);
-  var n = (INPROG_TASKS[moKey]||[]).length;
-  badge.textContent = isOpen
-    ? '\u25B6 '+n+' en curso \u25BE'
-    : '\u25B6 '+n+' en curso \u25B4';
-}
-
 function toggleNoOwnerTbl(moKey, badge) {
   var row = document.getElementById('noowner-detail-' + moKey);
   if(!row) return;
@@ -2955,10 +2996,8 @@ function renderTable(data) {
           }).join('');
           html += '<tr class="late-detail-row" id="late-detail-'+d.key+'">'
             +'<td colspan="9"><div class="late-panel">'
-            +'<div class="late-panel-title">\u26A0\uFE0F Tareas vencidas ('+lateCount+')</div>'
-            +'<table class="late-tbl"><thead><tr>'
-            +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:130px">Vence / Retraso</th><th style="width:160px">Responsable</th>'
-            +'</tr></thead><tbody>'+ltRows+'</tbody></table>'
+            +'<div class="late-panel-title">\u26A0\uFE0F Actividades atrasadas <span class="hier-panel-count">(?)</span></div>'
+            +'<div class="hier-panel-body"></div>'
             +'</div></td></tr>';
         }
 
@@ -2980,10 +3019,8 @@ function renderTable(data) {
           }).join('');
           html += '<tr class="week-detail-row" id="week-detail-'+d.key+'">'
             +'<td colspan="9"><div class="week-panel">'
-            +'<div class="week-panel-title">\uD83D\uDCC5 Actividades de la Semana ('+weekCount+')</div>'
-            +'<table class="week-tbl"><thead><tr>'
-            +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:130px">Vence en</th><th style="width:160px">Responsable</th>'
-            +'</tr></thead><tbody>'+wRows+'</tbody></table>'
+            +'<div class="week-panel-title">\uD83D\uDCC5 Actividades de la semana <span class="hier-panel-count">(?)</span></div>'
+            +'<div class="hier-panel-body"></div>'
             +'</div></td></tr>';
         }
 
