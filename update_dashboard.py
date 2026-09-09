@@ -748,6 +748,15 @@ def main():
     html=replace_var(html,"NO_DATE_TASKS",build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" sin fecha"))
     # Post-filtro: eliminar tareas que llegaron con assignee real
     html=replace_var(html,"NO_OWNER_TASKS",build_var("NO_OWNER_TASKS",noown_by_mo,str(total_noown)+" sin responsable"))
+    # 2do paso: rellenar es faltante en late/week/inprog usando parent_map de 2 niveles
+    for _by_mo_dict in [late_by_mo, week_by_mo, inprog_by_mo, nodt_by_mo, noown_by_mo]:
+        for _mo_k in _by_mo_dict:
+            for _t in _by_mo_dict[_mo_k]:
+                if _t.get('ps') and not _t.get('es'):
+                    _ps2,_es2=get_ps_es(_t['key'])
+                    if _es2: _t['es']=_es2
+                    elif _ps2 and not _t.get('ps'): _t['ps']=_ps2
+
     # Verificar fechas reales de tasks en curso (batch API puede tener stale duedate)
     inprog_nodate_keys=[t['key'] for mo in inprog_by_mo.values() for t in mo if not t.get('due')]
     if inprog_nodate_keys:
