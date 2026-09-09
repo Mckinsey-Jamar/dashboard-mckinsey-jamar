@@ -378,27 +378,35 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
 .inprog-detail-row{display:none;}
 .inprog-detail-row td{padding:0;}
 
-/* ─── Jerarquía visual ejecutiva ─── */
-.h0{padding:6px 8px 6px 10px;margin-bottom:2px;border-left:3px solid #1565C0;background:#F5F9FF;border-radius:0 4px 4px 0;}
-.h0-name{font-size:12px;font-weight:700;color:#1A237E;display:block;margin-bottom:3px;}
-.h1{padding:5px 8px 5px 10px;margin:2px 0 2px 16px;border-left:2px solid #A5D6A7;background:#F8FDF8;border-radius:0 4px 4px 0;}
-.h1-name{font-size:11.5px;font-weight:600;color:#263238;display:block;margin-bottom:2px;}
-.h2{padding:4px 8px 4px 10px;margin:2px 0 2px 32px;border-left:1px solid #FFCC80;background:#FFFDF5;border-radius:0 4px 4px 0;}
-.h2-name{font-size:11px;font-weight:500;color:#424242;display:block;margin-bottom:2px;}
-.h0-ctx{padding:5px 8px 5px 10px;margin-bottom:2px;border-left:3px solid #90CAF9;background:#F5F9FF;border-radius:0 4px 4px 0;opacity:.9;}
-.h0-ctx .h0-name{color:#1565C0;font-weight:600;}
-.h1-ctx{padding:4px 8px 4px 10px;margin:2px 0 2px 16px;border-left:2px solid #C8E6C9;background:#FAFDF9;border-radius:0 4px 4px 0;opacity:.85;}
-.h1-ctx .h1-name{color:#388E3C;font-weight:500;font-style:italic;}
-.h-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.h-key a{font-size:9px;color:#90A4AE;font-weight:600;text-decoration:none;}.h-key a:hover{color:#1565C0;text-decoration:underline;}
-.h-date{font-size:10px;color:#78909C;}
-.h-asn{font-size:10px;color:#546E7A;font-style:italic;}
-.h-status{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;}
-.hs-prog{background:#E3F2FD;color:#1565C0;}
-.hs-todo{background:#F5F5F5;color:#757575;}
-.hs-done{background:#E8F5E9;color:#2E7D32;}
-.hs-late{background:#FFEBEE;color:#C62828;}
-.hier-panel-body{padding:4px 0;}
+/* ─── Vista jerárquica ejecutiva v2 ─── */
+.htbl{width:100%;border-collapse:collapse;font-size:11px;margin:0;}
+.hhdr th{font-size:9px;font-weight:700;color:#90A4AE;letter-spacing:.5px;text-transform:uppercase;padding:5px 8px 4px;border-bottom:1.5px solid #E0E0E0;text-align:left;white-space:nowrap;}
+.hca{width:auto;min-width:160px;}
+.hcs{width:100px;white-space:nowrap;}
+.hcd{width:85px;white-space:nowrap;}
+.hcr{width:130px;}
+.hrl td,.hrc td,.hrctx td{padding:5px 8px;border-bottom:1px solid #F3F3F3;vertical-align:middle;}
+.hrl{background:#FFFFFF;}
+.hrc{background:#FAFAFA;}
+.hrctx{background:#F5F7F9;}
+.hrctx td{padding:4px 8px;}
+.hact{display:flex;align-items:center;gap:5px;}
+.han0{font-weight:700;font-size:11.5px;color:#1A237E;}
+.han1{font-weight:600;font-size:11px;color:#263238;}
+.han2{font-weight:500;font-size:10.5px;color:#424242;}
+.hctx0{font-weight:700;font-size:11.5px;color:#37474F;}
+.hctx1{font-weight:600;font-size:11px;color:#546E7A;font-style:italic;}
+.hkey{font-size:9px;color:#B0BEC5;font-weight:600;text-decoration:none;white-space:nowrap;margin-right:2px;}
+.hkey:hover{color:#1565C0;}
+.hst{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:3px;}
+.hst-prog{background:#E3F2FD;color:#1565C0;}
+.hst-todo{background:#F5F5F5;color:#616161;}
+.hst-done{background:#E8F5E9;color:#2E7D32;}
+.hst-late{background:#FFEBEE;color:#C62828;}
+.hst-blk{background:#EDE7F6;color:#4527A0;}
+.hno{color:#BDBDBD;font-style:italic;font-size:10px;}
+.hier-panel-body{padding:0;}
+.hier-panel-count{font-weight:400;font-size:11px;color:#78909C;}
 .hier-sep{height:1px;background:#E0E0E0;margin:8px 0;}
 .noowner-panel-title{font-size:10px;font-weight:700;color:#4527A0;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #D1C4E9;}
 .noowner-panel{background:#F9F7FD;border-top:1px solid #EDE7F6;padding:8px 12px;}
@@ -892,10 +900,8 @@ function buildSFPanelHTML(sfItems) {
       }).join('');
       html += '<div class="late-detail-card" id="late-detail-sf-'+d.key+'" style="display:none;">'
         +'<div class="late-panel">'
-        +'<div class="late-panel-title">⚠️ Tareas vencidas ('+lt2.length+')</div>'
-        +'<table class="late-tbl"><thead><tr>'
-        +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:120px">Vence</th><th style="width:160px">Responsable</th>'
-        +'</tr></thead><tbody>'+ltRows2+'</tbody></table>'
+        +'<div class="late-panel-title">\u26A0\uFE0F Actividades atrasadas <span class="hier-panel-count">(?)</span></div>'
+            +'<div class="hier-panel-body"></div>'
         +'</div></div>';
     }
     // Week panel
@@ -916,10 +922,8 @@ function buildSFPanelHTML(sfItems) {
       }).join('');
       html += '<div class="week-detail-card" id="week-detail-sf-'+d.key+'" style="display:none;">'
         +'<div class="week-panel">'
-        +'<div class="week-panel-title">📅 Actividades de la Semana ('+sfWkArr.length+')</div>'
-        +'<table class="week-tbl"><thead><tr>'
-        +'<th style="width:90px">Tarea</th><th>Actividad</th><th style="width:120px">Vence en</th><th style="width:160px">Responsable</th>'
-        +'</tr></thead><tbody>'+wRows+'</tbody></table>'
+        +'<div class="week-panel-title">\uD83D\uDCC5 Actividades de la semana <span class="hier-panel-count">(?)</span></div>'
+            +'<div class="hier-panel-body"></div>'
         +'</div></div>';
     }
   });
@@ -1212,12 +1216,21 @@ function toggleNoDatTbl(moKey, badge) {
 function toggleWeekTasksTbl(moKey, badge) {
   var row = document.getElementById('week-detail-' + moKey);
   if(!row) return;
-  var isOpen = row.style.display !== 'none' && row.style.display !== '';
+  var isOpen = row.style.display === 'table-row';
+  if(!isOpen) {
+    var tasks = (WEEK_TASKS[moKey]||[]);
+    var hier = buildHierPanel(tasks);
+    var pb = row.querySelector('.hier-panel-body');
+    if(pb) pb.innerHTML = hier.html;
+    var ct = row.querySelector('.hier-panel-count');
+    if(ct) ct.textContent = '('+hier.count+')';
+  }
   row.style.display = isOpen ? 'none' : 'table-row';
   badge.classList.toggle('open', !isOpen);
+  var n = (WEEK_TASKS[moKey]||[]).length;
   badge.textContent = isOpen
-    ? '📅 ' + (WEEK_TASKS[moKey]||[]).length + ' esta semana ▾'
-    : '📅 ' + (WEEK_TASKS[moKey]||[]).length + ' esta semana ▴';
+    ? '\uD83D\uDCC5 '+n+' esta semana \u25BE'
+    : '\uD83D\uDCC5 '+n+' esta semana \u25B4';
 }
 
 function toggleWeekTasks(id, btn, key) {
@@ -3050,19 +3063,28 @@ function renderTable(data) {
 }
 
 function toggleLateTasks(moKey, badge, dataKey) {
-  var realKey = dataKey || moKey;
-  // Find the panel — could be table-row (accordion) or div (frentes card)
-  var rowTbl = document.getElementById('late-detail-' + moKey);
-  var rowDiv = document.getElementById('late-detail-sf-' + realKey);
-  var row = rowTbl || rowDiv;
+  var row = document.getElementById('late-detail-' + moKey);
+  if(!row) {
+    var realKey = dataKey || moKey;
+    row = document.getElementById('late-detail-sf-' + realKey);
+  }
   if(!row) return;
-  var isTbl = !!rowTbl;
-  var isOpen = row.style.display !== 'none' && row.style.display !== '';
+  var isTbl = row.tagName === 'TR';
+  var isOpen = row.style.display === 'table-row' || (row.style.display === 'block');
+  if(!isOpen) {
+    var tasks = (LATE_TASKS[moKey]||[]);
+    var hier = buildHierPanel(tasks);
+    var pb = row.querySelector('.hier-panel-body');
+    if(pb) pb.innerHTML = hier.html;
+    var ct = row.querySelector('.hier-panel-count');
+    if(ct) ct.textContent = '('+hier.count+')';
+  }
   row.style.display = isOpen ? 'none' : (isTbl ? 'table-row' : 'block');
   badge.classList.toggle('open', !isOpen);
+  var n = (LATE_TASKS[moKey]||[]).length;
   badge.textContent = isOpen
-    ? '🔴 ' + (LATE_TASKS[moKey]||[]).length + ' atrasada' + ((LATE_TASKS[moKey]||[]).length>1?'s':'') + ' ▾'
-    : '🔴 ' + (LATE_TASKS[moKey]||[]).length + ' atrasada' + ((LATE_TASKS[moKey]||[]).length>1?'s':'') + ' ▴';
+    ? '\uD83D\uDD34 '+n+' atrasada'+(n>1?'s':'')+' \u25BE'
+    : '\uD83D\uDD34 '+n+' atrasada'+(n>1?'s':'')+' \u25B4';
 }
 
 function toggleSFActLate(sfName, badge) {
