@@ -378,32 +378,28 @@ tr.grand-total td{background:var(--slate-dk);color:#fff;font-weight:700;font-siz
 .inprog-detail-row{display:none;}
 .inprog-detail-row td{padding:0;}
 
-/* ─── Jerarquía visual ─── */
-.hier-epic-block{margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #E3F2FD;}
-.hier-epic-hdr{display:flex;align-items:center;gap:6px;margin-bottom:6px;padding:4px 6px;background:#EEF4FF;border-radius:4px;border-left:3px solid #1565C0;}
-.hier-epic-name{font-weight:700;font-size:11.5px;color:#1A237E;flex:1;}
-.hier-task-ctx{display:flex;align-items:center;gap:5px;margin:4px 0 3px 14px;padding:3px 6px;background:#F3F7F3;border-radius:4px;border-left:2px solid #43A047;}
-.hier-ctx{display:flex;align-items:center;gap:5px;margin:4px 0 3px;}
-.hier-ctx.hier-l1{margin-left:14px;padding:3px 6px;background:#F3F7F3;border-radius:4px;border-left:2px solid #43A047;}
-.hier-ctx-name{font-size:11px;font-style:italic;color:#555;}
-.hier-leaf{padding:5px 8px;border-radius:4px;margin-bottom:3px;background:#FAFAFA;border:1px solid #EEE;}
-.hier-leaf.hier-l1{margin-left:14px;background:#F0FBF0;}
-.hier-leaf.hier-l2{margin-left:28px;background:#FFF8E7;}
-.hier-row{display:flex;align-items:center;gap:5px;margin-bottom:2px;flex-wrap:wrap;}
-.hier-meta-row{display:flex;align-items:center;gap:6px;margin-top:2px;flex-wrap:wrap;}
-.hier-key a{font-size:9.5px;color:#1565C0;font-weight:700;text-decoration:none;}
-.hier-name{font-size:11px;font-weight:600;color:#222;flex:1;}
-.hier-date{font-size:10px;color:#888;}
-.hier-asn{font-size:10px;color:#555;font-style:italic;}
-.hbdg{font-size:8px;font-weight:800;padding:1px 5px;border-radius:3px;text-transform:uppercase;white-space:nowrap;}
-.hbdg-epic{background:#E3F2FD;color:#0D47A1;border:1px solid #90CAF9;}
-.hbdg-task{background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7;}
-.hbdg-sub{background:#FFF8E1;color:#E65100;border:1px solid #FFCC80;}
-.hst{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:3px;}
-.hst-prog{background:#E3F2FD;color:#0D47A1;}
-.hst-todo{background:#F5F5F5;color:#757575;}
-.hst-done{background:#E8F5E9;color:#1B5E20;}
+/* ─── Jerarquía visual ejecutiva ─── */
+.h0{padding:6px 8px 6px 10px;margin-bottom:2px;border-left:3px solid #1565C0;background:#F5F9FF;border-radius:0 4px 4px 0;}
+.h0-name{font-size:12px;font-weight:700;color:#1A237E;display:block;margin-bottom:3px;}
+.h1{padding:5px 8px 5px 10px;margin:2px 0 2px 16px;border-left:2px solid #A5D6A7;background:#F8FDF8;border-radius:0 4px 4px 0;}
+.h1-name{font-size:11.5px;font-weight:600;color:#263238;display:block;margin-bottom:2px;}
+.h2{padding:4px 8px 4px 10px;margin:2px 0 2px 32px;border-left:1px solid #FFCC80;background:#FFFDF5;border-radius:0 4px 4px 0;}
+.h2-name{font-size:11px;font-weight:500;color:#424242;display:block;margin-bottom:2px;}
+.h0-ctx{padding:5px 8px 5px 10px;margin-bottom:2px;border-left:3px solid #90CAF9;background:#F5F9FF;border-radius:0 4px 4px 0;opacity:.9;}
+.h0-ctx .h0-name{color:#1565C0;font-weight:600;}
+.h1-ctx{padding:4px 8px 4px 10px;margin:2px 0 2px 16px;border-left:2px solid #C8E6C9;background:#FAFDF9;border-radius:0 4px 4px 0;opacity:.85;}
+.h1-ctx .h1-name{color:#388E3C;font-weight:500;font-style:italic;}
+.h-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.h-key a{font-size:9px;color:#90A4AE;font-weight:600;text-decoration:none;}.h-key a:hover{color:#1565C0;text-decoration:underline;}
+.h-date{font-size:10px;color:#78909C;}
+.h-asn{font-size:10px;color:#546E7A;font-style:italic;}
+.h-status{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;}
+.hs-prog{background:#E3F2FD;color:#1565C0;}
+.hs-todo{background:#F5F5F5;color:#757575;}
+.hs-done{background:#E8F5E9;color:#2E7D32;}
+.hs-late{background:#FFEBEE;color:#C62828;}
 .hier-panel-body{padding:4px 0;}
+.hier-sep{height:1px;background:#E0E0E0;margin:8px 0;}
 .noowner-panel-title{font-size:10px;font-weight:700;color:#4527A0;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #D1C4E9;}
 .noowner-panel{background:#F9F7FD;border-top:1px solid #EDE7F6;padding:8px 12px;}
 .inprog-panel{background:#F0F7FF;border-top:2px solid #90CAF9;padding:8px 12px;}
@@ -1036,189 +1032,122 @@ function toggleNodateTasks(moKey, badge) {
 
 function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-function stBadge(status){
+function stBdg(status){
   if(!status) return '';
   var s=status.toLowerCase();
-  if(s.includes('curso')||s.includes('progress')||s.includes('ejecuc'))
-    return '<span class="hst hst-prog">'+escH(status)+'</span>';
-  if(s.includes('hac')||s.includes('todo')||s.includes('pend'))
-    return '<span class="hst hst-todo">'+escH(status)+'</span>';
-  if(s.includes('done')||s.includes('final')||s.includes('cerr'))
-    return '<span class="hst hst-done">'+escH(status)+'</span>';
-  return '<span class="hst">'+escH(status)+'</span>';
+  var cls='hs-todo',lbl=escH(status);
+  if(s.includes('curso')||s.includes('progress')||s.includes('ejecuc')) cls='hs-prog';
+  else if(s.includes('done')||s.includes('final')||s.includes('cerr')) cls='hs-done';
+  else if(s.includes('bloq')) cls='hs-late';
+  return '<span class="h-status '+cls+'">'+lbl+'</span>';
 }
 
-function fmtDate(d){ return d||'Sin fecha'; }
-function fmtAsn(a){ return (a&&a!=='Sin asignar')?escH(a):'Sin responsable'; }
-
-function renderHierLeaf(t, level) {
-  // level: 0=epic, 1=task, 2=subtask
-  var labels=['EPIC','HITO / TASK','SUBTASK'];
-  var bclasses=['hbdg-epic','hbdg-task','hbdg-sub'];
-  var lbl=level<labels.length?labels[level]:'TAREA';
-  var bcl=level<bclasses.length?bclasses[level]:'hbdg-task';
-  var indent=['','hier-l1','hier-l2'];
-  var indcl=level<indent.length?indent[level]:'hier-l2';
-
-  return '<div class="hier-leaf '+indcl+'">'
-    +'<div class="hier-row">'
-    +'<a class="hier-key" href="https://hubdigitaljamar.atlassian.net/browse/'+t.key+'" target="_blank">'+t.key+'</a>'
-    +'<span class="hbdg '+bcl+'">'+lbl+'</span>'
-    +'<span class="hier-name">'+escH(t.summary)+'</span>'
-    +'</div>'
-    +'<div class="hier-meta-row">'
-    +(stBadge(t.status))
-    +'<span class="hier-date">'+fmtDate(t.duedate||t.due)+'</span>'
-    +'<span class="hier-asn">'+fmtAsn(t.assignee)+'</span>'
-    +'</div>'
+function hMeta(t){
+  var due=(t.duedate||t.due||'Sin fecha');
+  var asn=(t.assignee&&t.assignee!=='Sin asignar')?t.assignee:'';
+  var key='<span class="h-key"><a href="https://hubdigitaljamar.atlassian.net/browse/'+t.key+'" target="_blank">'+t.key+'</a></span>';
+  return '<div class="h-meta">'
+    +key
+    +stBdg(t.status)
+    +'<span class="h-date">'+escH(due)+'</span>'
+    +(asn?'<span class="h-asn">'+escH(asn)+'</span>':'')
     +'</div>';
 }
 
-function renderHierCtx(summary, level) {
-  var labels=['EPIC','HITO / TASK','SUBTASK'];
-  var bclasses=['hbdg-epic','hbdg-task','hbdg-sub'];
-  var lbl=level<labels.length?labels[level]:'TAREA';
-  var bcl=level<bclasses.length?bclasses[level]:'hbdg-task';
-  var indent=['','hier-l1','hier-l2'];
-  var indcl=level<indent.length?indent[level]:'hier-l2';
-
-  return '<div class="hier-ctx '+indcl+'">'
-    +'<span class="hbdg '+bcl+'">'+lbl+'</span>'
-    +'<span class="hier-ctx-name">'+escH(summary)+'</span>'
-    +'</div>';
+function hLeaf(t, lvl){
+  var cls=['h0','h1','h2'][Math.min(lvl,2)];
+  var ncls=['h0-name','h1-name','h2-name'][Math.min(lvl,2)];
+  return '<div class="'+cls+'"><span class="'+ncls+'">'+escH(t.summary)+'</span>'+hMeta(t)+'</div>';
 }
 
-function buildHierPanel(tasks) {
-  // tasks: array of {key, summary, duedate/due, assignee, status, ps, es}
-  // ps = parent task summary, es = epic summary
-  // Returns {html: string, count: number}
+function hCtx(summary, lvl){
+  var cls=lvl===0?'h0-ctx':'h1-ctx';
+  var ncls=lvl===0?'h0-name':'h1-name';
+  return '<div class="'+cls+'"><span class="'+ncls+'">'+escH(summary)+'</span></div>';
+}
 
+function buildHierPanel(tasks){
   if(!tasks||!tasks.length) return {html:'',count:0};
-
-  // — Paso 1: Identificar todos los 'ps' presentes (summaries que aparecen como parent)
   var psSet=new Set(tasks.filter(function(t){return t.ps;}).map(function(t){return t.ps;}));
-
-  // — Paso 2: Contar hojas (unidades finales de trabajo)
-  //   Hoja = issue cuyo summary NO aparece como 'ps' de otro issue en el set
-  //   PERO: si un issue tiene ps y hay otro issue con ese summary como su propio summary
-  //   (es decir, el parent también está en el set), el parent no es hoja, la subtask sí
-  var filtSums=new Set(tasks.map(function(t){return t.summary;}));
-  var leaves=tasks.filter(function(t){
-    // Es hoja si su summary NO aparece como ps de ningún otro task en el set
-    return !psSet.has(t.summary);
-  });
+  var leaves=tasks.filter(function(t){return !psSet.has(t.summary);});
   var count=leaves.length;
 
-  // — Paso 3: Construir árbol
-  // epicMap: es → {tasks_by_ps: {ps → [items]}, direct: [items with es but no ps]}
   var epicMap={};
   var epicOrder=[];
   var noEpic=[];
 
   tasks.forEach(function(t){
     if(t.es){
-      if(!epicMap[t.es]){
-        epicMap[t.es]={byPs:{},direct:[],hasItem:false};
-        epicOrder.push(t.es);
-      }
+      if(!epicMap[t.es]){epicMap[t.es]={byPs:{},direct:[]};epicOrder.push(t.es);}
       var em=epicMap[t.es];
       if(t.ps){
         if(!em.byPs[t.ps]) em.byPs[t.ps]=[];
         em.byPs[t.ps].push(t);
-      } else {
-        em.direct.push(t);
-      }
-    } else {
-      noEpic.push(t);
-    }
+      } else { em.direct.push(t); }
+    } else { noEpic.push(t); }
   });
 
-  // — Paso 4: Renderizar
   var html='';
+  var firstEpic=true;
 
   epicOrder.forEach(function(es){
     var em=epicMap[es];
-    html+='<div class="hier-epic-block">';
+    if(!firstEpic) html+='<div class="hier-sep"></div>';
+    firstEpic=false;
 
-    // ¿El Epic mismo está en el set? (aparece como item directo sin ps)
-    var epicItem=em.direct.find(function(t){return t.es===es&&!t.ps&&!psSet.has(t.summary);});
-    // Si el epic está como item y NO tiene hijos que lo referencien como es únicamente
-    var epicHasChildren=Object.keys(em.byPs).length>0||em.direct.length>0;
+    // ¿El Epic es también un item filtrado?
+    var epicItem=em.direct.find(function(t){return !psSet.has(t.summary);});
+    var hasChildren=(Object.keys(em.byPs).length>0)||
+      em.direct.filter(function(t){return t!==epicItem;}).length>0;
 
-    // Encabezado del Epic
-    if(epicItem&&!epicHasChildren){
-      // El epic ES la hoja
-      html+=renderHierLeaf(epicItem,0);
+    if(epicItem&&!hasChildren){
+      html+=hLeaf(epicItem,0);
     } else {
-      // El epic es contexto o es hoja Y tiene hijos
-      html+='<div class="hier-epic-hdr">'
-        +'<span class="hbdg hbdg-epic">EPIC</span>'
-        +'<span class="hier-epic-name">'+escH(es)+'</span>'
-        +(epicItem?('<span class="hier-epic-meta">'+stBadge(epicItem.status)
-          +'<span class="hier-date">'+fmtDate(epicItem.duedate||epicItem.due)+'</span></span>'):'')
-        +'</div>';
+      // Epic como encabezado visual
+      if(epicItem){
+        html+='<div class="h0"><span class="h0-name">'+escH(es)+'</span>'+hMeta(epicItem)+'</div>';
+      } else {
+        html+=hCtx(es,0);
+      }
 
-      // Tasks directas del epic (sin ps, pero con hijos referenciados por otros)
+      // Tasks directas del epic
       em.direct.forEach(function(t){
-        if(t.summary!==es){ // evitar mostrar el epic como task child de sí mismo
-          // ¿Es hoja esta task directa?
-          if(!psSet.has(t.summary)){
-            html+=renderHierLeaf(t,1);
-          } else {
-            // Es contexto (tiene subtasks en el set)
-            html+=renderHierCtx(t.summary,1);
-            var subs=em.byPs[t.summary]||[];
-            subs.forEach(function(sub){
-              html+=renderHierLeaf(sub,2);
-            });
-          }
+        if(t===epicItem) return;
+        if(!psSet.has(t.summary)){
+          html+=hLeaf(t,1);
+        } else {
+          html+=hCtx(t.summary,1);
+          (em.byPs[t.summary]||[]).forEach(function(sub){ html+=hLeaf(sub,2); });
         }
       });
 
-      // Tasks referenciadas como ps (que NO aparecen como items directos)
+      // Tasks referenciadas como ps
       Object.keys(em.byPs).forEach(function(ps){
         var alreadyShown=em.direct.some(function(d){return d.summary===ps;});
-        if(!alreadyShown){
-          var psItems=em.byPs[ps];
-          // ¿El Task ps está también en el filtered set?
-          var psAsItem=tasks.find(function(t){return t.summary===ps&&t.es===es&&!t.ps;});
-          if(psAsItem){
-            // Task está en el set Y tiene subtasks → es contexto + sus propios datos
-            html+='<div class="hier-task-ctx">'
-              +'<span class="hbdg hbdg-task">HITO / TASK</span>'
-              +'<span class="hier-task-name">'+escH(ps)+'</span>'
-              +stBadge(psAsItem.status)
-              +'<span class="hier-date">'+fmtDate(psAsItem.duedate||psAsItem.due)+'</span>'
-              +'</div>';
-          } else {
-            html+=renderHierCtx(ps,1);
-          }
-          psItems.forEach(function(sub){
-            html+=renderHierLeaf(sub,2);
-          });
+        if(alreadyShown) return;
+        var psAsItem=tasks.find(function(t){return t.summary===ps&&t.es===es&&!t.ps;});
+        if(psAsItem){
+          html+='<div class="h1"><span class="h1-name">'+escH(ps)+'</span>'+hMeta(psAsItem)+'</div>';
+        } else {
+          html+=hCtx(ps,1);
         }
+        em.byPs[ps].forEach(function(sub){ html+=hLeaf(sub,2); });
       });
     }
-
-    html+='</div>'; // hier-epic-block
   });
 
-  // Items sin Epic
+  // Sin Epic
   noEpic.forEach(function(t){
-    var hasChildren=psSet.has(t.summary);
-    if(hasChildren){
-      html+=renderHierCtx(t.summary,0);
-      tasks.filter(function(s){return s.ps===t.summary;}).forEach(function(sub){
-        html+=renderHierLeaf(sub,1);
-      });
+    if(psSet.has(t.summary)){
+      html+=hCtx(t.summary,0);
+      tasks.filter(function(s){return s.ps===t.summary;}).forEach(function(sub){ html+=hLeaf(sub,1); });
     } else {
-      html+=renderHierLeaf(t,0);
+      html+=hLeaf(t,0);
     }
   });
 
-  return {html:html, count:count};
+  return {html:html,count:count};
 }
-
 
 function toggleInProgTbl(moKey, badge) {
   var row = document.getElementById('inprog-detail-' + moKey);
