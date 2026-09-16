@@ -67,6 +67,8 @@ def main():
     "MO-70",  # 3BP sin frente/subfrente
     "MO-72",  # 3GP sin frente/subfrente
     "MO-94",  # 2D sin frente (solo subfrente)
+    "MO-63",  # 2AP no se está trabajando actualmente (confirmado por Mela)
+    "MO-68",  # 2DP no se está trabajando actualmente (confirmado por Mela)
 }
     MO_TO_SW = {v:k for k,v in SW_TO_MO.items()}
     
