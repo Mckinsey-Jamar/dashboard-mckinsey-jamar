@@ -501,6 +501,22 @@ def main():
         gp=parent_map.get(pm["key"],{})
         if gp.get("type")=="Epic": return pm["sum"],gp["sum"]
         return pm["sum"],""
+
+    def get_ps_es_verified(task_key):
+        """Último recurso: cuando parent_map (batch) no tiene el parent —
+        consulta el issue individual (/rest/api/3/issue/{key}), que siempre
+        refleja el valor real, igual que verify_by_keys hace para duedate/status."""
+        f=jira_get(task_key,['parent'])
+        pf=f.get('parent') if f else None
+        if not pf: return "",""
+        ptype=pf.get('fields',{}).get('issuetype',{}).get('name','')
+        psum=clean(pf.get('fields',{}).get('summary',''))
+        if ptype=="Epic": return "",psum
+        gf=jira_get(pf.get('key',''),['parent'])
+        gpf=gf.get('parent') if gf else None
+        if gpf and gpf.get('fields',{}).get('issuetype',{}).get('name','')=="Epic":
+            return psum,clean(gpf.get('fields',{}).get('summary',''))
+        return psum,""
     print('  No-done total: '+str(_nd_total)+(' ⚠️ POSIBLE TRUNCADO (llegó al límite)' if _nd_total==5000 else ''))
 
     # Paso B: obtener conjunto de tareas con fecha CONFIRMADA por JQL
@@ -744,13 +760,10 @@ def main():
             html=re.sub(r"(key:'"+re.escape(mo)+r"'[^}]*?,tasks:)(\{[^}]+\}|null)",
                         lambda m,v=nt2: m.group(1)+v,html,count=1)
     
-    # 3. Listas
-    html=replace_var(html,"LATE_TASKS",  build_var("LATE_TASKS", late_by_mo,  str(total_late)+" tardias"))
-    html=replace_var(html,"WEEK_TASKS",  build_var("WEEK_TASKS", week_by_mo,  str(total_week)+" esta semana"))
-    html=replace_var(html,"NO_DATE_TASKS",build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" sin fecha"))
-    # Post-filtro: eliminar tareas que llegaron con assignee real
-    html=replace_var(html,"NO_OWNER_TASKS",build_var("NO_OWNER_TASKS",noown_by_mo,str(total_noown)+" sin responsable"))
-    # 2do paso: rellenar es faltante en late/week/inprog usando parent_map de 2 niveles
+    # 2do paso: rellenar ps/es faltante en TODAS las listas usando parent_map (batch, en memoria)
+    # IMPORTANTE: debe correr ANTES de serializar LATE_TASKS/WEEK_TASKS/NO_DATE_TASKS/NO_OWNER_TASKS,
+    # si no, el fix nunca llega al HTML (bug encontrado: antes corría después del replace_var)
+    _sin_jerarquia=[]
     for _by_mo_dict in [late_by_mo, week_by_mo, inprog_by_mo, nodt_by_mo, noown_by_mo]:
         for _mo_k in _by_mo_dict:
             for _t in _by_mo_dict[_mo_k]:
@@ -758,6 +771,26 @@ def main():
                     _ps2,_es2=get_ps_es(_t['key'])
                     if _es2: _t['es']=_es2
                     elif _ps2 and not _t.get('ps'): _t['ps']=_ps2
+                elif not _t.get('ps') and not _t.get('es'):
+                    _ps3,_es3=get_ps_es(_t['key'])
+                    if _es3: _t['es']=_es3
+                    if _ps3: _t['ps']=_ps3
+                    if not _t.get('ps') and not _t.get('es'):
+                        _sin_jerarquia.append(_t)
+    # 3er paso: para lo que ni parent_map (batch) tenía — verificación individual (fuente real)
+    if _sin_jerarquia:
+        print('  Jerarquia: '+str(len(_sin_jerarquia))+' tareas sin ps/es via batch → verificando individualmente')
+        for _t in _sin_jerarquia:
+            _ps4,_es4=get_ps_es_verified(_t['key'])
+            if _es4: _t['es']=_es4
+            if _ps4: _t['ps']=_ps4
+
+    # 3. Listas (ya con ps/es completos)
+    html=replace_var(html,"LATE_TASKS",  build_var("LATE_TASKS", late_by_mo,  str(total_late)+" tardias"))
+    html=replace_var(html,"WEEK_TASKS",  build_var("WEEK_TASKS", week_by_mo,  str(total_week)+" esta semana"))
+    html=replace_var(html,"NO_DATE_TASKS",build_var("NO_DATE_TASKS",nodt_by_mo,str(total_nodt)+" sin fecha"))
+    # Post-filtro: eliminar tareas que llegaron con assignee real
+    html=replace_var(html,"NO_OWNER_TASKS",build_var("NO_OWNER_TASKS",noown_by_mo,str(total_noown)+" sin responsable"))
 
     # Verificar fechas reales de tasks en curso (batch API puede tener stale duedate)
     inprog_nodate_keys=[t['key'] for mo in inprog_by_mo.values() for t in mo if not t.get('due')]
