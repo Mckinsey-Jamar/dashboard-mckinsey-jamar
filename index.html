@@ -1234,6 +1234,26 @@ function toggleWeekTasksTbl(moKey, badge) {
     : '\uD83D\uDCC5 '+n+' esta semana \u25B4';
 }
 
+function toggleInProgTbl(moKey, badge) {
+  var row = document.getElementById('inprog-detail-' + moKey);
+  if(!row) return;
+  var isOpen = row.style.display === 'table-row';
+  if(!isOpen) {
+    var tasks = (INPROG_TASKS[moKey]||[]);
+    var hier = buildHierPanel(tasks);
+    var pb = row.querySelector('.hier-panel-body');
+    if(pb) pb.innerHTML = hier.html;
+    var ct = row.querySelector('.hier-panel-count');
+    if(ct) ct.textContent = '('+hier.count+')';
+  }
+  row.style.display = isOpen ? 'none' : 'table-row';
+  badge.classList.toggle('open', !isOpen);
+  var n = (INPROG_TASKS[moKey]||[]).length;
+  badge.textContent = isOpen
+    ? '\u25B6 '+n+' en curso \u25BE'
+    : '\u25B6 '+n+' en curso \u25B4';
+}
+
 function toggleWeekTasks(id, btn, key) {
   var el = document.getElementById('week-detail-'+id);
   if (!el) return;
