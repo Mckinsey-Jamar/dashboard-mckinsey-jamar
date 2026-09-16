@@ -239,7 +239,7 @@ def main():
     mo_issues = jira_post(
         "project = MO ORDER BY key ASC",
         ["summary","status","customfield_11022","customfield_11055",
-         "customfield_11057","customfield_11197","issuelinks"], 100)
+         "customfield_11057","customfield_11197","customfield_11264","issuelinks"], 100)
     
     print("  Issues MO: "+str(len(mo_issues)))
     
@@ -277,6 +277,10 @@ def main():
     
         # Pais (customfield_11197)
         pais = get_pais(f.get("customfield_11197"))
+
+        # Categoria (customfield_11264) — Caso de Negocio / Habilitadora / MVP
+        cat_list = f.get("customfield_11264") or []
+        cat = cat_list[0].get("value","") if cat_list else ""
     
         # Summary
         summary = f.get("summary","")
@@ -301,7 +305,7 @@ def main():
             "rec": int(f.get("customfield_11094") or 0),  # KPI impacto en USD (customfield_11094) — NO convertir a COP
             "ot":  int(f.get("customfield_11091") or 0) if frente != "Crédito" else 0,  # OT solo para Operaciones
             "ct": 0,
-            "status":st,"owner":clean(owner),"pais":pais,"sw":sw
+            "status":st,"owner":clean(owner),"pais":pais,"sw":sw,"cat":clean(cat)
         }
     
     print("  Frentes detectados: "+str(set(v["frente"] for v in jira_data.values() if v["frente"])))
