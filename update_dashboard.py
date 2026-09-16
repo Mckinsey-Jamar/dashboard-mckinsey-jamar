@@ -690,7 +690,7 @@ def main():
 
     # Limpiar frente en HTML para iniciativas que Jira ya no tiene con frente+subfrente
     # Esto permite que el filtro JS DATA.filter() las excluya correctamente
-    _all_mo_html=set(re.findall(r"key:'(MO-\\d+)'",html[:html.find('var LATE_TASKS')]))
+    _all_mo_html=set(re.findall(r"key:'(MO-\d+)'",html[:html.find('var LATE_TASKS')]))
     _valid_mo=set(jira_data.keys())
     for _ex_mo in _all_mo_html - _valid_mo:
         html=re.sub(r"(key:'"+re.escape(_ex_mo)+r"'[^,\n]*?,frente:')[^']*'",
