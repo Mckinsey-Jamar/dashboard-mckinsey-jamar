@@ -767,27 +767,26 @@ def main():
     # 2do paso: rellenar ps/es faltante en TODAS las listas usando parent_map (batch, en memoria)
     # IMPORTANTE: debe correr ANTES de serializar LATE_TASKS/WEEK_TASKS/NO_DATE_TASKS/NO_OWNER_TASKS,
     # si no, el fix nunca llega al HTML (bug encontrado: antes corría después del replace_var)
-    _sin_jerarquia=[]
+    # NOTA: parent_map solo tiene issues NO terminados (viene de all_nondone), así que si el
+    # padre/story intermedio ya está Done, get_ps_es() nunca encuentra el Epic — por eso TODO
+    # task con 'es' faltante (no solo el caso "ambos vacíos") debe caer a verificación individual.
+    _sin_epic=[]
     for _by_mo_dict in [late_by_mo, week_by_mo, inprog_by_mo, nodt_by_mo, noown_by_mo]:
         for _mo_k in _by_mo_dict:
             for _t in _by_mo_dict[_mo_k]:
-                if _t.get('ps') and not _t.get('es'):
+                if not _t.get('es'):
                     _ps2,_es2=get_ps_es(_t['key'])
                     if _es2: _t['es']=_es2
-                    elif _ps2 and not _t.get('ps'): _t['ps']=_ps2
-                elif not _t.get('ps') and not _t.get('es'):
-                    _ps3,_es3=get_ps_es(_t['key'])
-                    if _es3: _t['es']=_es3
-                    if _ps3: _t['ps']=_ps3
-                    if not _t.get('ps') and not _t.get('es'):
-                        _sin_jerarquia.append(_t)
+                    if not _t.get('ps') and _ps2: _t['ps']=_ps2
+                    if not _t.get('es'):
+                        _sin_epic.append(_t)
     # 3er paso: para lo que ni parent_map (batch) tenía — verificación individual (fuente real)
-    if _sin_jerarquia:
-        print('  Jerarquia: '+str(len(_sin_jerarquia))+' tareas sin ps/es via batch → verificando individualmente')
-        for _t in _sin_jerarquia:
+    if _sin_epic:
+        print('  Jerarquia: '+str(len(_sin_epic))+' tareas sin es(epic) via batch → verificando individualmente')
+        for _t in _sin_epic:
             _ps4,_es4=get_ps_es_verified(_t['key'])
             if _es4: _t['es']=_es4
-            if _ps4: _t['ps']=_ps4
+            if not _t.get('ps') and _ps4: _t['ps']=_ps4
 
     # 3. Listas (ya con ps/es completos)
     html=replace_var(html,"LATE_TASKS",  build_var("LATE_TASKS", late_by_mo,  str(total_late)+" tardias"))
