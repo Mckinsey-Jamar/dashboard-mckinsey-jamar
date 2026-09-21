@@ -506,21 +506,53 @@ def main():
         if gp.get("type")=="Epic": return pm["sum"],gp["sum"]
         return pm["sum"],""
 
-    def get_ps_es_verified(task_key):
-        """Último recurso: cuando parent_map (batch) no tiene el parent —
-        consulta el issue individual (/rest/api/3/issue/{key}), que siempre
-        refleja el valor real, igual que verify_by_keys hace para duedate/status."""
-        f=jira_get(task_key,['parent'])
-        pf=f.get('parent') if f else None
-        if not pf: return "",""
-        ptype=pf.get('fields',{}).get('issuetype',{}).get('name','')
-        psum=clean(pf.get('fields',{}).get('summary',''))
-        if ptype=="Epic": return "",psum
-        gf=jira_get(pf.get('key',''),['parent'])
-        gpf=gf.get('parent') if gf else None
-        if gpf and gpf.get('fields',{}).get('issuetype',{}).get('name','')=="Epic":
-            return psum,clean(gpf.get('fields',{}).get('summary',''))
-        return psum,""
+    def get_ps_es_verified_batch(task_keys):
+        """Último recurso, EN LOTE: cuando parent_map (batch en memoria) no tiene
+        el dato — en vez de 1-2 llamadas individuales POR TAREA (lo que con ~150
+        tareas se volvió ~300 llamadas secuenciales y tumbó el cron por 40+ min,
+        causando ejecuciones encimadas que chocan al hacer push — ver incidente
+        2026-09-20/21), resuelve TODO el lote con máximo un puñado de consultas
+        'key in (...)' batch, sin importar cuántas tareas sean.
+        Devuelve {task_key: (ps, es)}.
+        """
+        result = {k: ("", "") for k in task_keys}
+        if not task_keys: return result
+
+        def chunks(lst, n=80):
+            for i in range(0, len(lst), n): yield lst[i:i+n]
+
+        # Paso 1: parent inmediato de cada tarea, en lote
+        parent_of = {}   # task_key -> {"key":..,"type":..,"sum":..}
+        for ch in chunks(list(task_keys)):
+            issues = jira_post("key in ("+",".join(ch)+")", ["parent"], len(ch))
+            for iss in issues:
+                pf = iss.get("fields",{}).get("parent")
+                if not pf: continue
+                parent_of[iss["key"]] = {
+                    "key": pf.get("key",""),
+                    "type": pf.get("fields",{}).get("issuetype",{}).get("name",""),
+                    "sum": clean(pf.get("fields",{}).get("summary",""))
+                }
+
+        # Paso 2: para los parents que NO son Epic, buscar su propio parent (grandparent), en lote
+        need_grandparent = sorted({v["key"] for v in parent_of.values() if v["type"]!="Epic" and v["key"]})
+        grandparent_of = {}
+        for ch in chunks(need_grandparent):
+            issues = jira_post("key in ("+",".join(ch)+")", ["parent"], len(ch))
+            for iss in issues:
+                gpf = iss.get("fields",{}).get("parent")
+                if gpf and gpf.get("fields",{}).get("issuetype",{}).get("name","")=="Epic":
+                    grandparent_of[iss["key"]] = clean(gpf.get("fields",{}).get("summary",""))
+
+        # Ensamblar resultado
+        for k in task_keys:
+            pm = parent_of.get(k)
+            if not pm: continue
+            if pm["type"]=="Epic":
+                result[k] = ("", pm["sum"])
+            else:
+                result[k] = (pm["sum"], grandparent_of.get(pm["key"],""))
+        return result
     print('  No-done total: '+str(_nd_total)+(' ⚠️ POSIBLE TRUNCADO (llegó al límite)' if _nd_total==5000 else ''))
 
     # Paso B: obtener conjunto de tareas con fecha CONFIRMADA por JQL
@@ -780,11 +812,13 @@ def main():
                     if not _t.get('ps') and _ps2: _t['ps']=_ps2
                     if not _t.get('es'):
                         _sin_epic.append(_t)
-    # 3er paso: para lo que ni parent_map (batch) tenía — verificación individual (fuente real)
+    # 3er paso: para lo que ni parent_map (batch en memoria) tenía — resolver EN LOTE
+    # (batch queries 'key in (...)', no una llamada por tarea — ver nota arriba)
     if _sin_epic:
-        print('  Jerarquia: '+str(len(_sin_epic))+' tareas sin es(epic) via batch → verificando individualmente')
+        print('  Jerarquia: '+str(len(_sin_epic))+' tareas sin es(epic) via batch → resolviendo en lote')
+        _resueltos = get_ps_es_verified_batch([_t['key'] for _t in _sin_epic])
         for _t in _sin_epic:
-            _ps4,_es4=get_ps_es_verified(_t['key'])
+            _ps4,_es4 = _resueltos.get(_t['key'], ("",""))
             if _es4: _t['es']=_es4
             if not _t.get('ps') and _ps4: _t['ps']=_ps4
 
