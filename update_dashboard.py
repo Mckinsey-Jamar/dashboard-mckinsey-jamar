@@ -732,6 +732,24 @@ def main():
         html=re.sub(r"(key:'"+re.escape(_ex_mo)+r"'[^,\n]*?,frente:')[^']*'",
                    lambda m: m.group(1)+"'", html, count=1)
     
+    # 0. INSERTAR iniciativas nuevas de Jira que aun no existen en DATA
+    _di=html.find('var DATA = [')
+    _de=html.find('\n];',_di) if _di>=0 else -1
+    if _de>0:
+        _esc=lambda x: str(x).replace('\\','\\\\').replace("'","\\'")
+        _nuevas=[]
+        for mk,vals in jira_data.items():
+            if ("key:'"+mk+"'") in html[_di:_de]: continue
+            _nuevas.append("{key:'"+mk+"',frente:'"+_esc(vals["frente"])+"',subfrente:'"+_esc(vals["subfrente"])
+                +"',summary:'"+_esc(vals["summary"])+"',status:'"+_esc(vals["status"])+"',cat:'"+_esc(vals.get("cat",""))
+                +"',owner:'"+_esc(vals["owner"])+"',pais:'"+_esc(vals["pais"])+"',rec:"+str(vals["rec"])+",ot:"+str(vals["ot"])
+                +",ct:"+str(vals.get("ct",0))+",url:'https://hubdigitaljamar.atlassian.net/browse/"+mk+"',sw:'"+_esc(vals["sw"])+"',tasks:null}")
+            print("  NUEVA iniciativa insertada en DATA: "+mk)
+        if _nuevas:
+            _pre=html[:_de].rstrip()
+            if not _pre.endswith(','): _pre+=','
+            html=_pre+"\n"+",\n".join(_nuevas)+html[_de:]
+
     # 1. SYNC ESTRUCTURAL: actualizar cada campo por MO
     changed=0
     for mk,vals in jira_data.items():
