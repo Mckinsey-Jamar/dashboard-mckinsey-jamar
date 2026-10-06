@@ -749,7 +749,7 @@ def main():
             html=re.sub(r"(key:'"+re.escape(mk)+r"'[^,\n]*?,frente:'[^']*',subfrente:'[^']*',summary:')[^']*'",
                         lambda m,v=vals["summary"]: m.group(1)+v+"'",html,count=1)
         # status
-        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^,\n]*?,frente:[^,\n]*?,subfrente:[^,\n]*?,summary:[^,\n]*?,status:')[^']+'",
+        html=re.sub(r"(key:'"+re.escape(mk)+r"'[^,\n]*?,frente:'[^']*',subfrente:'[^']*',summary:'(?:[^'\\]|\\.)*',status:')[^']+'",
                     lambda m,v=vals["status"]: m.group(1)+v+"'",html,count=1)
         # owner
         html=re.sub(r"(key:'"+re.escape(mk)+r"'[^}]*?owner:')[^']*'",
