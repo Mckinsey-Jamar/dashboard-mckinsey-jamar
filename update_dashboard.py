@@ -11,6 +11,7 @@ def main():
       3. LISTAS: reconstruye LATE, WEEK, PROXIMAS+SINFECHA
     """
     import os, re, json, base64, urllib.request, urllib.error
+    from concurrent.futures import ThreadPoolExecutor
     from collections import defaultdict
     from datetime import date, datetime, timedelta
     
@@ -416,20 +417,17 @@ def main():
     # Verificar sin responsable: consultar assignee REAL para candidatos
 
     # Verificar atrasadas: confirmar que siguen sin-done y con due < today
+    _VCACHE = {}
     def verify_by_keys(keys_list, fields):
-        """
-        Verifica cada tarea usando el endpoint INDIVIDUAL /rest/api/3/issue/{key}.
-        RAZÓN: el batch search API devuelve valores del índice JQL que puede estar
-        desactualizado (ej: assignee o duedate null aunque el issue los tenga seteados).
-        El endpoint individual siempre retorna los valores reales almacenados.
-        """
+        """Verifica campo real via /rest/api/3/issue/{key} (exacto) — en paralelo y con cache por corrida"""
         if not keys_list: return []
-        results=[]
-        for key in keys_list:
-            f=jira_get(key, fields)   # endpoint individual — siempre retorna valor real
-            if f is not None:
-                results.append({'key':key,'fields':f})
-        return results
+        _fk = tuple(fields)
+        todo = [k for k in dict.fromkeys(keys_list) if (k,_fk) not in _VCACHE]
+        if todo:
+            with ThreadPoolExecutor(max_workers=12) as _ex:
+                for _k,_f in zip(todo, _ex.map(lambda k: jira_get(k, fields), todo)):
+                    _VCACHE[(_k,_fk)] = _f
+        return [{'key':k,'fields':_VCACHE[(k,_fk)]} for k in keys_list if _VCACHE.get((k,_fk)) is not None]
 
 
     late_keys=[t['key'] for mo in late_by_mo.values() for t in mo]
@@ -666,15 +664,7 @@ def main():
     # Resuelve el índice JQL desactualizado de Jira.
     # ════════════════════════════════════════════════════════════════
 
-    def verify_by_keys(keys_list, fields):
-        """Verifica campo real via /rest/api/3/issue/{key} — siempre exacto"""
-        if not keys_list: return []
-        results=[]
-        for key in keys_list:
-            f=jira_get(key, fields)
-            if f is not None:
-                results.append({'key':key,'fields':f})
-        return results
+    # (verify_by_keys paralelo definido arriba)
 
     # ── 1. Atrasadas: verificar duedate y status real ───────────────
     _bl=sum(len(v) for v in late_by_mo.values())
