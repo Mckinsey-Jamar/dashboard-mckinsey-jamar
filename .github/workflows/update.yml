@@ -8,12 +8,12 @@ on:
 
 concurrency:
   group: dashboard-update
-  cancel-in-progress: true   # un disparo nuevo cancela el anterior en vez de correr en paralelo
+  cancel-in-progress: false  # una corrida en curso NO se cancela; las nuevas esperan en fila (sin solaparse)
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10       # corta sola si Jira/red se cuelga
+    timeout-minutes: 30       # corta sola si Jira/red se cuelga
     steps:
       - name: Checkout repositorio
         uses: actions/checkout@v4

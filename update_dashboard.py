@@ -12,6 +12,9 @@ def main():
     """
     import os, re, json, base64, urllib.request, urllib.error
     from concurrent.futures import ThreadPoolExecutor
+    import faulthandler, time as _time
+    _T0=_time.time()
+    faulthandler.dump_traceback_later(180, repeat=True)  # diagnostico: cada 3 min imprime en que linea esta el script
     from collections import defaultdict
     from datetime import date, datetime, timedelta
     
