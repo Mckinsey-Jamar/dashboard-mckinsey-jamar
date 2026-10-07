@@ -602,20 +602,24 @@ def main():
             noown_by_mo[mo_t].append({**t_data,'assignee':'Sin asignar'})
 
 
-        # VERIFICACIÓN INDIVIDUAL: para tasks sin fecha según batch API,
-        # verificar por proyecto directamente (resuelve inconsistencia Jira API)
-        sinf_keys_by_proj = defaultdict(list)
-        for mo_v, tasks_v in nodt_by_mo.items():
-            sw_v = MO_TO_SW.get(mo_v, '')
-            for t_v in tasks_v:
-                sinf_keys_by_proj[sw_v].append(t_v['key'])
+        # EN CURSO: status es En curso / In progress / Dev en progreso
+        if tf['status'].get('name','') in ('En curso','In progress','Dev en progreso','In Progress','En ejecución'):
+            inprog_by_mo[mo_t].append(t_data)
+    # VERIFICACIÓN INDIVIDUAL: para tasks sin fecha según batch API,
+    # verificar por proyecto directamente (resuelve inconsistencia Jira API)
+    sinf_keys_by_proj = defaultdict(list)
+    for mo_v, tasks_v in nodt_by_mo.items():
+        sw_v = MO_TO_SW.get(mo_v, '')
+        for t_v in tasks_v:
+            sinf_keys_by_proj[sw_v].append(t_v['key'])
 
-        # Para cada proyecto con tasks sin fecha, verificar duedate real
-        real_dated = set()  # keys que en realidad SÍ tienen fecha
-        for sw_v, keys_v in sinf_keys_by_proj.items():
-            if not keys_v: continue
-            # Query individual por proyecto y claves específicas
-            chunk = ','.join(keys_v[:100])  # max 100 por query
+    # Para cada proyecto con tasks sin fecha, verificar duedate real
+    real_dated = set()  # keys que en realidad SÍ tienen fecha
+    for sw_v, keys_v in sinf_keys_by_proj.items():
+        if not keys_v: continue
+        # Query por proyecto y claves específicas, en lotes de 100
+        for _i in range(0, len(keys_v), 100):
+            chunk = ','.join(keys_v[_i:_i+100])
             verified = jira_post(
                 'key in (' + chunk + ') AND due is not EMPTY',
                 ['duedate'], 100)
@@ -623,15 +627,13 @@ def main():
                 if viss.get('fields', {}).get('duedate'):
                     real_dated.add(viss['key'])
 
-        # Eliminar de sin fecha los que sí tienen fecha real
-        if real_dated:
-            print('  Tareas con fecha real encontradas: ' + str(len(real_dated)))
-            for mo_v in list(nodt_by_mo.keys()):
-                nodt_by_mo[mo_v] = [t for t in nodt_by_mo[mo_v]
-                    if t['key'] not in real_dated]
-        # EN CURSO: status es En curso / In progress / Dev en progreso
-        if tf['status'].get('name','') in ('En curso','In progress','Dev en progreso','In Progress','En ejecución'):
-            inprog_by_mo[mo_t].append(t_data)
+    # Eliminar de sin fecha los que sí tienen fecha real
+    if real_dated:
+        print('  Tareas con fecha real encontradas: ' + str(len(real_dated)))
+        for mo_v in list(nodt_by_mo.keys()):
+            nodt_by_mo[mo_v] = [t for t in nodt_by_mo[mo_v]
+                if t['key'] not in real_dated]
+
     # Post-filtro de seguridad noown
     for _mo in list(noown_by_mo.keys()):
         noown_by_mo[_mo]=[t for t in noown_by_mo[_mo]
