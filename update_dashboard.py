@@ -604,7 +604,7 @@ def main():
 
 
         # EN CURSO: status es En curso / In progress / Dev en progreso
-        if tf['status'].get('name','') in ('En curso','In progress','Dev en progreso','In Progress','En ejecución'):
+        if tf['status'].get('name','').strip().lower() in ('en curso','in progress','dev en progreso','en ejecución'):
             inprog_by_mo[mo_t].append(t_data)
     # VERIFICACIÓN INDIVIDUAL: para tasks sin fecha según batch API,
     # verificar por proyecto directamente (resuelve inconsistencia Jira API)
