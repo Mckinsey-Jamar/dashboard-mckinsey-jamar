@@ -73,6 +73,7 @@ def main():
     "MO-94",  # 2D sin frente (solo subfrente)
     "MO-63",  # 2AP no se está trabajando actualmente (confirmado por Mela)
     "MO-68",  # 2DP no se está trabajando actualmente (confirmado por Mela)
+    "MO-64",  # 2BP archivada en Jira (confirmado por Mela) — no mostrar
 }
     MO_TO_SW = {v:k for k,v in SW_TO_MO.items()}
     
