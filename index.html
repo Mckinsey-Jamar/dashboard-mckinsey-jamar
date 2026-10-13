@@ -685,7 +685,7 @@ function passes(d) {
   if(!STATE.frentes[d.frente]) return false;
   if(!STATE.sfs[d.subfrente]) return false;
   if(!STATE.stages[d.status]) return false;
-  if(!STATE.cats[d.cat]) return false;
+  if(d.cat && !STATE.cats[d.cat]) return false;  // sin categoria en Jira => visible (no se oculta en silencio)
   if(STATE.search) {
     const q = STATE.search.toLowerCase();
     if(![d.summary,d.owner,d.subfrente,d.key].some(v=>v.toLowerCase().includes(q))) return false;
@@ -851,7 +851,7 @@ function buildSFPanelHTML(sfItems) {
     html += '<div class="sf-ini-name">' + d.summary + '</div>';
     html += '<div class="sf-ini-meta">';
     html += '<span class="badge ' + stBadge + '">' + d.status + '</span>';
-    html += '<span class="badge ' + catBadge + '">' + d.cat + '</span>';
+    html += '<span class="badge ' + catBadge + '">' + (d.cat||'Sin categoría') + '</span>';
     html += '<span class="badge ' + (d.pais==='COL'?'b-col':'b-pan') + '">' + (d.pais==='COL'?'🇨🇴 COL':'🇵🇦 PAN') + '</span>';
     if(d.owner) html += '<span style="font-size:10px;color:#888;">' + d.owner + '</span>';
     html += '</div>';
@@ -3004,7 +3004,7 @@ function renderTable(data) {
           +'<td><a href="'+d.url+'" target="_blank" style="color:var(--op);font-weight:700;font-size:11px;">'+d.key+'</a></td>'
           +'<td>'+d.summary+'</td>'
           +'<td><span class="badge '+stBadge+'">'+d.status+'</span></td>'
-          +'<td><span class="badge '+ctBadge+'">'+d.cat+'</span></td>'
+          +'<td><span class="badge '+ctBadge+'">'+(d.cat||'Sin categoría')+'</span></td>'
           +'<td style="font-size:11px;">'+d.owner+'</td>'
           +'<td>'+paisBadge+'</td>'
           +'<td class="num">'+fmtImp(d.rec)+'</td>'
