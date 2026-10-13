@@ -241,10 +241,10 @@ def main():
     # ── PASO 1: SYNC ESTRUCTURAL ──────────────────────────────────────────────────
     print("\n[1/3] SYNC ESTRUCTURAL — MO issues con todos los campos...")
     
-    mo_issues = jira_post(
+    mo_issues = jira_all(
         "project = MO ORDER BY key ASC",
         ["summary","status","customfield_11022","customfield_11055",
-         "customfield_11057","customfield_11197","customfield_11264","issuelinks"], 100)
+         "customfield_11057","customfield_11197","customfield_11264","issuelinks"], 100, 5)
     
     print("  Issues MO: "+str(len(mo_issues)))
     
@@ -390,10 +390,10 @@ def main():
     print("\n[3/3] LISTAS — Late, Semana, Proximas...")
     
     # Tardías
-    late_issues=jira_post(
+    late_issues=jira_all(   # paginado: antes jira_post cortaba en 100 y se perdian atrasadas
         "project in ("+ALL_SW_DYN+") AND due < '"+TODAY+"' AND statusCategory != Done AND status not in ('Bloqueada','Bloqueado','Blocked') "
         "ORDER BY project ASC, due ASC",
-        ["summary","status","duedate","assignee","project","parent"],100)
+        ["summary","status","duedate","assignee","project","parent"],100,10)
     late_by_mo=defaultdict(list)
     for i in late_issues:
         if "fields" not in i: continue
