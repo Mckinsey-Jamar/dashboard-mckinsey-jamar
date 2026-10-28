@@ -26,8 +26,11 @@ def main():
     TODAY      = date.today().isoformat()
     WEEK_END   = (date.today() + timedelta(days=7)).isoformat()
     
-    # Nombres a mostrar que difieren de Jira (decision de Mela): MO-98 se llama asi en la realidad
-    SUMMARY_OVERRIDE = {"MO-98":"4B. Evolucionar el modelo operativo CNP"}
+    # Nombres a mostrar que difieren de Jira (vacio por ahora)
+    SUMMARY_OVERRIDE = {}
+    # Iniciativas que Mela quiere ver aunque la API de Jira no las devuelva (MO-45 da 404 por API).
+    # Se mantienen con los datos que ya estan en DATA (no se sincronizan) y no se les borra el frente.
+    STATIC_VISIBLE = {"MO-45"}
     # SW_TO_MO: mapeo definitivo + detectado dinámicamente
     SW_TO_MO = {
         # S&OP
@@ -60,6 +63,7 @@ def main():
     # Iniciativas excluidas del dashboard: frente/subfrente en blanco en Jira PD
     # El índice JQL puede estar desactualizado — actualizar si cambia en Jira
     EXCLUDED_MO = {
+        "MO-98",  # 4B Mejora en la experiencia del CNP: ya no aplica (decision de Mela)
         "MO-24",  # 4A sin frente/subfrente en Jira PD
     "MO-60",  # 1AP sin frente/subfrente en Jira
         "MO-61",  # 1EP sin frente en Jira
@@ -725,7 +729,7 @@ def main():
     # Limpiar frente en HTML para iniciativas que Jira ya no tiene con frente+subfrente
     # Esto permite que el filtro JS DATA.filter() las excluya correctamente
     _all_mo_html=set(re.findall(r"key:'(MO-\d+)'",html[:html.find('var LATE_TASKS')]))
-    _valid_mo=set(jira_data.keys())
+    _valid_mo=set(jira_data.keys())|STATIC_VISIBLE
     for _ex_mo in _all_mo_html - _valid_mo:
         html=re.sub(r"(key:'"+re.escape(_ex_mo)+r"'[^,\n]*?,frente:')[^']*'",
                    lambda m: m.group(1)+"'", html, count=1)
