@@ -26,6 +26,8 @@ def main():
     TODAY      = date.today().isoformat()
     WEEK_END   = (date.today() + timedelta(days=7)).isoformat()
     
+    # Nombres a mostrar que difieren de Jira (decision de Mela): MO-98 se llama asi en la realidad
+    SUMMARY_OVERRIDE = {"MO-98":"4B. Evolucionar el modelo operativo CNP"}
     # SW_TO_MO: mapeo definitivo + detectado dinámicamente
     SW_TO_MO = {
         # S&OP
@@ -306,7 +308,7 @@ def main():
             print("  NUEVO SW detectado: "+sw+" → "+key)
     
         jira_data[key] = {
-            "frente":frente,"subfrente":subfrente,"summary":clean(summary),
+            "frente":frente,"subfrente":subfrente,"summary":clean(SUMMARY_OVERRIDE.get(key,summary)),
             "rec": int(f.get("customfield_11094") or 0),  # KPI impacto en USD (customfield_11094) — NO convertir a COP
             "ot":  int(f.get("customfield_11091") or 0) if frente != "Crédito" else 0,  # OT solo para Operaciones
             "ct": 0,
