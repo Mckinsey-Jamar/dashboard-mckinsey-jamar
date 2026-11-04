@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   deploy:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -33,6 +34,13 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
+
+      - name: Cancelar despliegue de Pages trabado (si existe)
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api -X POST repos/${{ github.repository }}/pages/deployments/4340e0a09ee70b0d281c39d9c400eba5e9cca254/cancel || true
 
       - name: Deploy
         id: deployment
