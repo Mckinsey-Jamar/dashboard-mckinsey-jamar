@@ -9,6 +9,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  deployments: write
 
 concurrency:
   group: pages
@@ -42,6 +43,20 @@ jobs:
         run: |
           out=$(gh api -X POST repos/${{ github.repository }}/pages/deployments/4340e0a09ee70b0d281c39d9c400eba5e9cca254/cancel 2>&1) && echo "::notice::cancel OK: $out" || echo "::warning::cancel FALLO: $out"
           out2=$(gh api repos/${{ github.repository }}/pages/deployments/4340e0a09ee70b0d281c39d9c400eba5e9cca254 2>&1); echo "::notice::estado: $out2"
+
+      - name: Diagnostico de despliegues (github-pages)
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for d in $(gh api "repos/${{ github.repository }}/deployments?environment=github-pages&per_page=6" --jq '.[].id'); do
+            st=$(gh api repos/${{ github.repository }}/deployments/$d/statuses --jq '.[0].state' 2>&1)
+            echo "::notice::deploy $d estado=$st"
+            if [ "$st" = "in_progress" ] || [ "$st" = "queued" ] || [ "$st" = "pending" ]; then
+              r=$(gh api -X POST repos/${{ github.repository }}/deployments/$d/statuses -f state=inactive 2>&1 | head -c 200)
+              echo "::notice::marcar inactivo $d -> $r"
+            fi
+          done
 
       - name: Deploy
         id: deployment
