@@ -40,7 +40,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh api -X POST repos/${{ github.repository }}/pages/deployments/4340e0a09ee70b0d281c39d9c400eba5e9cca254/cancel || true
+          out=$(gh api -X POST repos/${{ github.repository }}/pages/deployments/4340e0a09ee70b0d281c39d9c400eba5e9cca254/cancel 2>&1) && echo "::notice::cancel OK: $out" || echo "::warning::cancel FALLO: $out"
+          out2=$(gh api repos/${{ github.repository }}/pages/deployments/4340e0a09ee70b0d281c39d9c400eba5e9cca254 2>&1); echo "::notice::estado: $out2"
 
       - name: Deploy
         id: deployment
